@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "isolatedModules": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declaration": false,
+    "noImplicitAny": true,
+    "noImplicitUseStrict": false,
+    "strictNullChecks": true,
+    "noEmitHelpers": false,
+    "noLib": false,
+    "noUnusedLocals": true,
+    "outDir": "src/browser/.aot",
+    "allowSyntheticDefaultImports": false,
+    "sourceMap": true,
+    "lib": ["es6", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true
+  },
+  "include": [
+    "src/browser"
+  ],
+  "exclude": [
+    "src/browser/main.aot.ts",
+    "src/browser/server.module.ts",
+    "src/browser/.aot"
+  ],
+  "angularCompilerOptions": {
+    "skipMetadataEmit": true,
+    "preserveWhitespaces": false,
+    "enableIvy": false
+  }
+}
