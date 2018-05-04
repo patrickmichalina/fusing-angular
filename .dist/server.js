@@ -25,6 +25,8 @@ var express = require("express");
 // import { ngExpressEngine } from '@nguniversal/express-engine'
 // import { AppServerModule } from './angular/server.angular.module'
 var path_1 = require("path");
+var express_engine_1 = require("@nguniversal/express-engine");
+var server_angular_module_1 = require("./server.angular.module");
 var shrinkRay = require('shrink-rayed');
 // const minifyHTML = require('express-minify-html')
 // const bunyanMiddleware = require('bunyan-middleware')
@@ -80,10 +82,204 @@ expressApp.use(shrinkRay());
 // )
 // app.use('/css', express.static(`${dir}/css`, staticOptions))
 expressApp.use('/js', express.static(dir + "/public/js"));
+expressApp.engine('html', express_engine_1.ngExpressEngine({
+    bootstrap: server_angular_module_1.AppServerModule // Give it a module to bootstrap
+}));
+expressApp.set('view engine', 'html');
 expressApp.get('/**', function (req, res) {
-    res.end("<!doctype html>\n    <html lang=\"en\">\n    <head>\n      <meta charset=\"utf-8\">\n      <title>Fusing Angular Demo</title>\n      <base href=\"/\">\n      <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    </head>\n    <body>\n      <app-root></app-root>\n      <script src=\"/js/vendor.js\"></script>\n      <script src=\"/js/app.js\"></script>\n    </body>\n    </html>");
+    var doc = "<!doctype html>\n  <html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <title>Fusing Angular Demo</title>\n    <base href=\"/\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  </head>\n  <body>\n    <app-root></app-root>\n    <script src=\"/js/vendor.js\"></script>\n    <script src=\"/js/app.js\"></script>\n  </body>\n  </html>";
+    res.render('../.dist/index', {
+        req: req,
+        res: res,
+        document: doc
+    });
 });
 //# sourceMappingURL=server.app.js.map
+});
+___scope___.file("server/server.angular.module.js", function(exports, require, module, __filename, __dirname){
+
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+require("reflect-metadata");
+require("zone.js/dist/zone-node");
+require("zone.js/dist/long-stack-trace-zone");
+var core_1 = require("@angular/core");
+var platform_server_1 = require("@angular/platform-server");
+var core_2 = require("@angular/core");
+var app_module_1 = require("../browser/app.module");
+var app_component_1 = require("../browser/app.component");
+// import { AppModule } from '../app.module';
+// import { AppComponent } from '../app.component';
+// import { FaviconComponent } from './favicon.component';
+// import { JavascriptComponent } from './javascript.component';
+// import { RouteDataService } from '../route-data.service'
+// import { filter } from 'rxjs/operators';
+// import { NavigationEnd } from '@angular/router';
+// import { take } from 'rxjs/operators';
+core_2.enableProdMode();
+var AppServerModule = /** @class */ (function () {
+    function AppServerModule() {
+    }
+    AppServerModule = __decorate([
+        core_1.NgModule({
+            imports: [
+                app_module_1.AppModule,
+                // RouterModule.forRoot([
+                //   { path: 'favicon.ico', component: FaviconComponent },
+                //   { path: 'js/:filename', component: JavascriptComponent, data: { customResponse: true } },
+                // ]),
+                platform_server_1.ServerModule,
+                platform_server_1.ServerTransferStateModule,
+            ],
+            declarations: [],
+            bootstrap: [app_component_1.AppComponent],
+        })
+    ], AppServerModule);
+    return AppServerModule;
+}());
+exports.AppServerModule = AppServerModule;
+//# sourceMappingURL=server.angular.module.js.map
+});
+___scope___.file("browser/app.module.js", function(exports, require, module, __filename, __dirname){
+
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var platform_browser_1 = require("@angular/platform-browser");
+var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var app_component_1 = require("./app.component");
+var home_component_1 = require("./home.component");
+// import {TransferHttpCacheModule} from '@nguniversal/common';
+var AppModule = /** @class */ (function () {
+    function AppModule() {
+    }
+    AppModule = __decorate([
+        core_1.NgModule({
+            declarations: [
+                app_component_1.AppComponent,
+                home_component_1.TestComponent,
+                home_component_1.HomeComponent,
+                home_component_1.NotFoundComponent
+            ],
+            imports: [
+                platform_browser_1.BrowserModule.withServerTransition({ appId: 'my-app' }),
+                router_1.RouterModule.forRoot([
+                    { path: '', component: home_component_1.HomeComponent },
+                    { path: 'test', component: home_component_1.TestComponent }
+                    // { path: '**', component: NotFoundComponent }
+                ], { initialNavigation: true }),
+            ],
+            providers: [],
+            bootstrap: [app_component_1.AppComponent]
+        })
+    ], AppModule);
+    return AppModule;
+}());
+exports.AppModule = AppModule;
+//# sourceMappingURL=app.module.js.map
+});
+___scope___.file("browser/app.component.js", function(exports, require, module, __filename, __dirname){
+
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var AppComponent = /** @class */ (function () {
+    function AppComponent() {
+    }
+    AppComponent = __decorate([
+        core_1.Component({
+            selector: 'app-root',
+            template: "\n  <div class=\"root\">\n  <h1>sdf</h1>\n  <a routerLink=\"/\">Hod  </a>\n  <a routerLink=\"/test\">test</a>\n  <router-outlet></router-outlet>\n  </div>\n  \n  ",
+            styles: ["\n  \n  "]
+        })
+    ], AppComponent);
+    return AppComponent;
+}());
+exports.AppComponent = AppComponent;
+//# sourceMappingURL=app.component.js.map
+});
+___scope___.file("browser/home.component.js", function(exports, require, module, __filename, __dirname){
+
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var HomeComponent = /** @class */ (function () {
+    function HomeComponent() {
+    }
+    HomeComponent.prototype.ngOnInit = function () {
+        this.message = 'Hello';
+    };
+    HomeComponent = __decorate([
+        core_1.Component({
+            selector: 'app-home',
+            template: "<h3>{{ message }}</h3>",
+            // styleUrls: ['./home.component.css'],
+            styles: ["\n    background-color: red;\n    display: block;\n  "]
+        })
+    ], HomeComponent);
+    return HomeComponent;
+}());
+exports.HomeComponent = HomeComponent;
+var TestComponent = /** @class */ (function () {
+    function TestComponent() {
+    }
+    TestComponent.prototype.ngOnInit = function () {
+        this.message = 'asdfasdfasd TEST';
+    };
+    TestComponent = __decorate([
+        core_1.Component({
+            selector: 'app-test',
+            template: "<h3>{{ message }}</h3>"
+        }),
+        __metadata("design:paramtypes", [])
+    ], TestComponent);
+    return TestComponent;
+}());
+exports.TestComponent = TestComponent;
+var NotFoundComponent = /** @class */ (function () {
+    function NotFoundComponent() {
+    }
+    NotFoundComponent.prototype.ngOnInit = function () {
+        this.message = 'NOT FOUND';
+    };
+    NotFoundComponent = __decorate([
+        core_1.Component({
+            selector: 'app-not-found',
+            template: "<h3>{{ message }}</h3>"
+        }),
+        __metadata("design:paramtypes", [])
+    ], NotFoundComponent);
+    return NotFoundComponent;
+}());
+exports.NotFoundComponent = NotFoundComponent;
+//# sourceMappingURL=home.component.js.map
 });
 ___scope___.file("config.js", function(exports, require, module, __filename, __dirname){
 

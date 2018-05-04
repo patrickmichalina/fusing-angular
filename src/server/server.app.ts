@@ -4,6 +4,9 @@ import * as express from 'express'
 // import { ngExpressEngine } from '@nguniversal/express-engine'
 // import { AppServerModule } from './angular/server.angular.module'
 import { resolve } from 'path'
+import { ngExpressEngine } from '@nguniversal/express-engine';
+import { AppServerModule } from './server.angular.module';
+
 const shrinkRay = require('shrink-rayed')
 // const minifyHTML = require('express-minify-html')
 // const bunyanMiddleware = require('bunyan-middleware')
@@ -66,22 +69,49 @@ expressApp.use(shrinkRay())
 
 // app.use('/css', express.static(`${dir}/css`, staticOptions))
 expressApp.use('/js', express.static(`${dir}/public/js`))
+
+expressApp.engine('html', ngExpressEngine({
+  bootstrap: AppServerModule // Give it a module to bootstrap
+}));
+
+expressApp.set('view engine', 'html');
 expressApp.get('/**', (req, res) => {
-    res.end(`<!doctype html>
-    <html lang="en">
-    <head>
-      <meta charset="utf-8">
-      <title>Fusing Angular Demo</title>
-      <base href="/">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-    <body>
-      <app-root></app-root>
-      <script src="/js/vendor.js"></script>
-      <script src="/js/app.js"></script>
-    </body>
-    </html>`)
-})
+  let doc = `<!doctype html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Fusing Angular Demo</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <app-root></app-root>
+    <script src="/js/vendor.js"></script>
+    <script src="/js/app.js"></script>
+  </body>
+  </html>`;
+  res.render('../.dist/index', {
+    req,
+    res,
+    document: doc
+  });
+});
+// expressApp.get('/**', (req, res) => {
+//     res.end(`<!doctype html>
+//     <html lang="en">
+//     <head>
+//       <meta charset="utf-8">
+//       <title>Fusing Angular Demo</title>
+//       <base href="/">
+//       <meta name="viewport" content="width=device-width, initial-scale=1">
+//     </head>
+//     <body>
+//       <app-root></app-root>
+//       <script src="/js/vendor.js"></script>
+//       <script src="/js/app.js"></script>
+//     </body>
+//     </html>`)
+// })
 // app.use('/ngsw.json', express.static(`${dir}/ngsw.json`, staticOptions))
 // app.use(
 //   '/ngsw-worker.js',
