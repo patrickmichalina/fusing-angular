@@ -52,7 +52,7 @@ var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var app_component_1 = require("./app.component");
 var home_component_1 = require("./home.component");
-// import {TransferHttpCacheModule} from '@nguniversal/common';
+var common_1 = require("@nguniversal/common");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -71,6 +71,7 @@ var AppModule = /** @class */ (function () {
                     { path: 'test', component: home_component_1.TestComponent }
                     // { path: '**', component: NotFoundComponent }
                 ], { initialNavigation: true }),
+                common_1.TransferHttpCacheModule
             ],
             providers: [],
             bootstrap: [app_component_1.AppComponent]
@@ -98,8 +99,8 @@ var AppComponent = /** @class */ (function () {
     AppComponent = __decorate([
         core_1.Component({
             selector: 'app-root',
-            template: "\n  <div class=\"root\">\n  <h1>sdf</h1>\n  <a routerLink=\"/\">Hod  </a>\n  <a routerLink=\"/test\">test</a>\n  <router-outlet></router-outlet>\n  </div>\n  \n  ",
-            styles: ["\n  \n  "]
+            template: "\n    <div class=\"root\">\n    <h1>sdf</h1>\n    <a routerLink=\"/\">Hod  </a>\n    <a routerLink=\"/test\">test</a>\n    <router-outlet></router-outlet>\n    </div>\n  ",
+            changeDetection: core_1.ChangeDetectionStrategy.OnPush
         })
     ], AppComponent);
     return AppComponent;
@@ -121,6 +122,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var red = 'red';
 var HomeComponent = /** @class */ (function () {
     function HomeComponent() {
     }
@@ -131,8 +133,7 @@ var HomeComponent = /** @class */ (function () {
         core_1.Component({
             selector: 'app-home',
             template: "<h3>{{ message }}</h3>",
-            // styleUrls: ['./home.component.css'],
-            styles: ["\n    background-color: red;\n    display: block;\n  "]
+            styles: ["\n    :host {\n      background-color: " + red + ";\n      display: block;\n    }\n  "]
         })
     ], HomeComponent);
     return HomeComponent;

@@ -1,12 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 
+const red = 'red'
+
 @Component({
   selector: 'app-home',
   template: `<h3>{{ message }}</h3>`,
-  // styleUrls: ['./home.component.css'],
   styles: [`
-    background-color: red;
-    display: block;
+    :host {
+      background-color: ${red};
+      display: block;
+    }
   `]
 })
 export class HomeComponent implements OnInit {

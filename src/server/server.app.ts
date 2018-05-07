@@ -1,14 +1,14 @@
 import * as express from 'express'
-// import * as cookieParser from 'cookie-parser'
+import * as cookieParser from 'cookie-parser'
+import { resolve } from 'path'
+import { ngExpressEngine } from '@nguniversal/express-engine'
+import { AppServerModule } from './server.angular.module'
+import { stat, writeFile } from 'fs/promises'
 // import { createLogger } from '@expo/bunyan'
 // import { ngExpressEngine } from '@nguniversal/express-engine'
-// import { AppServerModule } from './angular/server.angular.module'
-import { resolve } from 'path'
-import { ngExpressEngine } from '@nguniversal/express-engine';
-import { AppServerModule } from './server.angular.module';
 
 const shrinkRay = require('shrink-rayed')
-// const minifyHTML = require('express-minify-html')
+const minifyHTML = require('express-minify-html')
 // const bunyanMiddleware = require('bunyan-middleware')
 // const xhr2 = require('xhr2')
 // const cors = require('cors')
@@ -16,9 +16,9 @@ const shrinkRay = require('shrink-rayed')
 // tslint:disable-next-line:no-object-mutation
 // xhr2.prototype._restrictedHeaders.cookie = false
 
-// require('ts-node/register')
-
 const expressApp = express()
+const dir = resolve('./.dist')
+const publicDir = `${dir}/public`
 
 // const staticOptions = {
 //   index: false,
@@ -44,43 +44,52 @@ const expressApp = express()
 //     })
 //   )
 
-const dir = resolve('./.dist')
 
-// expressApp.engine('html', ngExpressEngine({ bootstrap: AppServerModule }))
-// app.set('ignore-routes', ['/api/'])
-// app.set('view engine', 'html')
-// app.set('views', dir)
-// app.use(cookieParser())
+expressApp.use(cookieParser())
 expressApp.use(shrinkRay())
 // app.use(cors())
-// app.use(
-//   minifyHTML({
-//     override: true,
-//     exception_url: false,
-//     htmlMinifier: {
-//       removeComments: true,
-//       collapseWhitespace: true,
-//       collapseBooleanAttributes: true,
-//       removeAttributeQuotes: false,
-//       minifyJS: true
-//     }
-//   })
-// )
+expressApp.use(
+  minifyHTML({
+    override: true,
+    exception_url: false,
+    htmlMinifier: {
+      removeComments: true,
+      collapseWhitespace: true,
+      collapseBooleanAttributes: true,
+      removeAttributeQuotes: false,
+      minifyJS: true
+    }
+  })
+)
 
-// app.use('/css', express.static(`${dir}/css`, staticOptions))
-expressApp.use('/js', express.static(`${dir}/public/js`))
+expressApp.use('/favicon.ico', (req, res) => res.sendStatus(204)) // TODO: FAVICONS
+expressApp.use('/js', express.static(`${publicDir}/js`))
+expressApp.set('view engine', 'html')
+expressApp.engine('html', ngExpressEngine({ bootstrap: AppServerModule }))
 
-expressApp.engine('html', ngExpressEngine({
-  bootstrap: AppServerModule // Give it a module to bootstrap
-}));
+const virtualIndex = (req: express.Request,
+  res: express.Response, doc: string, path = `${publicDir}/index.html`) => {
 
-expressApp.set('view engine', 'html');
-expressApp.get('/**', (req, res) => {
-  let doc = `<!doctype html>
-  <html lang="en">
+  const resolvedPath = resolve(path)
+
+  stat(resolvedPath)
+    .then(() => {
+      res.render(resolvedPath, {
+        req,
+        res,
+        document: doc
+      });
+    })
+    .catch(() => writeFile(resolvedPath, '')
+      .then(() => virtualIndex(req, res, doc, path)))
+}
+
+expressApp.get('**', (req, res) => {
+  const document = `<!doctype html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Fusing Angular Demo</title>
+    <title>Fusing Angular</title>
     <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
@@ -89,34 +98,27 @@ expressApp.get('/**', (req, res) => {
     <script src="/js/vendor.js"></script>
     <script src="/js/app.js"></script>
   </body>
-  </html>`;
-  res.render('../.dist/index', {
-    req,
-    res,
-    document: doc
-  });
-});
-// expressApp.get('/**', (req, res) => {
-//     res.end(`<!doctype html>
-//     <html lang="en">
-//     <head>
-//       <meta charset="utf-8">
-//       <title>Fusing Angular Demo</title>
-//       <base href="/">
-//       <meta name="viewport" content="width=device-width, initial-scale=1">
-//     </head>
-//     <body>
-//       <app-root></app-root>
-//       <script src="/js/vendor.js"></script>
-//       <script src="/js/app.js"></script>
-//     </body>
-//     </html>`)
-// })
+</html>`
+  virtualIndex(req, res, document)
+})
+
 // app.use('/ngsw.json', express.static(`${dir}/ngsw.json`, staticOptions))
 // app.use(
 //   '/ngsw-worker.js',
 //   express.static(`${dir}/ngsw-worker.js`, staticOptions)
 // )
+// app.use(
+//   '/assets',
+//   express.static(`${dir}/assets`, { ...staticOptions, fallthrough: false })
+// )
+// app.use(
+//   '/manifest.json',
+//   express.static(`${dir}/assets`, { ...staticOptions, fallthrough: false })
+// )
+
+
+
+///////////////////////////////////
 // app.use('/robots.txt', express.static(`${dir}/web/robots.txt`, staticOptions))
 // app.use('/ping.html', express.static(`${dir}/web/ping.html`, staticOptions))
 // app.use(
@@ -133,34 +135,5 @@ expressApp.get('/**', (req, res) => {
 //     fallthrough: false
 //   })
 // )
-// app.use(
-//   '/assets',
-//   express.static(`${dir}/assets`, { ...staticOptions, fallthrough: false })
-// )
-// app.use(
-//   '/manifest.json',
-//   express.static(`${dir}/assets`, { ...staticOptions, fallthrough: false })
-// )
-// app.get('/ad-server.js', (req, res) => res.send({}))
-
-// useApi(app)
-
-// app.set('ignore-routes', ['/api/', '/css/', '/js/', '/assets/'])
-// app.get(
-//   '**',
-//   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-//     const bypassed = (req.app.get('ignore-routes') as ReadonlyArray<
-//       string
-//     >).some(a => req.url.includes(a))
-//     return bypassed
-//       ? next()
-//       : res.render('index', {
-//           req,
-//           res
-//         })
-//   }
-// )
-
-
 
 export { expressApp }

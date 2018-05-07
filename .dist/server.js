@@ -20,23 +20,24 @@ ___scope___.file("server/server.app.js", function(exports, require, module, __fi
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
-// import * as cookieParser from 'cookie-parser'
-// import { createLogger } from '@expo/bunyan'
-// import { ngExpressEngine } from '@nguniversal/express-engine'
-// import { AppServerModule } from './angular/server.angular.module'
+var cookieParser = require("cookie-parser");
 var path_1 = require("path");
 var express_engine_1 = require("@nguniversal/express-engine");
 var server_angular_module_1 = require("./server.angular.module");
+var promises_1 = require("fs/promises");
+// import { createLogger } from '@expo/bunyan'
+// import { ngExpressEngine } from '@nguniversal/express-engine'
 var shrinkRay = require('shrink-rayed');
-// const minifyHTML = require('express-minify-html')
+var minifyHTML = require('express-minify-html');
 // const bunyanMiddleware = require('bunyan-middleware')
 // const xhr2 = require('xhr2')
 // const cors = require('cors')
 // tslint:disable-next-line:no-object-mutation
 // xhr2.prototype._restrictedHeaders.cookie = false
-// require('ts-node/register')
 var expressApp = express();
 exports.expressApp = expressApp;
+var dir = path_1.resolve('./.dist');
+var publicDir = dir + "/public";
 // const staticOptions = {
 //   index: false,
 //   maxAge: isProd ? ms('1y') : ms('0'),
@@ -59,40 +60,41 @@ exports.expressApp = expressApp;
 //       excludeHeaders: ['authorization', 'cookie']
 //     })
 //   )
-var dir = path_1.resolve('./.dist');
-// expressApp.engine('html', ngExpressEngine({ bootstrap: AppServerModule }))
-// app.set('ignore-routes', ['/api/'])
-// app.set('view engine', 'html')
-// app.set('views', dir)
-// app.use(cookieParser())
+expressApp.use(cookieParser());
 expressApp.use(shrinkRay());
 // app.use(cors())
-// app.use(
-//   minifyHTML({
-//     override: true,
-//     exception_url: false,
-//     htmlMinifier: {
-//       removeComments: true,
-//       collapseWhitespace: true,
-//       collapseBooleanAttributes: true,
-//       removeAttributeQuotes: false,
-//       minifyJS: true
-//     }
-//   })
-// )
-// app.use('/css', express.static(`${dir}/css`, staticOptions))
-expressApp.use('/js', express.static(dir + "/public/js"));
-expressApp.engine('html', express_engine_1.ngExpressEngine({
-    bootstrap: server_angular_module_1.AppServerModule // Give it a module to bootstrap
+expressApp.use(minifyHTML({
+    override: true,
+    exception_url: false,
+    htmlMinifier: {
+        removeComments: true,
+        collapseWhitespace: true,
+        collapseBooleanAttributes: true,
+        removeAttributeQuotes: false,
+        minifyJS: true
+    }
 }));
+expressApp.use('/favicon.ico', function (req, res) { return res.sendStatus(204); }); // TODO: FAVICONS
+expressApp.use('/js', express.static(publicDir + "/js"));
 expressApp.set('view engine', 'html');
-expressApp.get('/**', function (req, res) {
-    var doc = "<!doctype html>\n  <html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <title>Fusing Angular Demo</title>\n    <base href=\"/\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  </head>\n  <body>\n    <app-root></app-root>\n    <script src=\"/js/vendor.js\"></script>\n    <script src=\"/js/app.js\"></script>\n  </body>\n  </html>";
-    res.render('../.dist/index', {
-        req: req,
-        res: res,
-        document: doc
-    });
+expressApp.engine('html', express_engine_1.ngExpressEngine({ bootstrap: server_angular_module_1.AppServerModule }));
+var virtualIndex = function (req, res, doc, path) {
+    if (path === void 0) { path = publicDir + "/index.html"; }
+    var resolvedPath = path_1.resolve(path);
+    promises_1.stat(resolvedPath)
+        .then(function () {
+        res.render(resolvedPath, {
+            req: req,
+            res: res,
+            document: doc
+        });
+    })
+        .catch(function () { return promises_1.writeFile(resolvedPath, '')
+        .then(function () { return virtualIndex(req, res, doc, path); }); });
+};
+expressApp.get('**', function (req, res) {
+    var document = "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <title>Fusing Angular</title>\n    <base href=\"/\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  </head>\n  <body>\n    <app-root></app-root>\n    <script src=\"/js/vendor.js\"></script>\n    <script src=\"/js/app.js\"></script>\n  </body>\n</html>";
+    virtualIndex(req, res, document);
 });
 //# sourceMappingURL=server.app.js.map
 });
@@ -161,7 +163,7 @@ var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var app_component_1 = require("./app.component");
 var home_component_1 = require("./home.component");
-// import {TransferHttpCacheModule} from '@nguniversal/common';
+var common_1 = require("@nguniversal/common");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -180,6 +182,7 @@ var AppModule = /** @class */ (function () {
                     { path: 'test', component: home_component_1.TestComponent }
                     // { path: '**', component: NotFoundComponent }
                 ], { initialNavigation: true }),
+                common_1.TransferHttpCacheModule
             ],
             providers: [],
             bootstrap: [app_component_1.AppComponent]
@@ -207,8 +210,7 @@ var AppComponent = /** @class */ (function () {
     AppComponent = __decorate([
         core_1.Component({
             selector: 'app-root',
-            template: "\n  <div class=\"root\">\n  <h1>sdf</h1>\n  <a routerLink=\"/\">Hod  </a>\n  <a routerLink=\"/test\">test</a>\n  <router-outlet></router-outlet>\n  </div>\n  \n  ",
-            styles: ["\n  \n  "]
+            template: "\n    <div class=\"root\">\n    <h1>sdf</h1>\n    <a routerLink=\"/\">Hod  </a>\n    <a routerLink=\"/test\">test</a>\n    <router-outlet></router-outlet>\n    </div>\n  "
         })
     ], AppComponent);
     return AppComponent;
@@ -230,6 +232,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var red = 'red';
 var HomeComponent = /** @class */ (function () {
     function HomeComponent() {
     }
@@ -240,8 +243,7 @@ var HomeComponent = /** @class */ (function () {
         core_1.Component({
             selector: 'app-home',
             template: "<h3>{{ message }}</h3>",
-            // styleUrls: ['./home.component.css'],
-            styles: ["\n    background-color: red;\n    display: block;\n  "]
+            styles: ["\n    :host {\n      background-color: " + red + ";\n      display: block;\n    }\n  "]
         })
     ], HomeComponent);
     return HomeComponent;

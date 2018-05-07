@@ -1,6 +1,6 @@
-import { FuseBox, QuantumPlugin } from "fuse-box";
-import { PORT } from "./src/config";
-import { NgcPlugin } from "./tools/plugins/ngc.plugin";
+import { FuseBox, QuantumPlugin } from "fuse-box"
+import { PORT } from "./src/config"
+import { NgcPlugin } from "./tools/plugins/ngc.plugin"
 import { argv } from 'yargs'
 
 export interface FusingAngularConfig {
@@ -83,4 +83,7 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
   fuseServer.run()
 }
 
-fusingAngular()
+fusingAngular({
+  // productionBuild: true,
+  // enabledAot: true
+})
