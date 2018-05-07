@@ -16,8 +16,8 @@ import { TransferHttpCacheModule } from '@nguniversal/common';
     BrowserModule.withServerTransition({ appId: 'my-app' }),
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
-      { path: 'test', component: TestComponent }
-      // { path: '**', component: NotFoundComponent }
+      { path: 'test', component: TestComponent },
+      { path: '**', component: NotFoundComponent }
     ], { initialNavigation: true }),
     TransferHttpCacheModule
   ],

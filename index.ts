@@ -1,16 +1,26 @@
 import { FuseBox, QuantumPlugin } from "fuse-box"
 import { PORT } from "./src/config"
-import { NgcPlugin } from "./tools/plugins/ngc.plugin"
+import { NgcPlugin } from "./tools/plugins/ng.compiler.plugin"
 import { argv } from 'yargs'
 
 export interface FusingAngularConfig {
-  enabledAot?: boolean
   productionBuild?: boolean
+  supportIE11?: boolean
+  supportIE11Animations?: boolean
+  enableAotCompilaton?: boolean
+  enableAngularAnimations?: boolean
+  enableAngularForms?: boolean
+  enableServiceWorker?: boolean
 }
 
 const DEFAULT_CONFIG: FusingAngularConfig = {
-  enabledAot: argv.aot,
-  productionBuild: argv.prod
+  enableAotCompilaton: argv.aot,
+  productionBuild: argv.prod,
+  supportIE11: true,
+  supportIE11Animations: false,
+  enableAngularAnimations: false,
+  enableAngularForms: false,
+  enableServiceWorker: false
 }
 
 export const fusingAngular = (opts = DEFAULT_CONFIG) => {
@@ -19,23 +29,11 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
     output: "./.dist/public/js/$name.js",
     target: 'browser@es5',
     plugins: [
-      opts.enabledAot && NgcPlugin(),
+      opts.enableAotCompilaton && NgcPlugin(),
       // WebIndexPlugin({
       //   title: 'FuseBox + Angular',
       //   template: 'angular/index.html',
       // }),
-      // Ng2TemplatePlugin(),
-      // ['*.component.html', RawPlugin()],
-      // [
-      //   '*.component.css',
-      //   SassPlugin({
-      //     indentedSyntax: false,
-      //     importer: true,
-      //     sourceMap: false,
-      //     outputStyle: 'compressed'
-      //   } as any),
-      //   RawPlugin()
-      // ],
       opts.productionBuild && QuantumPlugin({
         warnings: false,
         uglify: true,
@@ -48,7 +46,7 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
     ] as any
   });
 
-  const mainAppEntry = opts.enabledAot
+  const mainAppEntry = opts.enableAotCompilaton
     ? 'main.aot.ts'
     : 'main.ts'
 
