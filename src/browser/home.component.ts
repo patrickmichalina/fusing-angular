@@ -34,7 +34,6 @@ export class TestComponent implements OnInit {
   }
 }
 
-
 @Component({
   selector: 'app-not-found',
   template: `<h3>{{ message }}</h3>`
