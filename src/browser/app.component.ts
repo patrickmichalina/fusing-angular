@@ -4,9 +4,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core'
   selector: 'app-root',
   template: `
     <div class="root">
-    <h1>sdf</h1>
-    <a routerLink="/">Hod  </a>
-    <a routerLink="/test">test</a>
+    <h1>Test</h1>
+    <a routerLink="/">Link 1</a>
+    <a routerLink="/test">Link 2</a>
     <router-outlet></router-outlet>
     </div>
   `,

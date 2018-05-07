@@ -80,4 +80,4 @@ src/config.json
 .serverless
 
 src/client/**/*.css
-.dist
+.dist/

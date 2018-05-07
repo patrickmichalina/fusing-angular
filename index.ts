@@ -64,12 +64,12 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
 
   fuseBrowser
     .bundle('app')
-    .watch('src/browser/**')
+    .watch('src/**')
     .instructions(` !> [${mainAppEntry}]`)
 
   fuseServer
     .bundle("server")
-    .watch("src/server/**")
+    .watch("src/**")
     .instructions(" > [server/server.ts]")
     .completed(proc => proc.start())
 
