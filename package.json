@@ -3,14 +3,22 @@
   "version": "1.0.0",
   "description": "frame-test",
   "main": "index.ts",
+  "author": "frame-test",
+  "license": "MIT",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node index",
     "dev": "ts-node index",
     "ngc": "ngc -p tsconfig.aot.json"
   },
-  "author": "frame-test",
-  "license": "MIT",
+  "devDependencies": {
+    "@types/cookie-parser": "1.4.1",
+    "@types/express": "4.11.1",
+    "@types/node": "10.0.5",
+    "@types/yargs": "11.0.0",
+    "concurrently": "3.5.1",
+    "opn": "5.3.0"
+  },
   "dependencies": {
     "@angular/animations": "6.0.0",
     "@angular/common": "6.0.0",
@@ -38,13 +46,5 @@
     "uglify-js": "3.3.24",
     "yargs": "11.0.0",
     "zone.js": "0.8.26"
-  },
-  "devDependencies": {
-    "@types/cookie-parser": "1.4.1",
-    "@types/express": "4.11.1",
-    "@types/node": "10.0.5",
-    "@types/yargs": "11.0.0",
-    "concurrently": "3.5.1",
-    "opn": "5.3.0"
   }
 }

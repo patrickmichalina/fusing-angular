@@ -1,6 +1,3 @@
-import 'core-js/es7/reflect'
-import 'zone.js/dist/zone-node'
-import 'zone.js/dist/long-stack-trace-zone'
 import { NgModule } from '@angular/core'
 import { ServerModule, ServerTransferStateModule } from '@angular/platform-server'
 import { enableProdMode } from '@angular/core'

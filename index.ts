@@ -56,7 +56,10 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
   const fuseServer = FuseBox.init({
     target: 'server@es5',
     homeDir: "./src",
-    output: "./.dist/$name.js"
+    output: "./.dist/$name.js",
+    plugins: [
+      NgPolyfillPlugin({ isServer: true })
+    ]
   })
 
   fuseBrowser

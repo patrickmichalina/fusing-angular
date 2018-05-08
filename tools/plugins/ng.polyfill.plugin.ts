@@ -50,11 +50,7 @@ export class NgPolyfillPluginClass implements Plugin {
   public dependencies: ['zone.js', 'core-js']
 
   onTypescriptTransform(file: File) {
-    // const regex = new RegExp(/\/\/ FusePlugin: NgPolyfillPlugin/, 'g')
-    // file.addStringDependency('core-js/es7/reflect')
-    // file.addStringDependency('zone.js/dist/zone')
     file.contents = `${prepForTransform(this.buildSet())}\n${file.contents}`
-    // file.contents = file.contents.replace(regex, prepForTransform(this.buildSet()))
   }
 
   buildSet() {
@@ -63,7 +59,6 @@ export class NgPolyfillPluginClass implements Plugin {
     } else {
       return NG_POLY_BROWSER
     }
-    // return []
   }
 }
 
