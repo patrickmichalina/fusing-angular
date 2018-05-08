@@ -2,6 +2,7 @@ import { FuseBox, QuantumPlugin } from "fuse-box"
 import { PORT } from "./src/config"
 import { NgcPlugin } from "./tools/plugins/ng.compiler.plugin"
 import { argv } from 'yargs'
+import { NgPolyfillPlugin } from "./tools/plugins/ng.polyfill.plugin"
 
 export interface FusingAngularConfig {
   productionBuild?: boolean
@@ -29,6 +30,7 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
     output: "./.dist/public/js/$name.js",
     target: 'browser@es5',
     plugins: [
+      NgPolyfillPlugin(),
       opts.enableAotCompilaton && NgcPlugin(),
       // WebIndexPlugin({
       //   title: 'FuseBox + Angular',
@@ -38,6 +40,7 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
         warnings: false,
         uglify: true,
         treeshake: true,
+        removeUseStrict: true,
         bakeApiIntoBundle: 'vendor'
         // replaceProcessEnv: false,
         // processPolyfill: true,

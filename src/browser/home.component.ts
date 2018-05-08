@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core'
 
 const red = 'red'
 
@@ -10,7 +10,8 @@ const red = 'red'
       background-color: ${red};
       display: block;
     }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
   public message: string;
@@ -27,7 +28,7 @@ export class HomeComponent implements OnInit {
 export class TestComponent implements OnInit {
   public message: string;
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit() {
     this.message = 'asdfasdfasd TEST';
@@ -41,7 +42,7 @@ export class TestComponent implements OnInit {
 export class NotFoundComponent implements OnInit {
   public message: string;
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit() {
     this.message = 'NOT FOUND';
