@@ -1,6 +1,6 @@
 import { Plugin, File } from 'fuse-box'
 
-const defaults = {}
+const defaults: NgPolyfillPluginOptions = {}
 
 export interface NgPolyfillPluginOptions {
   isServer?: boolean

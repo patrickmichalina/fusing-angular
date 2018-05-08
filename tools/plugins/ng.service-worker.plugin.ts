@@ -1,6 +1,6 @@
 import { File } from 'fuse-box/core/File'
 
-const defaults = {}
+const defaults: NgSwPluginOptions = {}
 
 export interface NgSwPluginOptions {}
 

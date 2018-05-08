@@ -2,7 +2,7 @@ import { main as ngc } from '@angular/compiler-cli/src/main'
 import { Plugin } from 'fuse-box'
 import { resolve } from 'path';
 
-const defaults = {}
+const defaults: NgcPluginOptions = {}
 
 export interface NgcPluginOptions { }
 
