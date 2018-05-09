@@ -89,5 +89,5 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
 
 fusingAngular({
   // productionBuild: true,
-  // enabledAot: true
+  // enableAotCompilaton: true
 })
