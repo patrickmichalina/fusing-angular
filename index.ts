@@ -4,7 +4,7 @@ import { NgCompilerPlugin } from "./tools/plugins/ng.compiler.plugin"
 import { argv } from 'yargs'
 import { NgPolyfillPlugin } from "./tools/plugins/ng.polyfill.plugin"
 import { NgProdPlugin } from "./tools/plugins/ng.prod.plugin"
-import { NgOptimizerPlugin } from "./tools/plugins/ng.optimizer.plugin";
+import { NgOptimizerPlugin } from "./tools/plugins/ng.optimizer.plugin"
 
 export interface FusingAngularConfig {
   productionBuild?: boolean
@@ -39,9 +39,8 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
       NgOptimizerPlugin({ enabled: opts.enableAngularBuildOptimizer }),
       opts.productionBuild && QuantumPlugin({
         warnings: false,
-        uglify: true,
-        treeshake: true,
-        removeUseStrict: true,
+        uglify: false,
+        treeshake: false,
         bakeApiIntoBundle: 'vendor'
         // replaceProcessEnv: false,
         // processPolyfill: true,
@@ -91,5 +90,5 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
 
 fusingAngular({
   productionBuild: true,
-  enableAotCompilaton: true
+  // enableAotCompilaton: true
 })
