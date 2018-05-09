@@ -24,6 +24,7 @@
     "opn": "5.3.0"
   },
   "dependencies": {
+    "@angular-devkit/build-optimizer": "^0.6.0",
     "@angular/animations": "6.0.0",
     "@angular/common": "6.0.0",
     "@angular/compiler": "6.0.0",
