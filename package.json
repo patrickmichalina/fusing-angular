@@ -11,9 +11,7 @@
   "author": "frame-test",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node index",
-    "dev": "ts-node index",
-    "ngc": "ngc -p tsconfig.aot.json"
+    "start": "ts-node index"
   },
   "devDependencies": {
     "@types/cookie-parser": "1.4.1",
