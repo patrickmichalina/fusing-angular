@@ -1,9 +1,9 @@
 import { FuseBox, QuantumPlugin } from "fuse-box"
 import { PORT } from "./src/config"
-import { NgcPlugin } from "./tools/plugins/ng.compiler.plugin"
+import { NgCompilerPlugin } from "./tools/plugins/ng.compiler.plugin"
 import { argv } from 'yargs'
 import { NgPolyfillPlugin } from "./tools/plugins/ng.polyfill.plugin"
-import { NgProdPlugin } from "./tools/plugins/ng.prod.plugin";
+import { NgProdPlugin } from "./tools/plugins/ng.prod.plugin"
 
 export interface FusingAngularConfig {
   productionBuild?: boolean
@@ -31,9 +31,9 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
     output: "./.dist/public/js/$name.js",
     target: 'browser@es5',
     plugins: [
-      NgProdPlugin(),
+      NgProdPlugin({ enabled: opts.productionBuild }),
       NgPolyfillPlugin(),
-      opts.enableAotCompilaton && NgcPlugin(),
+      NgCompilerPlugin({ enabled: opts.enableAotCompilaton }),
       opts.productionBuild && QuantumPlugin({
         warnings: false,
         uglify: true,
@@ -56,7 +56,7 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
     homeDir: "./src",
     output: "./.dist/$name.js",
     plugins: [
-      // NgProdPlugin({ fileTest: 'server.angular.module' }),
+      NgProdPlugin({ enabled: opts.productionBuild, fileTest: 'server.angular.module' }),
       NgPolyfillPlugin({ isServer: true, fileTest: 'server.angular.module' })
     ]
   })
@@ -87,6 +87,6 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
 }
 
 fusingAngular({
-  // productionBuild: true,
-  // enableAotCompilaton: true
+  productionBuild: true,
+  enableAotCompilaton: true
 })

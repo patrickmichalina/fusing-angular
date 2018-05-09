@@ -5,7 +5,6 @@ const defaults: NgProdPluginOptions = {
 }
 
 export interface NgProdPluginOptions {
-  isServer?: boolean
   enabled?: boolean
   fileTest?: string
 }
@@ -18,6 +17,7 @@ export class NgProdPluginClass implements Plugin {
     }
   }
 
+  public dependencies: ['@angular/core']
   public test = this.regex || /(main.ts|main.aot.ts)/
 
   get regex() {
@@ -27,11 +27,10 @@ export class NgProdPluginClass implements Plugin {
   }
 
   onTypescriptTransform(file: File) {
-    // console.log(file.context)
-    // console.log(this.regex)
-    // file.contents = `import { enableProdMode } from '@angular/core';
-    // enableProdMode()
-    // ${file.contents}`
+    if (!this.opts.enabled || !this.test.test(file.relativePath)) return
+    file.contents = `import { enableProdMode } from '@angular/core';
+    enableProdMode()
+    ${file.contents}`
   }
 }
 
