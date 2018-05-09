@@ -1,5 +1,8 @@
 {
   "name": "frame-test",
+  "repository": {
+    "url": "https://github.com/patrickmichalina/fusing-angular"
+  },
   "version": "0.0.0",
   "description": "frame-test",
   "main": "dist/server.js",

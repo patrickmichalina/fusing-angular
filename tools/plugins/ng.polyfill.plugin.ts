@@ -4,6 +4,7 @@ const defaults: NgPolyfillPluginOptions = {}
 
 export interface NgPolyfillPluginOptions {
   isServer?: boolean
+  fileTest?: string
 }
 
 export const NG_POLY_BASE = [
@@ -46,10 +47,12 @@ const prepForTransform = (deps: string[]) => {
 
 export class NgPolyfillPluginClass implements Plugin {
   constructor(private opts: NgPolyfillPluginOptions = defaults) { }
-  public test: RegExp = /(main.ts|main.aot.ts)/
+  public test: RegExp = this.opts.fileTest &&
+    new RegExp(this.opts.fileTest) || /(main.ts|main.aot.ts)/
   public dependencies: ['zone.js', 'core-js']
 
   onTypescriptTransform(file: File) {
+    if (!this.test.test(file.relativePath)) return
     file.contents = `${prepForTransform(this.buildSet())}\n${file.contents}`
   }
 

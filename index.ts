@@ -3,6 +3,7 @@ import { PORT } from "./src/config"
 import { NgcPlugin } from "./tools/plugins/ng.compiler.plugin"
 import { argv } from 'yargs'
 import { NgPolyfillPlugin } from "./tools/plugins/ng.polyfill.plugin"
+import { NgProdPlugin } from "./tools/plugins/ng.prod.plugin";
 
 export interface FusingAngularConfig {
   productionBuild?: boolean
@@ -30,6 +31,7 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
     output: "./.dist/public/js/$name.js",
     target: 'browser@es5',
     plugins: [
+      NgProdPlugin(),
       NgPolyfillPlugin(),
       opts.enableAotCompilaton && NgcPlugin(),
       opts.productionBuild && QuantumPlugin({
@@ -54,7 +56,8 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
     homeDir: "./src",
     output: "./.dist/$name.js",
     plugins: [
-      NgPolyfillPlugin({ isServer: true })
+      // NgProdPlugin({ fileTest: 'server.angular.module' }),
+      NgPolyfillPlugin({ isServer: true, fileTest: 'server.angular.module' })
     ]
   })
 
