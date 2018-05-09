@@ -32,10 +32,6 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
     plugins: [
       NgPolyfillPlugin(),
       opts.enableAotCompilaton && NgcPlugin(),
-      // WebIndexPlugin({
-      //   title: 'FuseBox + Angular',
-      //   template: 'angular/index.html',
-      // }),
       opts.productionBuild && QuantumPlugin({
         warnings: false,
         uglify: true,

@@ -4,14 +4,10 @@ import { resolve } from 'path'
 import { ngExpressEngine } from '@nguniversal/express-engine'
 import { AppServerModule } from './server.angular.module'
 import { stat, writeFile } from 'fs/promises'
-// import { createLogger } from '@expo/bunyan'
-// import { ngExpressEngine } from '@nguniversal/express-engine'
 
 const shrinkRay = require('shrink-rayed')
 const minifyHTML = require('express-minify-html')
-// const bunyanMiddleware = require('bunyan-middleware')
 // const xhr2 = require('xhr2')
-// const cors = require('cors')
 
 // tslint:disable-next-line:no-object-mutation
 // xhr2.prototype._restrictedHeaders.cookie = false
@@ -33,21 +29,8 @@ const publicDir = `${dir}/public`
 //   }
 // }
 
-// !isEndToEndTest &&
-//   app.use(
-//     bunyanMiddleware({
-//       logger: createLogger({
-//         name: 'Fusing-Angular',
-//         type: 'node-express'
-//       }),
-//       excludeHeaders: ['authorization', 'cookie']
-//     })
-//   )
-
-
 expressApp.use(cookieParser())
 expressApp.use(shrinkRay())
-// app.use(cors())
 expressApp.use(
   minifyHTML({
     override: true,
