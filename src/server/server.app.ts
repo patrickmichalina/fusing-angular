@@ -68,7 +68,7 @@ expressApp.set('view engine', 'html')
 expressApp.engine('html', ngExpressEngine({ bootstrap: AppServerModule }))
 
 const virtualIndex = (req: express.Request,
-  res: express.Response, doc: string, path = `${publicDir}/index.html`) => {
+  res: express.Response, document: string, path = `${publicDir}/index.html`) => {
 
   const resolvedPath = resolve(path)
 
@@ -77,11 +77,11 @@ const virtualIndex = (req: express.Request,
       res.render(resolvedPath, {
         req,
         res,
-        document: doc
+        document
       });
     })
     .catch(() => writeFile(resolvedPath, '')
-      .then(() => virtualIndex(req, res, doc, path)))
+      .then(() => virtualIndex(req, res, document, path)))
 }
 
 expressApp.get('**', (req, res) => {

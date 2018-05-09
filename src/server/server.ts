@@ -6,5 +6,5 @@ const port = PORT
 const server = createServer(expressApp)
 
 server.listen(port, () => {
-    console.log('Angular Universal Server listening')
+  console.log('Angular Universal Server listening')
 })

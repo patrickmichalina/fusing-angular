@@ -47,7 +47,7 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
         // ensureES5: true
       })
     ] as any
-  });
+  })
 
   const mainAppEntry = opts.enableAotCompilaton
     ? 'main.aot.ts'
@@ -77,7 +77,7 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
     .instructions(" > [server/server.ts]")
     .completed(proc => proc.start())
 
-  fuseServer.dev({
+  !opts.productionBuild && fuseServer.dev({
     root: './.dist',
     port: PORT,
     httpServer: false

@@ -2,7 +2,9 @@
   "name": "frame-test",
   "version": "0.0.0",
   "description": "frame-test",
-  "main": "index.ts",
+  "main": "dist/server.js",
+  "ts:main": "src/index.ts",
+  "typings": "src/index.ts",
   "author": "frame-test",
   "license": "MIT",
   "scripts": {
@@ -13,7 +15,7 @@
   "devDependencies": {
     "@types/cookie-parser": "1.4.1",
     "@types/express": "4.11.1",
-    "@types/node": "10.0.5",
+    "@types/node": "10.0.6",
     "@types/yargs": "11.0.0",
     "concurrently": "3.5.1",
     "opn": "5.3.0"
