@@ -1,12 +1,11 @@
 {
   "name": "frame-test",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "frame-test",
   "main": "index.ts",
   "author": "frame-test",
   "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node index",
     "dev": "ts-node index",
     "ngc": "ngc -p tsconfig.aot.json"

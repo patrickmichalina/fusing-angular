@@ -3,8 +3,9 @@ import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { AppComponent } from './app.component'
 import { HomeComponent, TestComponent, NotFoundComponent } from './home.component'
-import { TransferHttpCacheModule } from '@nguniversal/common';
-
+import { TransferHttpCacheModule } from '@nguniversal/common'
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+ 
 @NgModule({
   declarations: [
     AppComponent,
@@ -13,6 +14,7 @@ import { TransferHttpCacheModule } from '@nguniversal/common';
     NotFoundComponent
   ],
   imports: [
+    // BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'my-app' }),
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
