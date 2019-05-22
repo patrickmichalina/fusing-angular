@@ -62,7 +62,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     homeDir: `${settings.homeDir}/${settings.browserSrcDir}`,
     output: `${settings.outputDir}/public/js/$name.js`,
     sourceMaps: true,
-    target: 'browser@es5',
+    target: 'browser@esnext',
     plugins: [
       opts.enableAotCompilaton && NgAotFactoryPlugin(),
       NgPolyfillPlugin(),
@@ -72,7 +72,12 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
         uglify: settings.minify,
         treeshake: settings.treeshake,
         bakeApiIntoBundle: settings.vendorBundleName,
-        processPolyfill: settings.enableAotCompilaton,
+        // processPolyfill: settings.enableAotCompilaton,
+        processPolyfill: true,
+        replaceProcessEnv: false,
+        replaceTypeOf: false,
+        ensureES5: true
+
       }) as any,
       WebIndexPlugin({
         path: '/js',
@@ -87,7 +92,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     : `${settings.browserEntry}.ts`
 
   const fuseServer = FuseBox.init({
-    target: 'server',
+    target: 'server@es5',
     homeDir: settings.homeDir,
     output: `${settings.outputDir}/$name.js`,
     plugins: [
@@ -103,7 +108,8 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
   fuseBrowser
     .bundle(settings.appBundleName)
     .splitConfig({
-      dest: 'modules'
+      dest: 'modules',
+      browser: 'modules'
     })
     .watch(`${settings.homeDir}/**`, () => settings.watch)
     .instructions(` !> [${mainAppEntry}]`)
@@ -129,5 +135,5 @@ fusingAngular({
   productionBuild: true,
   // productionBuild: true,
   // minify: true,
-  enableAotCompilaton: true
+  // enableAotCompilaton: true
 })
