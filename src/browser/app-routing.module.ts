@@ -2,13 +2,27 @@ import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 
 export function homeModule() {
-  return import('./home/home.module').then(m => m.HomeModule)
+  return import('./home/home.module').then(m => {
+    console.log(m)
+    return m.HomeModule
+  })
+}
+
+export function aboutModule() {
+  return import('./about/about.module').then(m => {
+    console.log(m)
+    return m.AboutModule
+  })
 }
 
 export const routes: Routes = [
   {
     path: '',
     loadChildren: homeModule
+  },
+  {
+    path: 'about',
+    loadChildren: aboutModule
   }
 ]
 
@@ -17,10 +31,3 @@ export const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
-
-
-// RouterModule.forRoot([
-//   { path: '', component: HomeComponent },
-//   { path: 'test', component: TestComponent },
-//   { path: '**', component: NotFoundComponent }
-// ], { initialNavigation: true }),

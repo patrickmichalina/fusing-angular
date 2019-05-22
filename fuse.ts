@@ -3,6 +3,7 @@ import { NgCompilerPlugin } from "./tools/plugins/ng.compiler.plugin"
 import { NgPolyfillPlugin } from "./tools/plugins/ng.polyfill.plugin"
 import { NgProdPlugin } from "./tools/plugins/ng.prod.plugin"
 import { maybe } from 'typescript-monads'
+import { NgAotFactoryPlugin } from "./tools/plugins/ng.aot-factory.plugin";
 
 export interface FusingAngularConfig {
   readonly productionBuild: boolean
@@ -61,16 +62,18 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     homeDir: `${settings.homeDir}/${settings.browserSrcDir}`,
     output: `${settings.outputDir}/public/js/$name.js`,
     sourceMaps: true,
+    target: 'browser@es5',
     plugins: [
+      opts.enableAotCompilaton && NgAotFactoryPlugin(),
       NgPolyfillPlugin(),
       NgCompilerPlugin({ enabled: settings.enableAotCompilaton }),
-      NgProdPlugin({ enabled: opts.productionBuild, fileTest: settings.browserEntry }),
+      opts.productionBuild && NgProdPlugin({ enabled: opts.productionBuild, fileTest: settings.browserEntry }),
       QuantumPlugin({
         uglify: settings.minify,
         treeshake: settings.treeshake,
         bakeApiIntoBundle: settings.vendorBundleName,
-        processPolyfill: settings.enableAotCompilaton
-      }),
+        processPolyfill: settings.enableAotCompilaton,
+      }) as any,
       WebIndexPlugin({
         path: '/js',
         template: `${settings.homeDir}/${settings.browserSrcDir}/index.html`,
@@ -123,6 +126,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 
 fusingAngular({
   watch: true,
+  productionBuild: true,
   // productionBuild: true,
   // minify: true,
   enableAotCompilaton: true

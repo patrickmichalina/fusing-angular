@@ -1,16 +1,14 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core'
 
-const red = 'red'
-
 @Component({
-  selector: 'app-home',
-  template: `<h3>THIS IS HOME!</h3>`,
+  selector: 'app-about',
+  template: `<h3>ABOUT</h3>`,
   styles: [`
     :host {
-      background-color: ${red};
       display: block;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent { }
+export class AboutComponent {
+}
