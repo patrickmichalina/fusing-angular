@@ -18,6 +18,8 @@ export interface FusingAngularConfig {
   readonly watch: boolean
   readonly port: number
   readonly homeDir: string
+  readonly serverSrcDir: string
+  readonly browserSrcDir: string
   readonly outputDir: string
   readonly vendorBundleName: string
   readonly appBundleName: string
@@ -41,6 +43,8 @@ const DEFAULT_CONFIG: FusingAngularConfig = {
   port: maybe(process.env.PORT).map(v => +v).valueOr(5000),
   homeDir: 'src',
   outputDir: '.dist',
+  serverSrcDir: 'server',
+  browserSrcDir: 'browser',
   vendorBundleName: 'vendor',
   appBundleName: 'app',
   serverBundleName: 'server',
@@ -54,9 +58,10 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     ...opts
   }
   const fuseBrowser = FuseBox.init({
-    homeDir: "src/browser",
+    homeDir: `${settings.homeDir}/${settings.browserSrcDir}`,
     output: `${settings.outputDir}/public/js/$name.js`,
     target: 'browser@es6',
+    sourceMaps: true,
     plugins: [
       NgPolyfillPlugin(),
       NgCompilerPlugin({ enabled: settings.enableAotCompilaton }),
@@ -66,7 +71,9 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
         uglify: settings.minify,
         treeshake: settings.treeshake,
         bakeApiIntoBundle: settings.vendorBundleName,
-        processPolyfill: settings.enableAotCompilaton
+        processPolyfill: settings.enableAotCompilaton,
+        // replaceProcessEnv: false,
+        // replaceTypeOf: false,
       })
     ] as any
   })
@@ -97,7 +104,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
   fuseServer
     .bundle(settings.serverBundleName)
     .watch(`${settings.homeDir}/**`, () => settings.watch)
-    .instructions(" > [server/server.ts]")
+    .instructions(` > [${settings.serverSrcDir}/server.ts]`)
     .completed(proc => proc.start())
 
   !opts.productionBuild && fuseServer.dev({
