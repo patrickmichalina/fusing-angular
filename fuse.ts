@@ -27,6 +27,8 @@ export interface FusingAngularConfig {
   readonly serverBundleName: string
   readonly browserEntry: string
   readonly browserAotEntry: string
+  readonly jsOutputDir: string
+  readonly jsLazyModuleDir: string
 }
 
 const DEFAULT_CONFIG: FusingAngularConfig = {
@@ -44,6 +46,8 @@ const DEFAULT_CONFIG: FusingAngularConfig = {
   port: maybe(process.env.PORT).map(v => +v).valueOr(5000),
   homeDir: 'src',
   outputDir: '.dist',
+  jsOutputDir: 'js',
+  jsLazyModuleDir: 'modules',
   serverSrcDir: 'server',
   browserSrcDir: 'browser',
   vendorBundleName: 'vendor',
@@ -54,28 +58,24 @@ const DEFAULT_CONFIG: FusingAngularConfig = {
 }
 
 export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
-  const settings = {
-    ...DEFAULT_CONFIG,
-    ...opts
-  }
+  const settings = { ...DEFAULT_CONFIG, ...opts }
   const fuseBrowser = FuseBox.init({
     homeDir: `${settings.homeDir}/${settings.browserSrcDir}`,
     output: `${settings.outputDir}/public/js/$name.js`,
     sourceMaps: true,
-    target: 'browser',
     plugins: [
       NgAotFactoryPlugin({ enabled: opts.enableAotCompilaton }),
       NgPolyfillPlugin(),
       NgCompilerPlugin({ enabled: settings.enableAotCompilaton }),
       NgProdPlugin({ enabled: opts.productionBuild, fileTest: settings.browserEntry }),
-      QuantumPlugin({
+      opts.productionBuild && QuantumPlugin({
         uglify: settings.minify,
         treeshake: settings.treeshake,
         bakeApiIntoBundle: settings.vendorBundleName,
         processPolyfill: settings.enableAotCompilaton
       }) as any,
       WebIndexPlugin({
-        path: '/js',
+        path: `/${settings.jsOutputDir}`,
         template: `${settings.homeDir}/${settings.browserSrcDir}/index.html`,
         target: '../index.html'
       })
@@ -102,7 +102,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 
   fuseBrowser
     .bundle(settings.appBundleName)
-    .splitConfig({ dest: 'modules', browser: '/js/' })
+    .splitConfig({ dest: settings.jsLazyModuleDir, browser: `/${settings.jsOutputDir}/` })
     .watch(`${settings.homeDir}/**`, () => settings.watch)
     .instructions(` !> [${mainAppEntry}]`)
 
