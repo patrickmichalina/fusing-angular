@@ -98,7 +98,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 
   fuseBrowser
     .bundle(settings.vendorBundleName)
-    .instructions(mainAppEntry)
+    .instructions(` ~ ${mainAppEntry}`)
 
   fuseBrowser
     .bundle(settings.appBundleName)
@@ -123,7 +123,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 }
 
 fusingAngular({
-  watch: true,
+  // watch: true,
   // productionBuild: true,
   // productionBuild: true,
   // minify: true,
