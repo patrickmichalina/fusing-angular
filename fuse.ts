@@ -62,7 +62,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     homeDir: `${settings.homeDir}/${settings.browserSrcDir}`,
     output: `${settings.outputDir}/public/js/$name.js`,
     sourceMaps: true,
-    target: 'browser@esnext',
+    target: 'browser',
     plugins: [
       opts.enableAotCompilaton && NgAotFactoryPlugin(),
       NgPolyfillPlugin(),
@@ -72,12 +72,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
         uglify: settings.minify,
         treeshake: settings.treeshake,
         bakeApiIntoBundle: settings.vendorBundleName,
-        // processPolyfill: settings.enableAotCompilaton,
-        processPolyfill: true,
-        replaceProcessEnv: false,
-        replaceTypeOf: false,
-        ensureES5: true
-
+        processPolyfill: settings.enableAotCompilaton
       }) as any,
       WebIndexPlugin({
         path: '/js',
@@ -132,7 +127,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 
 fusingAngular({
   watch: true,
-  productionBuild: true,
+  // productionBuild: true,
   // productionBuild: true,
   // minify: true,
   // enableAotCompilaton: true
