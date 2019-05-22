@@ -37,7 +37,7 @@
     "cookie-parser": "1.4.4",
     "core-js": "^3.1.2",
     "express": "^4.17.0",
-    "fuse-box": "^3.7.1",
+    "fuse-box": "^4.0.0-alpha.29",
     "rxjs": "^6.5.2",
     "ts-node": "^8.1.0",
     "typescript": "^3.4.5",

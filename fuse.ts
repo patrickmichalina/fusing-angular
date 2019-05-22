@@ -1,4 +1,4 @@
-import { FuseBox, QuantumPlugin } from "fuse-box"
+import { FuseBox, QuantumPlugin, WebIndexPlugin } from "fuse-box"
 import { NgCompilerPlugin } from "./tools/plugins/ng.compiler.plugin"
 import { NgPolyfillPlugin } from "./tools/plugins/ng.polyfill.plugin"
 import { NgProdPlugin } from "./tools/plugins/ng.prod.plugin"
@@ -60,22 +60,23 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
   const fuseBrowser = FuseBox.init({
     homeDir: `${settings.homeDir}/${settings.browserSrcDir}`,
     output: `${settings.outputDir}/public/js/$name.js`,
-    target: 'browser@es6',
     sourceMaps: true,
     plugins: [
       NgPolyfillPlugin(),
       NgCompilerPlugin({ enabled: settings.enableAotCompilaton }),
       NgProdPlugin({ enabled: opts.productionBuild, fileTest: settings.browserEntry }),
       QuantumPlugin({
-        warnings: false,
         uglify: settings.minify,
         treeshake: settings.treeshake,
         bakeApiIntoBundle: settings.vendorBundleName,
-        processPolyfill: settings.enableAotCompilaton,
-        // replaceProcessEnv: false,
-        // replaceTypeOf: false,
+        processPolyfill: settings.enableAotCompilaton
+      }),
+      WebIndexPlugin({
+        path: '/js',
+        template: `${settings.homeDir}/${settings.browserSrcDir}/index.html`,
+        target: '../index.html'
       })
-    ] as any
+    ]
   })
 
   const mainAppEntry = opts.enableAotCompilaton
@@ -83,7 +84,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     : `${settings.browserEntry}.ts`
 
   const fuseServer = FuseBox.init({
-    target: 'server@es5',
+    target: 'server',
     homeDir: settings.homeDir,
     output: `${settings.outputDir}/$name.js`,
     plugins: [
@@ -94,7 +95,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 
   fuseBrowser
     .bundle(settings.vendorBundleName)
-    .instructions(` ~ ${mainAppEntry}`)
+    .instructions(mainAppEntry)
 
   fuseBrowser
     .bundle(settings.appBundleName)
@@ -118,7 +119,8 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 }
 
 fusingAngular({
-  // productionBuild: true,
-  // minify: true,
-  // enableAotCompilaton: true
+  watch: true,
+  productionBuild: true,
+  minify: true,
+  enableAotCompilaton: true
 })
