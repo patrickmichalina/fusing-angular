@@ -41,6 +41,7 @@
     "rxjs": "^6.5.2",
     "ts-node": "^8.1.0",
     "typescript": "^3.4.5",
+    "typescript-monads": "^3.13.0",
     "yargs": "^13.2.4",
     "zone.js": "^0.9.1"
   }
