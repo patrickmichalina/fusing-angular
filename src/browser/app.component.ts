@@ -5,8 +5,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core'
   template: `
     <div class="root">
     <h1>Tes2t</h1>
-    <a routerLink="/">Link 1</a>
-    <a routerLink="/test">Link 4</a>
+    <a routerLink>HOME</a>
+    <a routerLink="/test">TEST</a>
     <router-outlet></router-outlet>
     </div>
   `,
