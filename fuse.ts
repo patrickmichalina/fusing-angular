@@ -99,6 +99,9 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 
   fuseBrowser
     .bundle(settings.appBundleName)
+    .splitConfig({
+      dest: 'modules'
+    })
     .watch(`${settings.homeDir}/**`, () => settings.watch)
     .instructions(` !> [${mainAppEntry}]`)
 
@@ -119,8 +122,8 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 }
 
 fusingAngular({
-  watch: true
+  watch: true,
   // productionBuild: true,
   // minify: true,
-  // enableAotCompilaton: true
+  enableAotCompilaton: true
 })

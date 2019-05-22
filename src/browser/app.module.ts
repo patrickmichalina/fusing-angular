@@ -1,29 +1,22 @@
 import { BrowserModule } from '@angular/platform-browser'
 import { NgModule } from '@angular/core'
-import { RouterModule } from '@angular/router'
-import { AppComponent } from './app.component'
-import { HomeComponent, TestComponent, NotFoundComponent } from './home.component'
 import { TransferHttpCacheModule } from '@nguniversal/common'
+import { NotFoundModule } from './not-found/not-found.module';
+import { AppComponent } from './app.component';
+import { HomeModule } from './home/home.module';
+import { AppRoutingModule } from './app-routing.module';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
- 
+// BrowserAnimationsModule,
+
 @NgModule({
-  declarations: [
-    AppComponent,
-    TestComponent,
-    HomeComponent,
-    NotFoundComponent
-  ],
   imports: [
-    // BrowserAnimationsModule,
+    AppRoutingModule,
+    HomeModule,
+    NotFoundModule,
     BrowserModule.withServerTransition({ appId: 'my-app' }),
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent },
-      { path: 'test', component: TestComponent },
-      { path: '**', component: NotFoundComponent }
-    ], { initialNavigation: true }),
     TransferHttpCacheModule
   ],
-  providers: [],
+  declarations: [AppComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -16,7 +16,7 @@
     "outDir": ".dist",
     "allowSyntheticDefaultImports": false,
     "sourceMap": true,
-    "lib": ["es6", "dom"],
+    "lib": ["es2016", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true
   },
