@@ -64,7 +64,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     sourceMaps: true,
     target: 'browser',
     plugins: [
-      opts.enableAotCompilaton && NgAotFactoryPlugin(),
+      NgAotFactoryPlugin({ enabled: opts.enableAotCompilaton }),
       NgPolyfillPlugin(),
       NgCompilerPlugin({ enabled: settings.enableAotCompilaton }),
       NgProdPlugin({ enabled: opts.productionBuild, fileTest: settings.browserEntry }),

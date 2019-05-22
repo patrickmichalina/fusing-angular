@@ -5,17 +5,21 @@ import { Plugin, File } from 'fuse-box'
 // tslint:disable:no-if-statement
 // tslint:disable:no-object-mutation
 // tslint:disable:readonly-keyword
-const defaults: NgAotFactoryPluginOptions = {}
+const defaults: NgAotFactoryPluginOptions = {
+  enabled: false
+}
 
-export interface NgAotFactoryPluginOptions {}
+export interface NgAotFactoryPluginOptions {
+  enabled?: boolean
+}
 
 export class NgAotFactoryPluginClass implements Plugin {
-  constructor(public opts: NgAotFactoryPluginOptions = defaults) {}
+  constructor(public opts: NgAotFactoryPluginOptions = defaults) { }
 
   public test: RegExp = /-routing.module.js/
 
   onTypescriptTransform?(file: File) {
-    if (!this.test.test(file.relativePath)) return
+    if (!this.opts.enabled || !this.test.test(file.relativePath)) return
     const regex1 = new RegExp(/.module'/, 'g')
     const regex2 = new RegExp(/Module\);/, 'g')
     file.contents = file.contents.replace(regex1, ".module.ngfactory'")
