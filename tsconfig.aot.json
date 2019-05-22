@@ -31,6 +31,6 @@
   "angularCompilerOptions": {
     "skipMetadataEmit": true,
     "preserveWhitespaces": false,
-    "enableIvy": false
+    "disableTypeScriptVersionCheck": true
   }
 }

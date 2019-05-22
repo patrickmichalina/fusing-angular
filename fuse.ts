@@ -1,50 +1,55 @@
 import { FuseBox, QuantumPlugin } from "fuse-box"
-import { PORT } from "./src/config"
 import { NgCompilerPlugin } from "./tools/plugins/ng.compiler.plugin"
-import { argv } from 'yargs'
 import { NgPolyfillPlugin } from "./tools/plugins/ng.polyfill.plugin"
 import { NgProdPlugin } from "./tools/plugins/ng.prod.plugin"
-import { NgOptimizerPlugin } from "./tools/plugins/ng.optimizer.plugin"
+import { PORT } from "./src/config"
 
 export interface FusingAngularConfig {
-  productionBuild?: boolean
-  supportIE11?: boolean
-  supportIE11Animations?: boolean
-  enableAotCompilaton?: boolean
-  enableAngularAnimations?: boolean
-  enableAngularForms?: boolean
-  enableServiceWorker?: boolean
-  enableAngularBuildOptimizer?: boolean
+  readonly productionBuild: boolean
+  readonly supportIE11: boolean
+  readonly supportIE11Animations: boolean
+  readonly enableAotCompilaton: boolean
+  readonly enableAngularAnimations: boolean
+  readonly enableAngularForms: boolean
+  readonly enableServiceWorker: boolean
+  readonly enableAngularBuildOptimizer: boolean
+  readonly minify: boolean
+  readonly treeshake: boolean
+  readonly vendorBundleName: string
 }
 
 const DEFAULT_CONFIG: FusingAngularConfig = {
-  enableAotCompilaton: argv.aot,
-  productionBuild: argv.prod,
+  enableAotCompilaton: false,
+  productionBuild: false,
   supportIE11: true,
   supportIE11Animations: false,
   enableAngularAnimations: false,
   enableAngularForms: false,
-  enableServiceWorker: false
+  enableServiceWorker: false,
+  enableAngularBuildOptimizer: false,
+  minify: false,
+  treeshake: false,
+  vendorBundleName: 'vendor'
 }
 
-export const fusingAngular = (opts = DEFAULT_CONFIG) => {
+export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
+  const settings = {
+    ...DEFAULT_CONFIG,
+    ...opts
+  }
   const fuseBrowser = FuseBox.init({
     homeDir: "src/browser",
     output: "./.dist/public/js/$name.js",
-    target: 'browser@es5',
+    target: 'browser@es6',
     plugins: [
-      NgProdPlugin({ enabled: opts.productionBuild }),
       NgPolyfillPlugin(),
-      NgCompilerPlugin({ enabled: opts.enableAotCompilaton }),
-      NgOptimizerPlugin({ enabled: opts.enableAngularBuildOptimizer }),
-      opts.productionBuild && QuantumPlugin({
+      NgCompilerPlugin({ enabled: settings.enableAotCompilaton }),
+      QuantumPlugin({
         warnings: false,
-        uglify: false,
-        treeshake: false,
-        bakeApiIntoBundle: 'vendor'
-        // replaceProcessEnv: false,
-        // processPolyfill: true,
-        // ensureES5: true
+        uglify: settings.minify,
+        treeshake: settings.treeshake,
+        bakeApiIntoBundle: settings.vendorBundleName,
+        processPolyfill: settings.enableAotCompilaton
       })
     ] as any
   })
@@ -55,7 +60,7 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
 
   const fuseServer = FuseBox.init({
     target: 'server@es5',
-    homeDir: "./src",
+    homeDir: "src",
     output: "./.dist/$name.js",
     plugins: [
       NgProdPlugin({ enabled: opts.productionBuild, fileTest: 'server.angular.module' }),
@@ -64,7 +69,7 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
   })
 
   fuseBrowser
-    .bundle('vendor')
+    .bundle(settings.vendorBundleName)
     .instructions(` ~ ${mainAppEntry}`)
 
   fuseBrowser
@@ -89,6 +94,7 @@ export const fusingAngular = (opts = DEFAULT_CONFIG) => {
 }
 
 fusingAngular({
-  productionBuild: true,
-  // enableAotCompilaton: true
+  // productionBuild: true,
+  // minify: true,
+  enableAotCompilaton: true
 })

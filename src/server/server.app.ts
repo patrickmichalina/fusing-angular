@@ -3,49 +3,14 @@ import * as cookieParser from 'cookie-parser'
 import { resolve } from 'path'
 import { ngExpressEngine } from '@nguniversal/express-engine'
 import { AppServerModule } from './server.angular.module'
-import { stat, writeFile } from 'fs/promises'
-
-const shrinkRay = require('shrink-rayed')
-const minifyHTML = require('express-minify-html')
-// const xhr2 = require('xhr2')
-
-// tslint:disable-next-line:no-object-mutation
-// xhr2.prototype._restrictedHeaders.cookie = false
+import { writeFile, stat } from 'fs'
+import { bindNodeCallback } from 'rxjs';
 
 const expressApp = express()
 const dir = resolve('./.dist')
 const publicDir = `${dir}/public`
 
-// const staticOptions = {
-//   index: false,
-//   maxAge: isProd ? ms('1y') : ms('0'),
-//   setHeaders: (res: express.Response, path: any) => {
-//     res.setHeader(
-//       'Expires',
-//       isProd
-//         ? new Date(Date.now() + ms('1y')).toUTCString()
-//         : new Date(Date.now() + ms('0')).toUTCString()
-//     )
-//   }
-// }
-
 expressApp.use(cookieParser())
-expressApp.use(shrinkRay())
-expressApp.use(
-  minifyHTML({
-    override: true,
-    exception_url: false,
-    htmlMinifier: {
-      removeComments: true,
-      collapseWhitespace: true,
-      collapseBooleanAttributes: true,
-      removeAttributeQuotes: false,
-      minifyJS: true
-    }
-  })
-)
-
-expressApp.use('/favicon.ico', (req, res) => res.sendStatus(204)) // TODO: FAVICONS
 expressApp.use('/js', express.static(`${publicDir}/js`))
 expressApp.set('view engine', 'html')
 expressApp.engine('html', ngExpressEngine({ bootstrap: AppServerModule }))
@@ -55,7 +20,7 @@ const virtualIndex = (req: express.Request,
 
   const resolvedPath = resolve(path)
 
-  stat(resolvedPath)
+  bindNodeCallback(stat)(resolvedPath).toPromise()
     .then(() => {
       res.render(resolvedPath, {
         req,
@@ -63,7 +28,7 @@ const virtualIndex = (req: express.Request,
         document
       });
     })
-    .catch(() => writeFile(resolvedPath, '')
+    .catch(() => bindNodeCallback(writeFile)(resolvedPath, '').toPromise()
       .then(() => virtualIndex(req, res, document, path)))
 }
 
@@ -84,39 +49,5 @@ expressApp.get('**', (req, res) => {
 </html>`
   virtualIndex(req, res, document)
 })
-
-// app.use('/ngsw.json', express.static(`${dir}/ngsw.json`, staticOptions))
-// app.use(
-//   '/ngsw-worker.js',
-//   express.static(`${dir}/ngsw-worker.js`, staticOptions)
-// )
-// app.use(
-//   '/assets',
-//   express.static(`${dir}/assets`, { ...staticOptions, fallthrough: false })
-// )
-// app.use(
-//   '/manifest.json',
-//   express.static(`${dir}/assets`, { ...staticOptions, fallthrough: false })
-// )
-
-
-
-///////////////////////////////////
-// app.use('/robots.txt', express.static(`${dir}/web/robots.txt`, staticOptions))
-// app.use('/ping.html', express.static(`${dir}/web/ping.html`, staticOptions))
-// app.use(
-//   '/favicon.ico',
-//   express.static(`${dir}/assets/favicons/favicon-16x16.png`, {
-//     ...staticOptions,
-//     fallthrough: false
-//   })
-// )
-// app.use(
-//   '/assets/favicons/favicon.ico',
-//   express.static(`${dir}/assets/favicons/favicon-16x16.png`, {
-//     ...staticOptions,
-//     fallthrough: false
-//   })
-// )
 
 export { expressApp }
