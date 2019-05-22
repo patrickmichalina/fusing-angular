@@ -8,7 +8,7 @@ export interface NgPolyfillPluginOptions {
 }
 
 export const NG_POLY_BASE = [
-  'core-js/es7/reflect'
+  'core-js/features/reflect'
 ]
 export const NG_POLY_SERVER = [
   ...NG_POLY_BASE,
@@ -23,20 +23,20 @@ export const NG_POLY_BROWSER_IE_ANIMATIONS = [
   'web-animations-js'
 ]
 export const NG_POLY_BROWSER_IE = [
-  'core-js/es6/symbol',
-  'core-js/es6/object',
-  'core-js/es6/function',
-  'core-js/es6/parse-int',
-  'core-js/es6/parse-float',
-  'core-js/es6/number',
-  'core-js/es6/math',
-  'core-js/es6/string',
-  'core-js/es6/date',
-  'core-js/es6/array',
-  'core-js/es6/regexp',
-  'core-js/es6/map',
-  'core-js/es6/weak-map',
-  'core-js/es6/set'
+  'core-js/features/symbol',
+  'core-js/features/object',
+  'core-js/features/function',
+  'core-js/features/parse-int',
+  'core-js/features/parse-float',
+  'core-js/features/number',
+  'core-js/features/math',
+  'core-js/features/string',
+  'core-js/features/date',
+  'core-js/features/array',
+  'core-js/features/regexp',
+  'core-js/features/map',
+  'core-js/features/weak-map',
+  'core-js/features/set'
 ]
 
 const prepForTransform = (deps: string[]) => {
