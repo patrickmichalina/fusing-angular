@@ -15,7 +15,10 @@ export interface FusingAngularConfig {
   readonly enableAngularBuildOptimizer: boolean
   readonly minify: boolean
   readonly treeshake: boolean
+  readonly outputDir: string
   readonly vendorBundleName: string
+  readonly appBundleName: string
+  readonly serverBundleName: string
 }
 
 const DEFAULT_CONFIG: FusingAngularConfig = {
@@ -29,7 +32,10 @@ const DEFAULT_CONFIG: FusingAngularConfig = {
   enableAngularBuildOptimizer: false,
   minify: false,
   treeshake: false,
-  vendorBundleName: 'vendor'
+  outputDir: '.dist',
+  vendorBundleName: 'vendor',
+  appBundleName: 'app',
+  serverBundleName: 'server'
 }
 
 export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
@@ -39,11 +45,12 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
   }
   const fuseBrowser = FuseBox.init({
     homeDir: "src/browser",
-    output: "./.dist/public/js/$name.js",
+    output: `${settings.outputDir}/public/js/$name.js`,
     target: 'browser@es6',
     plugins: [
       NgPolyfillPlugin(),
       NgCompilerPlugin({ enabled: settings.enableAotCompilaton }),
+      NgProdPlugin({ enabled: opts.productionBuild, fileTest: 'main' }),
       QuantumPlugin({
         warnings: false,
         uglify: settings.minify,
@@ -61,7 +68,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
   const fuseServer = FuseBox.init({
     target: 'server@es5',
     homeDir: "src",
-    output: "./.dist/$name.js",
+    output: `${settings.outputDir}/$name.js`,
     plugins: [
       NgProdPlugin({ enabled: opts.productionBuild, fileTest: 'server.angular.module' }),
       NgPolyfillPlugin({ isServer: true, fileTest: 'server.angular.module' })
@@ -73,12 +80,12 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     .instructions(` ~ ${mainAppEntry}`)
 
   fuseBrowser
-    .bundle('app')
+    .bundle(settings.appBundleName)
     .watch('src/**')
     .instructions(` !> [${mainAppEntry}]`)
 
   fuseServer
-    .bundle("server")
+    .bundle(settings.serverBundleName)
     .watch("src/**")
     .instructions(" > [server/server.ts]")
     .completed(proc => proc.start())
@@ -94,7 +101,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 }
 
 fusingAngular({
-  // productionBuild: true,
-  // minify: true,
+  productionBuild: true,
+  minify: true,
   enableAotCompilaton: true
 })
