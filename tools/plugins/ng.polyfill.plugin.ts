@@ -8,7 +8,7 @@ export interface NgPolyfillPluginOptions {
 }
 
 export const NG_POLY_BASE = [
-  'core-js/features/reflect'
+  'core-js/proposals/reflect-metadata'
 ]
 export const NG_POLY_SERVER = [
   ...NG_POLY_BASE,

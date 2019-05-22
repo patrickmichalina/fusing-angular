@@ -67,7 +67,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
       opts.enableAotCompilaton && NgAotFactoryPlugin(),
       NgPolyfillPlugin(),
       NgCompilerPlugin({ enabled: settings.enableAotCompilaton }),
-      opts.productionBuild && NgProdPlugin({ enabled: opts.productionBuild, fileTest: settings.browserEntry }),
+      NgProdPlugin({ enabled: opts.productionBuild, fileTest: settings.browserEntry }),
       QuantumPlugin({
         uglify: settings.minify,
         treeshake: settings.treeshake,
@@ -102,10 +102,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 
   fuseBrowser
     .bundle(settings.appBundleName)
-    .splitConfig({
-      dest: 'modules',
-      browser: 'modules'
-    })
+    .splitConfig({ dest: 'modules', browser: '/js/' })
     .watch(`${settings.homeDir}/**`, () => settings.watch)
     .instructions(` !> [${mainAppEntry}]`)
 

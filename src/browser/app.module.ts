@@ -3,9 +3,8 @@ import { NgModule } from '@angular/core'
 import { TransferHttpCacheModule } from '@nguniversal/common'
 import { NotFoundModule } from './not-found/not-found.module';
 import { AppComponent } from './app.component';
-import { HomeModule } from './home/home.module';
 import { AppRoutingModule } from './app-routing.module';
-import { AboutModule } from './about/about.module';
+import { HomeModule } from './home/home.module';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 // BrowserAnimationsModule,
 
@@ -13,7 +12,6 @@ import { AboutModule } from './about/about.module';
   imports: [
     AppRoutingModule,
     HomeModule,
-    AboutModule,
     NotFoundModule,
     BrowserModule.withServerTransition({ appId: 'my-app' }),
     TransferHttpCacheModule
