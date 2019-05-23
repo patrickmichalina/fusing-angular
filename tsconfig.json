@@ -20,11 +20,8 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true
   },
-  "exclude": [
-    "./.vscode",
-    "./.fusebox",
-    "./.dist",
-    "./.coverage",
-    "./node_modules"
+  "include": [
+    "src",
+    "tools"
   ]
 }

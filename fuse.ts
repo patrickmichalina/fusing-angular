@@ -87,7 +87,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     : `${settings.browserEntry}.ts`
 
   const fuseServer = FuseBox.init({
-    target: 'server@es5',
+    target: 'server',
     homeDir: settings.homeDir,
     output: `${settings.outputDir}/$name.js`,
     plugins: [
@@ -124,8 +124,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 
 fusingAngular({
   // watch: true,
-  // productionBuild: true,
-  // productionBuild: true,
-  // minify: true,
-  // enableAotCompilaton: true
+  productionBuild: true,
+  minify: true,
+  enableAotCompilaton: true
 })
