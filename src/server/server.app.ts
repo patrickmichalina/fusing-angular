@@ -7,9 +7,15 @@ import { AppServerModule } from './server.angular.module'
 const app = express()
 const dir = resolve('./.dist')
 const publicDir = `${dir}/public`
+const jsDir = `${publicDir}/js`
+const expressStaticGzip = require('express-static-gzip')
 
 app.use(cookieParser())
-app.use('/js', express.static(`${publicDir}/js`))
+app.use('/js', expressStaticGzip(jsDir, {
+  enableBrotli: true,
+  orderPreference: ['br', 'gzip'] as ReadonlyArray<string>,
+  // maxAge: config.NODE_DEBUG ? '0' : '7d'
+}))
 
 app.set('view engine', 'html')
 app.set('views', publicDir)

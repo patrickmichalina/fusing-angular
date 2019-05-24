@@ -1,6 +1,7 @@
 import { FuseBox, QuantumPlugin, WebIndexPlugin } from "fuse-box"
 import { NgCompilerPlugin } from "./tools/plugins/ng.compiler.plugin"
 import { NgPolyfillPlugin } from "./tools/plugins/ng.polyfill.plugin"
+import { CompressionPlugin } from "./tools/plugins/compression.plugin"
 import { NgProdPlugin } from "./tools/plugins/ng.prod.plugin"
 import { maybe } from 'typescript-monads'
 import { NgAotFactoryPlugin } from "./tools/plugins/ng.aot-factory.plugin"
@@ -77,6 +78,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
         bakeApiIntoBundle: settings.vendorBundleName,
         processPolyfill: settings.enableAotCompilaton
       }) as any,
+      CompressionPlugin({ enabled: settings.productionBuild }),
       WebIndexPlugin({
         path: `/${settings.jsOutputDir}`,
         template: `${settings.homeDir}/${settings.browserSrcDir}/index.html`,
@@ -93,7 +95,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     target: 'server',
     homeDir: settings.homeDir,
     output: `${settings.outputDir}/$name.js`,
-    ignoreModules: ['express', 'domino'],
+    ignoreModules: ['express', 'domino', 'express-static-gzip'],
     plugins: [
       NgProdPlugin({ enabled: opts.productionBuild, fileTest: 'server.angular.module' }),
       NgPolyfillPlugin({ isServer: true, fileTest: /server.angular.module/ }),
@@ -130,9 +132,10 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 }
 
 fusingAngular({
-  watch: false,
+  devServer: true,
+  // watch: false,
   minify: true,
   treeshake: true,
-  productionBuild: true
-  // enableAotCompilaton: true
+  productionBuild: true,
+  enableAotCompilaton: true
 })
