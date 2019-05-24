@@ -22,7 +22,6 @@
     "@angular/http": "6.1.7",
     "@angular/platform-browser": "6.1.7",
     "@angular/platform-browser-dynamic": "6.1.7",
-    "@angular/platform-server": "6.1.7",
     "@angular/router": "6.1.7",
     "@angular/service-worker": "6.1.7",
     "@nguniversal/common": "8.0.0-rc.0",
@@ -43,7 +42,8 @@
     "zone.js": "^0.9.1"
   },
   "dependencies": {
-    "express": "^4.17.0"
+    "express": "^4.17.0",
+    "@angular/platform-server": "6.1.7"
   },
   "engines": {
     "node": "= 12.3.1"
