@@ -130,7 +130,8 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 
 fusingAngular({
   watch: false,
-  // minify: true,
-  // productionBuild: true,
+  minify: true,
+  treeshake: true,
+  productionBuild: true
   // enableAotCompilaton: true
 })
