@@ -6,5 +6,5 @@ const port = PORT
 const server = createServer(app)
 
 server.listen(port, () => {
-  console.log('Angular Universal Server listening')
+  console.log('FUSING ANGULAR | Server listening!')
 })

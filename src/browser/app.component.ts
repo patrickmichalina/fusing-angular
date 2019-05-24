@@ -6,7 +6,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core'
     <div class="root">
     <h1>Tes2t</h1>
     <ul>
-      <li><a routerLink>HOME</a></li>
+      <li><a routerLink>HOME2</a></li>
       <li><a routerLink="/about">ABOUT</a></li>
     </ul>
     <router-outlet></router-outlet>

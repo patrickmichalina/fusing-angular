@@ -3,7 +3,7 @@ import { NgCompilerPlugin } from "./tools/plugins/ng.compiler.plugin"
 import { NgPolyfillPlugin } from "./tools/plugins/ng.polyfill.plugin"
 import { NgProdPlugin } from "./tools/plugins/ng.prod.plugin"
 import { maybe } from 'typescript-monads'
-import { NgAotFactoryPlugin } from "./tools/plugins/ng.aot-factory.plugin";
+import { NgAotFactoryPlugin } from "./tools/plugins/ng.aot-factory.plugin"
 
 export interface FusingAngularConfig {
   readonly productionBuild: boolean
@@ -29,6 +29,7 @@ export interface FusingAngularConfig {
   readonly browserAotEntry: string
   readonly jsOutputDir: string
   readonly jsLazyModuleDir: string
+  readonly devServer: boolean
 }
 
 const DEFAULT_CONFIG: FusingAngularConfig = {
@@ -43,6 +44,7 @@ const DEFAULT_CONFIG: FusingAngularConfig = {
   minify: false,
   treeshake: false,
   watch: false,
+  devServer: false,
   port: maybe(process.env.PORT).map(v => +v).valueOr(5000),
   homeDir: 'src',
   outputDir: '.dist',
@@ -63,6 +65,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     homeDir: `${settings.homeDir}/${settings.browserSrcDir}`,
     output: `${settings.outputDir}/public/js/$name.js`,
     sourceMaps: true,
+    dynamicImportsEnabled: true,
     plugins: [
       NgAotFactoryPlugin({ enabled: settings.enableAotCompilaton }),
       NgPolyfillPlugin({ isAot: settings.enableAotCompilaton }),
@@ -90,9 +93,15 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     target: 'server',
     homeDir: settings.homeDir,
     output: `${settings.outputDir}/$name.js`,
+    ignoreModules: ['express', 'domino'],
     plugins: [
       NgProdPlugin({ enabled: opts.productionBuild, fileTest: 'server.angular.module' }),
-      NgPolyfillPlugin({ isServer: true, fileTest: /server.angular.module/ })
+      NgPolyfillPlugin({ isServer: true, fileTest: /server.angular.module/ }),
+      settings.productionBuild && QuantumPlugin({
+        bakeApiIntoBundle: settings.serverBundleName,
+        treeshake: settings.treeshake,
+        uglify: settings.minify
+      }) as any
     ]
   })
 
@@ -100,31 +109,28 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     .bundle(settings.vendorBundleName)
     .instructions(` ~ ${mainAppEntry}`)
 
-  fuseBrowser
+  const appBundle = fuseBrowser
     .bundle(settings.appBundleName)
     .splitConfig({ dest: settings.jsLazyModuleDir, browser: `/${settings.jsOutputDir}/` })
-    .watch(`${settings.homeDir}/**`, () => settings.watch)
     .instructions(` !> [${mainAppEntry}]`)
 
-  fuseServer
+  const serverBundle = fuseServer
     .bundle(settings.serverBundleName)
-    .watch(`${settings.homeDir}/**`, () => settings.watch)
-    .instructions(` > [${settings.serverSrcDir}/server.ts]`)
-    .completed(proc => proc.start())
+    .splitConfig({ dest: settings.jsLazyModuleDir })
+    .instructions(` > ${settings.serverSrcDir}/server.ts`)
+    .completed(proc => settings.devServer && proc.start())
 
-  !opts.productionBuild && fuseServer.dev({
-    root: settings.outputDir,
-    port: settings.port,
-    httpServer: false
-  })
+  if (settings.watch) {
+    appBundle.watch(`${settings.homeDir}/**`)
+    serverBundle.watch(`${settings.homeDir}/**`)
+  }
 
-  fuseBrowser.run()
-    .then(() => fuseServer.run())
+  fuseBrowser.run().then(() => fuseServer.run())
 }
 
 fusingAngular({
-  // watch: true,
+  watch: false,
   // minify: true,
-  productionBuild: true,
-  enableAotCompilaton: true
+  // productionBuild: true,
+  // enableAotCompilaton: true
 })

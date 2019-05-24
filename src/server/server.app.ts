@@ -10,13 +10,14 @@ const publicDir = `${dir}/public`
 
 app.use(cookieParser())
 app.use('/js', express.static(`${publicDir}/js`))
+
 app.set('view engine', 'html')
 app.set('views', publicDir)
+
 app.engine('html', ngExpressEngine({ bootstrap: AppServerModule }))
 
 app.get('*', (req, res) => {
   res.render('index', { req })
 })
-
 
 export { app }
