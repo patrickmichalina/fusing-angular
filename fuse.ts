@@ -64,11 +64,11 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     output: `${settings.outputDir}/public/js/$name.js`,
     sourceMaps: true,
     plugins: [
-      NgAotFactoryPlugin({ enabled: opts.enableAotCompilaton }),
-      NgPolyfillPlugin(),
+      NgAotFactoryPlugin({ enabled: settings.enableAotCompilaton }),
+      NgPolyfillPlugin({ isAot: settings.enableAotCompilaton }),
       NgCompilerPlugin({ enabled: settings.enableAotCompilaton }),
-      NgProdPlugin({ enabled: opts.productionBuild, fileTest: settings.browserEntry }),
-      opts.productionBuild && QuantumPlugin({
+      NgProdPlugin({ enabled: settings.productionBuild, fileTest: settings.browserEntry }),
+      settings.productionBuild && QuantumPlugin({
         uglify: settings.minify,
         treeshake: settings.treeshake,
         bakeApiIntoBundle: settings.vendorBundleName,
@@ -92,7 +92,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     output: `${settings.outputDir}/$name.js`,
     plugins: [
       NgProdPlugin({ enabled: opts.productionBuild, fileTest: 'server.angular.module' }),
-      NgPolyfillPlugin({ isServer: true, fileTest: 'server.angular.module' })
+      NgPolyfillPlugin({ isServer: true, fileTest: /server.angular.module/ })
     ]
   })
 
@@ -124,7 +124,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 
 fusingAngular({
   // watch: true,
+  // minify: true,
   productionBuild: true,
-  minify: true,
   enableAotCompilaton: true
 })

@@ -1,10 +1,15 @@
 import { Plugin, File } from 'fuse-box'
 
-const defaults: NgPolyfillPluginOptions = {}
+const defaults: NgPolyfillPluginOptions = {
+  isAot: false,
+  isServer: false,
+  fileTest: /(main.ts|main.aot.ts)/
+}
 
 export interface NgPolyfillPluginOptions {
-  isServer?: boolean
-  fileTest?: string
+  isServer: boolean
+  isAot: boolean
+  fileTest?: RegExp
 }
 
 export const NG_POLY_BASE = [
@@ -39,6 +44,10 @@ export const NG_POLY_BROWSER_IE = [
   'core-js/features/set'
 ]
 
+const REMOVE_FROM_AOT = [
+  'core-js/proposals/reflect-metadata'
+]
+
 const prepForTransform = (deps: string[]) => {
   return deps.map(dep => {
     return `import '${dep}'`
@@ -47,12 +56,11 @@ const prepForTransform = (deps: string[]) => {
 
 export class NgPolyfillPluginClass implements Plugin {
   constructor(private opts: NgPolyfillPluginOptions = defaults) { }
-  public test: RegExp = this.opts.fileTest &&
-    new RegExp(this.opts.fileTest) || /(main.ts|main.aot.ts)/
+  public test = this.opts.fileTest
   public dependencies: ['zone.js', 'core-js']
 
   onTypescriptTransform(file: File) {
-    if (!this.test.test(file.relativePath)) return
+    if (!this.test || !this.test.test(file.relativePath)) return
     file.contents = `${prepForTransform(this.buildSet())}\n${file.contents}`
   }
 
@@ -60,9 +68,15 @@ export class NgPolyfillPluginClass implements Plugin {
     if (this.opts.isServer) {
       return NG_POLY_SERVER
     } else {
-      return NG_POLY_BROWSER
+      return this.opts.isAot
+        ? NG_POLY_BROWSER.filter(a => !REMOVE_FROM_AOT.includes(a))
+        : NG_POLY_BROWSER
     }
   }
 }
 
-export const NgPolyfillPlugin = (options?: NgPolyfillPluginOptions) => new NgPolyfillPluginClass(options);
+export const NgPolyfillPlugin = (options?: Partial<NgPolyfillPluginOptions>) =>
+  new NgPolyfillPluginClass({
+    ...defaults,
+    ...options,
+  });

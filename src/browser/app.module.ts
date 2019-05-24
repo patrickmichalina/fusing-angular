@@ -5,6 +5,7 @@ import { NotFoundModule } from './not-found/not-found.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeModule } from './home/home.module';
+// import { AboutModule } from './about/about.module';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 // BrowserAnimationsModule,
 
@@ -12,6 +13,7 @@ import { HomeModule } from './home/home.module';
   imports: [
     AppRoutingModule,
     HomeModule,
+    // AboutModule,
     NotFoundModule,
     BrowserModule.withServerTransition({ appId: 'my-app' }),
     TransferHttpCacheModule

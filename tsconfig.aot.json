@@ -29,7 +29,6 @@
     "src/browser/.aot"
   ],
   "angularCompilerOptions": {
-    "skipMetadataEmit": true,
     "preserveWhitespaces": false,
     "disableTypeScriptVersionCheck": true
   }
