@@ -98,9 +98,10 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
       NgProdPlugin({ enabled: opts.productionBuild, fileTest: 'server.angular.module' }),
       NgPolyfillPlugin({ isServer: true, fileTest: /server.angular.module/ }),
       settings.productionBuild && QuantumPlugin({
+        replaceProcessEnv: false,
+        uglify: settings.minify,
         bakeApiIntoBundle: settings.serverBundleName,
-        treeshake: settings.treeshake,
-        uglify: settings.minify
+        treeshake: settings.treeshake
       }) as any
     ]
   })
