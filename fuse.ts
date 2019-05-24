@@ -132,10 +132,10 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
 }
 
 fusingAngular({
-  devServer: true,
-  // watch: false,
+  // devServer: true,
+  // watch: true,
   minify: true,
   treeshake: true,
   productionBuild: true,
-  enableAotCompilaton: true
+  // enableAotCompilaton: true
 })
