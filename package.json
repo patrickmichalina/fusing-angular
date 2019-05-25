@@ -1,9 +1,9 @@
 {
-  "name": "frame-test",
-  "version": "0.0.0",
-  "description": "frame-test",
+  "name": "fusing-angular",
+  "description": "fusing-angular",
   "author": "Patrick Michalina",
   "license": "MIT",
+  "version": "0.0.0",
   "main": ".dist/electron.js",
   "repository": {
     "url": "https://github.com/patrickmichalina/fusing-angular"
