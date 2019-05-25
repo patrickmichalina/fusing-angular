@@ -64,6 +64,7 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
   const settings = { ...DEFAULT_CONFIG, ...opts }
   const shared = {
     sourceMaps: settings.productionBuild,
+    cache: !settings.productionBuild
   }
 
   const browser = FuseBox.init({
@@ -84,16 +85,12 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
       }) as any,
       CompressionPlugin({ enabled: settings.productionBuild }),
       WebIndexPlugin({
-        path: `/${settings.jsOutputDir}`,
+        path: `${settings.jsOutputDir}`,
         template: `${settings.homeDir}/${settings.browserSrcDir}/index.html`,
         target: '../index.html'
       })
     ]
   })
-
-  const mainAppEntry = opts.enableAotCompilaton
-    ? `${settings.browserAotEntry}.ts`
-    : `${settings.browserEntry}.ts`
 
   const server = FuseBox.init({
     ...shared,
@@ -113,9 +110,32 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     ]
   })
 
+  const electron = FuseBox.init({
+    ...shared,
+    target: 'electron',
+    homeDir: `${settings.homeDir}/${'electron'}`,
+    output: `${'.dist'}/$name.js`,
+    plugins: [
+      settings.productionBuild && QuantumPlugin({
+        replaceProcessEnv: false,
+        uglify: settings.minify,
+        bakeApiIntoBundle: 'electron',
+        treeshake: settings.treeshake
+      }) as any
+    ]
+  })
+
+  const mainAppEntry = opts.enableAotCompilaton
+    ? `${settings.browserAotEntry}.ts`
+    : `${settings.browserEntry}.ts`
+
   browser
     .bundle(settings.vendorBundleName)
     .instructions(` ~ ${mainAppEntry}`)
+
+  const electronBundle = electron
+    .bundle('electron')
+    .instructions(` > [main.ts]`)
 
   const appBundle = browser
     .bundle(settings.appBundleName)
@@ -131,16 +151,20 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
   if (settings.watch) {
     appBundle.watch(`${settings.homeDir}/**`)
     serverBundle.watch(`${settings.homeDir}/**`)
+    electronBundle.watch(`${settings.homeDir}/**`)
   }
 
-  browser.run().then(() => server.run())
+  browser.run().then(() => {
+    server.run()
+    electron.run()
+  })
 }
 
 fusingAngular({
-  devServer: true,
-  watch: true,
+  // devServer: true,
+  // watch: true,
   // minify: true,
   // treeshake: true,
-  // productionBuild: true,
+  productionBuild: true,
   // enableAotCompilaton: true
 })
