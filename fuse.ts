@@ -62,11 +62,15 @@ const DEFAULT_CONFIG: FusingAngularConfig = {
 
 export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
   const settings = { ...DEFAULT_CONFIG, ...opts }
-  const fuseBrowser = FuseBox.init({
+  const shared = {
+    sourceMaps: settings.productionBuild,
+  }
+
+  const browser = FuseBox.init({
+    ...shared,
+    target: 'browser',
     homeDir: `${settings.homeDir}/${settings.browserSrcDir}`,
     output: `${settings.outputDir}/public/js/$name.js`,
-    sourceMaps: true,
-    dynamicImportsEnabled: true,
     plugins: [
       NgAotFactoryPlugin({ enabled: settings.enableAotCompilaton }),
       NgPolyfillPlugin({ isAot: settings.enableAotCompilaton }),
@@ -91,7 +95,8 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     ? `${settings.browserAotEntry}.ts`
     : `${settings.browserEntry}.ts`
 
-  const fuseServer = FuseBox.init({
+  const server = FuseBox.init({
+    ...shared,
     target: 'server',
     homeDir: settings.homeDir,
     output: `${settings.outputDir}/$name.js`,
@@ -108,16 +113,16 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     ]
   })
 
-  fuseBrowser
+  browser
     .bundle(settings.vendorBundleName)
     .instructions(` ~ ${mainAppEntry}`)
 
-  const appBundle = fuseBrowser
+  const appBundle = browser
     .bundle(settings.appBundleName)
     .splitConfig({ dest: settings.jsLazyModuleDir, browser: `/${settings.jsOutputDir}/` })
     .instructions(` !> [${mainAppEntry}]`)
 
-  const serverBundle = fuseServer
+  const serverBundle = server
     .bundle(settings.serverBundleName)
     .splitConfig({ dest: settings.jsLazyModuleDir })
     .instructions(` > ${settings.serverSrcDir}/server.ts`)
@@ -128,14 +133,14 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     serverBundle.watch(`${settings.homeDir}/**`)
   }
 
-  fuseBrowser.run().then(() => fuseServer.run())
+  browser.run().then(() => server.run())
 }
 
 fusingAngular({
-  // devServer: true,
-  // watch: true,
-  minify: true,
-  treeshake: true,
-  productionBuild: true,
+  devServer: true,
+  watch: true,
+  // minify: true,
+  // treeshake: true,
+  // productionBuild: true,
   // enableAotCompilaton: true
 })

@@ -37,6 +37,7 @@ export class CompressionPluginClass implements Plugin {
     }
   }
   producerEnd?(producer: BundleProducer): any {
+    if (!this.opts.enabled) return
     return forkJoin(
       Array.from(producer.bundles)
         .map(bundle => bundle[1].context.output)
