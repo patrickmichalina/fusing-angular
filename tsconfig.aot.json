@@ -25,7 +25,6 @@
   ],
   "exclude": [
     "src/browser/main.aot.ts",
-    "src/browser/server.module.ts",
     "src/browser/.aot"
   ],
   "angularCompilerOptions": {

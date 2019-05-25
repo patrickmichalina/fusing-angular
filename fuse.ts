@@ -3,11 +3,31 @@ import { NgCompilerPlugin } from "./tools/plugins/ng.compiler.plugin"
 import { NgPolyfillPlugin } from "./tools/plugins/ng.polyfill.plugin"
 import { CompressionPlugin } from "./tools/plugins/compression.plugin"
 import { NgProdPlugin } from "./tools/plugins/ng.prod.plugin"
-import { maybe } from 'typescript-monads'
 import { NgAotFactoryPlugin } from "./tools/plugins/ng.aot-factory.plugin"
 
+export interface IBundleOptions {
+  readonly name: string
+}
+
+export interface IBundledOutput {
+  readonly bundle: IBundleOptions
+}
+
+export interface IUniversalServerOptions {
+  readonly enabled: boolean
+}
+
+export interface IElectronOptions {
+  readonly enabled: boolean
+}
+
+export interface IProductionBuildOptions {
+  readonly enabled: boolean
+  readonly minify: boolean
+  readonly treeshake: boolean
+}
+
 export interface FusingAngularConfig {
-  readonly productionBuild: boolean
   readonly supportIE11: boolean
   readonly supportIE11Animations: boolean
   readonly enableAotCompilaton: boolean
@@ -15,10 +35,9 @@ export interface FusingAngularConfig {
   readonly enableAngularForms: boolean
   readonly enableServiceWorker: boolean
   readonly enableAngularBuildOptimizer: boolean
-  readonly minify: boolean
-  readonly treeshake: boolean
+
   readonly watch: boolean
-  readonly port: number
+  
   readonly homeDir: string
   readonly serverSrcDir: string
   readonly browserSrcDir: string
@@ -31,22 +50,22 @@ export interface FusingAngularConfig {
   readonly jsOutputDir: string
   readonly jsLazyModuleDir: string
   readonly devServer: boolean
+
+
+  readonly electron: Partial<IElectronOptions>
+  readonly optimizations: Partial<IProductionBuildOptions>
 }
 
 const DEFAULT_CONFIG: FusingAngularConfig = {
   enableAotCompilaton: false,
-  productionBuild: false,
   supportIE11: true,
   supportIE11Animations: false,
   enableAngularAnimations: false,
   enableAngularForms: false,
   enableServiceWorker: false,
   enableAngularBuildOptimizer: false,
-  minify: false,
-  treeshake: false,
   watch: false,
   devServer: false,
-  port: maybe(process.env.PORT).map(v => +v).valueOr(5000),
   homeDir: 'src',
   outputDir: '.dist',
   jsOutputDir: 'js',
@@ -57,14 +76,38 @@ const DEFAULT_CONFIG: FusingAngularConfig = {
   appBundleName: 'app',
   serverBundleName: 'server',
   browserEntry: 'main',
-  browserAotEntry: 'main.aot'
+  browserAotEntry: 'main.aot',
+  electron: {
+    enabled: false
+  },
+  optimizations: {
+    enabled: false,
+    minify: false,
+    treeshake: false
+  }
 }
 
+const mergeOptions =
+  (defaultsOptions: FusingAngularConfig) =>
+    (incomingOptions: Partial<FusingAngularConfig>): FusingAngularConfig => ({
+      ...defaultsOptions,
+      ...incomingOptions,
+      electron: {
+        ...defaultsOptions.electron,
+        ...incomingOptions.electron
+      },
+      optimizations: {
+        ...defaultsOptions.optimizations,
+        ...incomingOptions.optimizations
+      }
+    })
+
 export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
-  const settings = { ...DEFAULT_CONFIG, ...opts }
+  const settings = mergeOptions(DEFAULT_CONFIG)(opts)
+
   const shared = {
-    sourceMaps: settings.productionBuild,
-    cache: !settings.productionBuild
+    sourceMaps: settings.optimizations.enabled,
+    cache: !settings.optimizations.enabled
   }
 
   const browser = FuseBox.init({
@@ -76,14 +119,14 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
       NgAotFactoryPlugin({ enabled: settings.enableAotCompilaton }),
       NgPolyfillPlugin({ isAot: settings.enableAotCompilaton }),
       NgCompilerPlugin({ enabled: settings.enableAotCompilaton }),
-      NgProdPlugin({ enabled: settings.productionBuild, fileTest: settings.browserEntry }),
-      settings.productionBuild && QuantumPlugin({
-        uglify: settings.minify,
-        treeshake: settings.treeshake,
+      NgProdPlugin({ enabled: settings.optimizations.enabled, fileTest: settings.browserEntry }),
+      settings.optimizations.enabled && QuantumPlugin({
+        uglify: settings.optimizations.minify,
+        treeshake: settings.optimizations.treeshake,
         bakeApiIntoBundle: settings.vendorBundleName,
         processPolyfill: settings.enableAotCompilaton
       }) as any,
-      CompressionPlugin({ enabled: settings.productionBuild }),
+      CompressionPlugin({ enabled: settings.optimizations.enabled }),
       WebIndexPlugin({
         path: `${settings.jsOutputDir}`,
         template: `${settings.homeDir}/${settings.browserSrcDir}/index.html`,
@@ -99,13 +142,13 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     output: `${settings.outputDir}/$name.js`,
     ignoreModules: ['express', 'domino', 'express-static-gzip'],
     plugins: [
-      NgProdPlugin({ enabled: opts.productionBuild, fileTest: 'server.angular.module' }),
+      NgProdPlugin({ enabled: settings.optimizations.enabled, fileTest: 'server.angular.module' }),
       NgPolyfillPlugin({ isServer: true, fileTest: /server.angular.module/ }),
-      settings.productionBuild && QuantumPlugin({
+      settings.optimizations.enabled && QuantumPlugin({
         replaceProcessEnv: false,
-        uglify: settings.minify,
+        uglify: settings.optimizations.minify,
         bakeApiIntoBundle: settings.serverBundleName,
-        treeshake: settings.treeshake
+        treeshake: settings.optimizations.treeshake
       }) as any
     ]
   })
@@ -116,11 +159,11 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     homeDir: `${settings.homeDir}/${'electron'}`,
     output: `${'.dist'}/$name.js`,
     plugins: [
-      settings.productionBuild && QuantumPlugin({
+      settings.optimizations.enabled && QuantumPlugin({
         replaceProcessEnv: false,
-        uglify: settings.minify,
+        uglify: settings.optimizations.minify,
         bakeApiIntoBundle: 'electron',
-        treeshake: settings.treeshake
+        treeshake: settings.optimizations.treeshake
       }) as any
     ]
   })
@@ -151,12 +194,12 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
   if (settings.watch) {
     appBundle.watch(`${settings.homeDir}/**`)
     serverBundle.watch(`${settings.homeDir}/**`)
-    electronBundle.watch(`${settings.homeDir}/**`)
+    if (settings.electron.enabled) { electronBundle.watch(`${settings.homeDir}/**`) }
   }
 
   browser.run().then(() => {
     server.run()
-    electron.run()
+    if (settings.electron.enabled) { electron.run() }
   })
 }
 
@@ -165,6 +208,12 @@ fusingAngular({
   // watch: true,
   // minify: true,
   // treeshake: true,
-  productionBuild: true,
+  // productionBuild: true,
+  electron: {
+    enabled: false
+  },
+  optimizations: {
+    enabled: true
+  }
   // enableAotCompilaton: true
 })
