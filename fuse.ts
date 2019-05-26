@@ -9,20 +9,24 @@ export interface IBundleOptions {
   readonly name: string
 }
 
-export interface IBundledOutput {
-  readonly bundle: IBundleOptions
+export interface IBundleable {
+  readonly bundle: Partial<IBundleOptions>
 }
 
-export interface IUniversalServerOptions {
+export interface IRequiredBundleable extends IBundleable {
+  readonly bundle: Required<IBundleOptions>
+}
+
+export interface IEnableable {
   readonly enabled: boolean
 }
 
-export interface IElectronOptions {
-  readonly enabled: boolean
-}
+export interface IUniversalServerOptions extends IBundleable, IEnableable { }
+export interface IRequiredUniversalServerOptions extends IRequiredBundleable, IEnableable { }
+export interface IElectronOptions extends IBundleable, IEnableable { }
+export interface IRequiredElectronOptions extends IRequiredBundleable, IEnableable { }
 
-export interface IProductionBuildOptions {
-  readonly enabled: boolean
+export interface IProductionBuildOptions extends IEnableable {
   readonly minify: boolean
   readonly treeshake: boolean
 }
@@ -37,26 +41,33 @@ export interface FusingAngularConfig {
   readonly enableAngularBuildOptimizer: boolean
 
   readonly watch: boolean
-  
   readonly homeDir: string
   readonly serverSrcDir: string
   readonly browserSrcDir: string
   readonly outputDir: string
   readonly vendorBundleName: string
   readonly appBundleName: string
-  readonly serverBundleName: string
   readonly browserEntry: string
   readonly browserAotEntry: string
   readonly jsOutputDir: string
   readonly jsLazyModuleDir: string
-  readonly devServer: boolean
+  readonly serve: boolean
 
 
   readonly electron: Partial<IElectronOptions>
+  readonly universal: Partial<IUniversalServerOptions>
   readonly optimizations: Partial<IProductionBuildOptions>
 }
 
-const DEFAULT_CONFIG: FusingAngularConfig = {
+type UserOptions = Partial<FusingAngularConfig>
+
+interface RequiredFusingAngularConfig extends FusingAngularConfig {
+  readonly electron: Required<IRequiredElectronOptions>
+  readonly universal: Required<IRequiredUniversalServerOptions>
+  readonly optimizations: Required<IProductionBuildOptions>
+}
+
+const DEFAULT_CONFIG: RequiredFusingAngularConfig = {
   enableAotCompilaton: false,
   supportIE11: true,
   supportIE11Animations: false,
@@ -65,7 +76,7 @@ const DEFAULT_CONFIG: FusingAngularConfig = {
   enableServiceWorker: false,
   enableAngularBuildOptimizer: false,
   watch: false,
-  devServer: false,
+  serve: false,
   homeDir: 'src',
   outputDir: '.dist',
   jsOutputDir: 'js',
@@ -74,11 +85,19 @@ const DEFAULT_CONFIG: FusingAngularConfig = {
   browserSrcDir: 'browser',
   vendorBundleName: 'vendor',
   appBundleName: 'app',
-  serverBundleName: 'server',
   browserEntry: 'main',
   browserAotEntry: 'main.aot',
   electron: {
-    enabled: false
+    enabled: false,
+    bundle: {
+      name: ''
+    }
+  },
+  universal: {
+    enabled: true,
+    bundle: {
+      name: 'server'
+    }
   },
   optimizations: {
     enabled: false,
@@ -87,14 +106,19 @@ const DEFAULT_CONFIG: FusingAngularConfig = {
   }
 }
 
+
 const mergeOptions =
-  (defaultsOptions: FusingAngularConfig) =>
-    (incomingOptions: Partial<FusingAngularConfig>): FusingAngularConfig => ({
+  (defaultsOptions: RequiredFusingAngularConfig) =>
+    (incomingOptions: UserOptions): RequiredFusingAngularConfig => ({
       ...defaultsOptions,
       ...incomingOptions,
+      universal: {
+        ...defaultsOptions.universal,
+        ...incomingOptions.universal as IRequiredUniversalServerOptions
+      },
       electron: {
         ...defaultsOptions.electron,
-        ...incomingOptions.electron
+        ...incomingOptions.electron as IRequiredElectronOptions,
       },
       optimizations: {
         ...defaultsOptions.optimizations,
@@ -102,7 +126,7 @@ const mergeOptions =
       }
     })
 
-export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
+export const fusingAngular = (opts: UserOptions) => {
   const settings = mergeOptions(DEFAULT_CONFIG)(opts)
 
   const shared = {
@@ -142,12 +166,11 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     output: `${settings.outputDir}/$name.js`,
     ignoreModules: ['express', 'domino', 'express-static-gzip'],
     plugins: [
-      NgProdPlugin({ enabled: settings.optimizations.enabled, fileTest: 'server.angular.module' }),
-      NgPolyfillPlugin({ isServer: true, fileTest: /server.angular.module/ }),
+      NgPolyfillPlugin({ isServer: true, fileTest: /server.ts/ }),
       settings.optimizations.enabled && QuantumPlugin({
         replaceProcessEnv: false,
         uglify: settings.optimizations.minify,
-        bakeApiIntoBundle: settings.serverBundleName,
+        bakeApiIntoBundle: settings.universal.bundle.name,
         treeshake: settings.optimizations.treeshake
       }) as any
     ]
@@ -186,10 +209,10 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
     .instructions(` !> [${mainAppEntry}]`)
 
   const serverBundle = server
-    .bundle(settings.serverBundleName)
+    .bundle(settings.universal.bundle.name)
     .splitConfig({ dest: settings.jsLazyModuleDir })
     .instructions(` > ${settings.serverSrcDir}/server.ts`)
-    .completed(proc => settings.devServer && proc.start())
+    .completed(proc => settings.serve && proc.start())
 
   if (settings.watch) {
     appBundle.watch(`${settings.homeDir}/**`)
@@ -198,22 +221,31 @@ export const fusingAngular = (opts: Partial<FusingAngularConfig>) => {
   }
 
   browser.run().then(() => {
-    server.run()
     if (settings.electron.enabled) { electron.run() }
+    server.run()
   })
 }
 
 fusingAngular({
-  // devServer: true,
+  serve: true,
   // watch: true,
   // minify: true,
   // treeshake: true,
   // productionBuild: true,
-  electron: {
-    enabled: false
-  },
   optimizations: {
     enabled: true
-  }
-  // enableAotCompilaton: true
+  },
+  // universal: {
+  //   bundle: {
+  //     // name: ''
+  //   }
+  // },
+  electron: {
+    enabled: false,
+    // bundle: {
+    //   name: ''
+    // }
+    // bundle: {}
+  },
+  enableAotCompilaton: true
 })
