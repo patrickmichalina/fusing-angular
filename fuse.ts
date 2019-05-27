@@ -14,6 +14,7 @@ export interface IBundleOptions {
 
 export interface IBundleable<T extends Partial<IBundleOptions> | Required<IBundleOptions> = Partial<IBundleOptions>> {
   readonly bundle: T
+  readonly rootDir: string
 }
 
 type IRequiredBundleable = IBundleable<Required<IBundleOptions>>
@@ -30,6 +31,7 @@ export interface IRequiredElectronOptions extends IRequiredBundleable, IEnableab
 interface BaseBrowserOptions {
   readonly supportIE11: boolean
   readonly supportIE11Animations: boolean
+  readonly indexTemplatePath: string
 }
 
 export interface IBrowserOptions extends BaseBrowserOptions, IBundleable { }
@@ -48,7 +50,6 @@ export interface BaseOptions {
   readonly enableAngularBuildOptimizer: boolean
   readonly watch: boolean
   readonly srcRoot: string
-  readonly browserSrcDir: string
   readonly outputDirectory: string
   readonly vendorBundleName: string
   readonly browserAotEntry: string
@@ -82,35 +83,38 @@ const DEFAULT_CONFIG: Options = {
   outputDirectory: '.dist',
   jsOutputDir: 'js',
   jsLazyModuleDir: 'modules',
-  browserSrcDir: 'browser',
   vendorBundleName: 'vendor',
   browserAotEntry: 'main.aot.ts',
   browser: {
     supportIE11: false,
     supportIE11Animations: false,
+    indexTemplatePath: 'index.html',
+    rootDir: 'browser',
     bundle: {
       name: 'app',
-      inputPath: 'main.ts',
+      inputPath: 'browser/main.ts',
       outputPath: 'public/js',
-      ignoredModules: []
-    }
-  },
-  electron: {
-    enabled: false,
-    bundle: {
-      name: 'electron',
-      inputPath: '',
-      outputPath: '.',
       ignoredModules: []
     }
   },
   universal: {
     enabled: true,
+    rootDir: 'server',
     bundle: {
       name: 'server',
       inputPath: 'server.ts',
       outputPath: '/public/js/',
       ignoredModules: ['express', 'domino', 'express-static-gzip']
+    }
+  },
+  electron: {
+    enabled: false,
+    rootDir: 'electron',
+    bundle: {
+      name: 'electron',
+      inputPath: 'main.ts',
+      outputPath: '.',
+      ignoredModules: []
     }
   },
   optimizations: {
@@ -155,7 +159,7 @@ const mergeOptions =
       }
     })
 
-export const fusingAngular = (opts: PartialOptions) => {
+export const fuseAngular = (opts: PartialOptions) => {
   const settings = mergeOptions(DEFAULT_CONFIG)(opts)
 
   const shared = {
@@ -167,7 +171,6 @@ export const fusingAngular = (opts: PartialOptions) => {
 
   const browser = FuseBox.init({
     ...shared,
-    homeDir: `${shared.homeDir}/${settings.browserSrcDir}`,
     ignoreModules: settings.browser.bundle.ignoredModules,
     output: `${settings.outputDirectory}/${settings.browser.bundle.outputPath}/$name.js`,
     plugins: [
@@ -184,7 +187,7 @@ export const fusingAngular = (opts: PartialOptions) => {
       CompressionPlugin({ enabled: settings.optimizations.enabled }),
       WebIndexPlugin({
         path: `${settings.jsOutputDir}`,
-        template: `${settings.srcRoot}/${settings.browserSrcDir}/index.html`,
+        template: `${settings.srcRoot}/${settings.browser.rootDir}/${settings.browser.indexTemplatePath}`,
         target: '../index.html'
       })
     ]
@@ -236,17 +239,33 @@ export const fusingAngular = (opts: PartialOptions) => {
   const serverBundle = server
     .bundle(settings.universal.bundle.name)
     .splitConfig({ dest: settings.jsLazyModuleDir })
-    .instructions(` > ${settings.universal.bundle.inputPath}`)
-    .completed(proc => settings.serve && proc.start())
+    .instructions(` > ${settings.universal.rootDir}/${settings.universal.bundle.inputPath}`)
+    .completed(proc => {
+      if (settings.serve && settings.universal.enabled) { proc.start() }
+    })
+
+  const httpServer = settings.serve && !settings.universal.enabled
+  const UNIVERSAL_PORT = 5000
+  const port = httpServer ? UNIVERSAL_PORT : 5001
 
   const electronBundle = electron
     .bundle(settings.electron.bundle.name)
     .instructions(` > ${settings.electron.bundle.inputPath}`)
 
+  if (settings.serve) {
+    browser.dev({
+      port,
+      httpServer,
+      root: '.dist/public',
+      fallback: "index.html"
+    })
+  }
+
   if (settings.watch) {
     const watchDir = `${settings.srcRoot}/**`
     appBundle.watch(watchDir)
 
+    if (settings.serve) { appBundle.hmr({ port }) }
     if (settings.universal.enabled) { serverBundle.watch(watchDir) }
     if (settings.electron.enabled) { electronBundle.watch(watchDir) }
   }
@@ -257,13 +276,14 @@ export const fusingAngular = (opts: PartialOptions) => {
   })
 }
 
-fusingAngular({
-  // serve: true,
-  // watch: true,
+fuseAngular({
+  serve: true,
+  watch: true,
   // optimizations: {
-  //   enabled: true
+  //   enabled: true,
+  //   minify: true,
+  //   treeshake: true
   // },
-  // browser: {},
   // universal: {
   //   enabled: false,
   //   bundle: {
