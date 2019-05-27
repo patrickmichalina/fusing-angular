@@ -11,7 +11,7 @@
   "scripts": {
     "start": "ts-node fuse",
     "heroku-postbuild": "ts-node fuse",
-    "start.electron": "electron ."
+    "electron": "electron ."
   },
   "engines": {
     "node": "= 12.3.1"
