@@ -9,8 +9,8 @@
     "url": "https://github.com/patrickmichalina/fusing-angular"
   },
   "scripts": {
-    "start": "ts-node fuse",
-    "heroku-postbuild": "ts-node fuse",
+    "start": "ts-node index",
+    "heroku-postbuild": "ts-node index",
     "electron": "electron ."
   },
   "engines": {

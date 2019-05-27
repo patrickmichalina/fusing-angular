@@ -48,7 +48,7 @@ const DEFAULT_CONFIG: Options = {
     bundle: {
       name: 'electron',
       inputPath: 'main.ts',
-      outputPath: '.',
+      outputPath: '/',
       ignoredModules: []
     }
   },
@@ -146,7 +146,6 @@ export const fuseAngular = (opts: PartialOptions) => {
   const electron = FuseBox.init({
     ...shared,
     target: 'electron',
-    // homeDir: `${settings.srcRoot}/${'electron'}`,
     ignoreModules: settings.electron.bundle.ignoredModules,
     plugins: [
       settings.optimizations.enabled && QuantumPlugin({
@@ -161,6 +160,10 @@ export const fuseAngular = (opts: PartialOptions) => {
   const mainAppEntry = opts.enableAotCompilaton
     ? `${settings.browserAotEntry}`
     : `${settings.browser.bundle.inputPath}`
+
+  const httpServer = settings.serve && !settings.universal.enabled
+  const UNIVERSAL_PORT = 5000
+  const port = httpServer ? UNIVERSAL_PORT : 5001
 
   browser
     .bundle(settings.vendorBundleName)
@@ -179,13 +182,9 @@ export const fuseAngular = (opts: PartialOptions) => {
       if (settings.serve && settings.universal.enabled) { svr.start() }
     })
 
-  const httpServer = settings.serve && !settings.universal.enabled
-  const UNIVERSAL_PORT = 5000
-  const port = httpServer ? UNIVERSAL_PORT : 5001
-
   const electronBundle = electron
     .bundle(settings.electron.bundle.name)
-    .instructions(` > ${settings.electron.bundle.inputPath}`)
+    .instructions(` > ${settings.electron.rootDir}/${settings.electron.bundle.inputPath}`)
 
   if (settings.serve) {
     browser.dev({
