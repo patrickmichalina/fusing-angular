@@ -5,7 +5,7 @@ const defaults: NgSwPluginOptions = {}
 export interface NgSwPluginOptions {}
 
 export class NgSwPluginClass {
-  public test: RegExp = /app.browser.module/
+  public test: RegExp = /app-routing.module.ts/
 
   constructor(opts: NgSwPluginOptions = defaults) {}
 

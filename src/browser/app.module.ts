@@ -3,15 +3,14 @@ import { NgModule } from '@angular/core'
 import { TransferHttpCacheModule } from '@nguniversal/common'
 import { AppComponent } from './app.component'
 import { AppRoutingModule } from './app-routing.module'
-// import { AboutModule } from './about/about.module';
-
+import { NotFoundModule } from './not-found/not-found.module'
 
 @NgModule({
   declarations: [AppComponent],
   bootstrap: [AppComponent],
   imports: [
     AppRoutingModule,
-    // AboutModule,
+    NotFoundModule,
     BrowserModule.withServerTransition({ appId: 'my-app' }),
     TransferHttpCacheModule
   ]

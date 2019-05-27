@@ -2,7 +2,7 @@ import { fuseAngular } from './tools/runner/fuse'
 
 fuseAngular({
   serve: true,
-  watch: false,
+  watch: true,
   // optimizations: {
   //   enabled: true,
   //   minify: true,
@@ -17,6 +17,6 @@ fuseAngular({
     //   name: ''
     // }
     // bundle: {}
-  }
-  // enableAotCompilaton: true
+  },
+  enableAotCompilaton: true
 })

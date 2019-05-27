@@ -1,29 +1,19 @@
 import { NgModule } from '@angular/core'
-import { RouterModule, Routes } from '@angular/router'
+import { RouterModule } from '@angular/router'
 import { HomeModule } from './home/home.module'
-import { NotFoundModule } from './not-found/not-found.module'
-import { APP_BASE_HREF } from '@angular/common'
-import { isElectron, getBaseRef } from './app-routing.electron'
-
-export function aboutModule() {
-  return import('./about/about.module').then(m => m.AboutModule)
-}
-
-export const routes: Routes = [
-  {
-    path: 'about',
-    loadChildren: aboutModule
-  }
-]
+import { lazyRoutes } from './app-routing.lazy';
+import { getBaseRef, getLocationStrategy } from './app-routing.electron';
+import { APP_BASE_HREF, PlatformLocation, LocationStrategy } from '@angular/common'
 
 @NgModule({
   imports: [
     HomeModule,
-    RouterModule.forRoot(routes, { initialNavigation: 'enabled', useHash: isElectron() }),
-    NotFoundModule
+    // <-- Non-lazy modules go here.
+    RouterModule.forRoot(lazyRoutes, { initialNavigation: 'enabled' })
   ],
   providers: [
-    { provide: APP_BASE_HREF, useFactory: getBaseRef }
+    { provide: APP_BASE_HREF, useFactory: getBaseRef },
+    { provide: LocationStrategy, useFactory: getLocationStrategy, deps: [PlatformLocation, APP_BASE_HREF] }
   ],
   exports: [RouterModule]
 })
