@@ -19,7 +19,7 @@ const DEFAULT_CONFIG: Options = {
   jsOutputDir: 'js',
   jsLazyModuleDir: 'modules',
   vendorBundleName: 'vendor',
-  browserAotEntry: 'main.aot.ts',
+  browserAotEntry: 'browser/main.aot.ts',
   browser: {
     supportIE11: false,
     supportIE11Animations: false,
@@ -49,7 +49,7 @@ const DEFAULT_CONFIG: Options = {
       name: 'electron',
       inputPath: 'main.ts',
       outputPath: '/',
-      ignoredModules: []
+      ignoredModules: ['electron']
     }
   },
   optimizations: {
@@ -145,7 +145,7 @@ export const fuseAngular = (opts: PartialOptions) => {
 
   const electron = FuseBox.init({
     ...shared,
-    target: 'electron',
+    target: 'server',
     ignoreModules: settings.electron.bundle.ignoredModules,
     plugins: [
       settings.optimizations.enabled && QuantumPlugin({
