@@ -1,7 +1,7 @@
 import { fuseAngular } from './tools/runner/fuse'
 
 fuseAngular({
-  serve: false,
+  serve: true,
   watch: false,
   // optimizations: {
   //   enabled: true,
