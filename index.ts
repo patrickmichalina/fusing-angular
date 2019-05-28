@@ -7,12 +7,12 @@ fuseAngular({
     enabled: false
   },
   electron: {
-    enabled: true
+    enabled: false
   },
   // optimizations: {
   //   enabled: true,
   //   minify: true,
   //   treeshake: true
   // },
-  enableAotCompilaton: true
+  // enableAotCompilaton: true
 })

@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core'
 
 @Component({
   selector: 'app-about',
-  template: `<h3>ABOUT PAGE (Lazy Loaded in Production)</h3>`,
+  template: `<h3>ABOUT PAGE</h3>`,
   styles: [`
     :host {
       display: block;

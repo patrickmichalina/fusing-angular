@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router'
   imports: [
     RouterModule.forChild([
       {
-        path: '',
+        path: 'about',
         component: AboutComponent
       }
     ])
