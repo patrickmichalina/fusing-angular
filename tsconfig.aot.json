@@ -1,31 +1,12 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "node",
-    "isolatedModules": false,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "declaration": false,
-    "noImplicitAny": true,
-    "noImplicitUseStrict": false,
-    "strictNullChecks": true,
-    "noEmitHelpers": false,
-    "noLib": false,
-    "noUnusedLocals": true,
-    "outDir": "src/browser/.ngc",
-    "allowSyntheticDefaultImports": false,
-    "sourceMap": true,
-    "lib": ["es6", "dom"],
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true
+    "outDir": "src/browser/.ngc"
   },
   "include": [
     "src/browser"
-  ],
-  "exclude": [
-    "src/browser/main.aot.ts",
-    "src/browser/.ngc"
   ],
   "angularCompilerOptions": {
     "preserveWhitespaces": false,

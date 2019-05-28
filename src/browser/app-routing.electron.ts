@@ -1,9 +1,10 @@
 import { HashLocationStrategy, PlatformLocation, PathLocationStrategy } from '@angular/common'
 
-const IS_ELECTRON = typeof navigator !== 'undefined' && navigator.userAgent.includes('Electron') ? true : false
+const HAS_NAVIGATOR = typeof navigator !== 'undefined'
+const IS_ELECTRON = HAS_NAVIGATOR && navigator.userAgent.includes('Electron') ? true : false
 
 export function getBaseRef() {
-  return navigator.userAgent.includes('Electron') ? '' : '/'
+  return HAS_NAVIGATOR && navigator.userAgent.includes('Electron') ? '' : '/'
 }
 
 export function getLocationStrategy(pl: PlatformLocation, baseHref: string) {

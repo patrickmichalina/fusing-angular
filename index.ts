@@ -4,15 +4,15 @@ fuseAngular({
   serve: true,
   watch: true,
   universal: {
-    enabled: false
+    enabled: true
   },
   electron: {
     enabled: false
   },
-  // optimizations: {
-  //   enabled: true,
-  //   minify: true,
-  //   treeshake: true
-  // },
+  optimizations: {
+    enabled: false,
+    // minify: true,
+    // treeshake: true
+  }
   // enableAotCompilaton: true
 })

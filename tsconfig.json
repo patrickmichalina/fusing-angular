@@ -13,7 +13,6 @@
     "noEmitHelpers": false,
     "noLib": false,
     "noUnusedLocals": true,
-    "outDir": ".dist",
     "allowSyntheticDefaultImports": false,
     "sourceMap": true,
     "lib": ["es2016", "dom"],
@@ -23,5 +22,9 @@
   "include": [
     "src",
     "tools"
+  ],
+  "exclude": [
+    "src/browser/main.aot.ts",
+    "src/browser/.ngc"
   ]
 }
