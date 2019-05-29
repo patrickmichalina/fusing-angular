@@ -12,7 +12,7 @@
     "start": "ts-node index --watch --serve",
     "build.prod": "ts-node index --prod",
     "electron": "electron .",
-    "heroku-postbuild": "ts-node index"
+    "heroku-postbuild": "ts-node index --prod"
   },
   "engines": {
     "node": "= 12.3.1"
