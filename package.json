@@ -30,7 +30,7 @@
     "@angular/platform-browser-dynamic": "^8.0.0",
     "@angular/router": "^8.0.0",
     "@angular/service-worker": "^8.0.0",
-    "@flosportsinc/ng-env-transfer-state": "^6.11.0",
+    "@flosportsinc/ng-env-transfer-state": "^7.0.0",
     "@nguniversal/common": "8.0.0-rc.0",
     "@nguniversal/express-engine": "8.0.0-rc.0",
     "@types/cookie-parser": "^1.4.1",
