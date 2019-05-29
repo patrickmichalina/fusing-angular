@@ -94,8 +94,21 @@ const mergeOptions =
       }
     })
 
+export const removeUndefinedValuesFromObj = (ob: any) =>
+  Object.keys(ob)
+    .reduce((acc, curr): any => {
+      return typeof ob[curr] === 'undefined'
+        ? acc
+        : {
+          ...acc,
+          [curr]: typeof ob[curr] === 'object'
+            ? removeUndefinedValuesFromObj(ob[curr])
+            : ob[curr]
+        }
+    }, {})
+
 export const fuseAngular = (opts: PartialOptions) => {
-  const settings = mergeOptions(DEFAULT_CONFIG)(opts)
+  const settings = mergeOptions(DEFAULT_CONFIG)(removeUndefinedValuesFromObj(opts))
 
   const shared = {
     sourceMaps: settings.optimizations.enabled,
@@ -157,7 +170,7 @@ export const fuseAngular = (opts: PartialOptions) => {
     ]
   })
 
-  const mainAppEntry = opts.enableAotCompilaton
+  const mainAppEntry = settings.enableAotCompilaton
     ? `${settings.browserAotEntry}`
     : `${settings.browser.bundle.inputPath}`
 
@@ -193,15 +206,14 @@ export const fuseAngular = (opts: PartialOptions) => {
       root: '.dist/public',
       fallback: "index.html"
     })
-  }
+    if (settings.watch) {
+      const watchDir = `${settings.srcRoot}/**`
+      appBundle.watch(watchDir)
 
-  if (settings.watch) {
-    const watchDir = `${settings.srcRoot}/**`
-    appBundle.watch(watchDir)
-
-    if (settings.serve) { appBundle.hmr({ port }) }
-    if (settings.universal.enabled) { serverBundle.watch(watchDir) }
-    if (settings.electron.enabled) { electronBundle.watch(watchDir) }
+      appBundle.hmr({ port })
+      if (settings.universal.enabled) { serverBundle.watch(watchDir) }
+      if (settings.electron.enabled) { electronBundle.watch(watchDir) }
+    }
   }
 
   browser.run().then(_ => {

@@ -1,18 +1,34 @@
 import { fuseAngular } from './tools/runner/fuse'
+import { argv, Arguments } from 'yargs'
+
+interface IAppArgs {
+  readonly serve?: boolean
+  readonly watch?: boolean
+  readonly aot?: boolean
+  readonly optimize?: boolean
+  readonly prod?: boolean
+  readonly minify?: boolean
+  readonly treeshake?: boolean
+  readonly electron?: boolean
+  readonly universal?: boolean
+}
+
+type Args = Arguments<IAppArgs>
+const args = argv as Args
 
 fuseAngular({
-  serve: true,
-  watch: true,
+  serve: args.serve,
+  watch: args.watch,
   universal: {
-    enabled: true
+    enabled: args.universal
   },
   electron: {
-    enabled: false
+    enabled: args.electron
   },
   optimizations: {
-    enabled: false,
-    // minify: true,
-    // treeshake: true
-  }
-  // enableAotCompilaton: true
+    enabled: args.optimize || args.prod,
+    minify: args.minify || args.prod,
+    treeshake: args.treeshake || args.prod
+  },
+  enableAotCompilaton: args.aot || args.prod
 })
