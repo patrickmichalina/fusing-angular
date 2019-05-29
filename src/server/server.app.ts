@@ -5,7 +5,7 @@ import { ngExpressEngine } from '@nguniversal/express-engine'
 import { AppServerModule } from './server.angular.module'
 
 const app = express()
-const dir = resolve('./.dist')
+const dir = resolve('dist')
 const publicDir = `${dir}/public`
 const jsDir = `${publicDir}/js`
 const expressStaticGzip = require('express-static-gzip')

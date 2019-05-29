@@ -5,59 +5,7 @@ import { NgPolyfillPlugin } from "../plugins/ng.polyfill.plugin"
 import { CompressionPlugin } from "../plugins/compression.plugin"
 import { NgAotFactoryPlugin } from "../plugins/ng.aot-factory.plugin"
 import { NgProdPlugin } from "../plugins/ng.prod.plugin"
-
-const DEFAULT_CONFIG: Options = {
-  enableAotCompilaton: false,
-  enableAngularAnimations: false,
-  enableAngularForms: false,
-  enableServiceWorker: false,
-  enableAngularBuildOptimizer: false,
-  watch: false,
-  serve: false,
-  srcRoot: 'src',
-  outputDirectory: '.dist',
-  jsOutputDir: 'js',
-  jsLazyModuleDir: 'modules',
-  vendorBundleName: 'vendor',
-  browserAotEntry: 'browser/main.aot.ts',
-  browser: {
-    supportIE11: false,
-    supportIE11Animations: false,
-    indexTemplatePath: 'index.html',
-    rootDir: 'browser',
-    bundle: {
-      name: 'app',
-      inputPath: 'browser/main.ts',
-      outputPath: 'public/js',
-      ignoredModules: []
-    }
-  },
-  universal: {
-    enabled: true,
-    rootDir: 'server',
-    bundle: {
-      name: 'server',
-      inputPath: 'server.ts',
-      outputPath: '/public/js/',
-      ignoredModules: ['express', 'domino', 'express-static-gzip']
-    }
-  },
-  electron: {
-    enabled: false,
-    rootDir: 'electron',
-    bundle: {
-      name: 'electron',
-      inputPath: 'main.ts',
-      outputPath: '/',
-      ignoredModules: ['electron']
-    }
-  },
-  optimizations: {
-    enabled: false,
-    minify: false,
-    treeshake: false
-  }
-}
+import { DEFAULT_CONFIG } from "./config"
 
 const mergeOptions =
   (defaultsOptions: Options) =>
@@ -203,7 +151,7 @@ export const fuseAngular = (opts: PartialOptions) => {
     browser.dev({
       port,
       httpServer,
-      root: '.dist/public',
+      root: 'dist/public',
       fallback: "index.html"
     })
     if (settings.watch) {

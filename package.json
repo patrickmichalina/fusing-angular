@@ -4,7 +4,7 @@
   "author": "Patrick Michalina",
   "license": "MIT",
   "version": "0.0.0",
-  "main": ".dist/electron.js",
+  "main": "dist/electron.js",
   "repository": {
     "url": "https://github.com/patrickmichalina/fusing-angular"
   },

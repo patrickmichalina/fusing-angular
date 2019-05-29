@@ -69,15 +69,14 @@ test-report.xml
 test-results.xml
 
 ngc
+aot
 .ngc
 .aot
-aot
 .e2e
 
 documentation
 
 src/config.json
 .serverless
-
-src/client/**/*.css
-.dist/
+.dist
+dist

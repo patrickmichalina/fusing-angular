@@ -37,8 +37,6 @@ export interface IProductionBuildOptions extends IEnableable {
 
 export interface BaseOptions {
   readonly enableAotCompilaton: boolean
-  readonly enableAngularAnimations: boolean
-  readonly enableAngularForms: boolean
   readonly enableServiceWorker: boolean
   readonly enableAngularBuildOptimizer: boolean
   readonly watch: boolean
