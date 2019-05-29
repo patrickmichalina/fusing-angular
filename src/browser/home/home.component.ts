@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core'
+import { NodeEnvTransferService } from '@flosportsinc/ng-env-transfer-state'
 
 const red = 'red'
 
@@ -13,4 +14,8 @@ const red = 'red'
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent { }
+export class HomeComponent {
+  constructor(public env: NodeEnvTransferService) {
+    console.log(env.env)
+  }
+}

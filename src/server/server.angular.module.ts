@@ -3,6 +3,7 @@ import { ServerModule, ServerTransferStateModule } from '@angular/platform-serve
 import { enableProdMode } from '@angular/core'
 import { AppComponent } from '../browser/app.component'
 import { AppModule } from '../browser/app.module'
+import { NodeEnvTransferServerModule } from '@flosportsinc/ng-env-transfer-state/server'
 
 enableProdMode()
 
@@ -11,6 +12,7 @@ enableProdMode()
     AppModule,
     ServerModule,
     ServerTransferStateModule,
+    NodeEnvTransferServerModule
   ],
   bootstrap: [AppComponent],
 })

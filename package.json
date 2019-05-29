@@ -9,7 +9,7 @@
     "url": "https://github.com/patrickmichalina/fusing-angular"
   },
   "scripts": {
-    "start": "ts-node index --watch --serve",
+    "start": "ts-node -r dotenv/config index --watch --serve",
     "build.prod": "ts-node index --prod",
     "electron": "electron .",
     "heroku-postbuild": "ts-node index --prod"
@@ -30,6 +30,7 @@
     "@angular/platform-browser-dynamic": "^8.0.0",
     "@angular/router": "^8.0.0",
     "@angular/service-worker": "^8.0.0",
+    "@flosportsinc/ng-env-transfer-state": "^6.11.0",
     "@nguniversal/common": "8.0.0-rc.0",
     "@nguniversal/express-engine": "8.0.0-rc.0",
     "@types/cookie-parser": "^1.4.1",
