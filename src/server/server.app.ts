@@ -10,6 +10,7 @@ const publicDir = `${dir}/public`
 const jsDir = `${publicDir}/js`
 const expressStaticGzip = require('express-static-gzip')
 
+app.disable('x-powered-by');
 app.use(cookieParser())
 app.use('/js', expressStaticGzip(jsDir, {
   enableBrotli: true,
