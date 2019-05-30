@@ -12,7 +12,7 @@
     "start": "ts-node -r dotenv/config fuse build.dev --watch --serve",
     "build.prod": "ts-node fuse build.prod --prod",
     "electron": "electron .",
-    "heroku-postbuild": "ts-node fuse build --prod"
+    "heroku-postbuild": "ts-node fuse build.prod --prod"
   },
   "engines": {
     "node": "= 12.3.1"
