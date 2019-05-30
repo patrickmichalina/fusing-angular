@@ -7,6 +7,8 @@ export const DEFAULT_CONFIG: Options = {
   watch: false,
   serve: false,
   srcRoot: 'src',
+  assetRoot: 'assets',
+  wwwroot: 'public',
   outputDirectory: 'dist',
   jsOutputDir: 'js',
   jsLazyModuleDir: 'modules',

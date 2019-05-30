@@ -41,6 +41,8 @@ export interface BaseOptions {
   readonly enableAngularBuildOptimizer: boolean
   readonly watch: boolean
   readonly srcRoot: string
+  readonly assetRoot: string
+  readonly wwwroot: string
   readonly outputDirectory: string
   readonly vendorBundleName: string
   readonly browserAotEntry: string
