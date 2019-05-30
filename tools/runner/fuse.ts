@@ -156,11 +156,12 @@ export const fuseAngular = (opts: PartialOptions) => {
     })
     if (settings.watch) {
       const watchDir = `${settings.srcRoot}/**`
-      appBundle.watch(watchDir)
+      const pathIgnore = (path: string) => !path.match("assets")
+      appBundle.watch(watchDir, pathIgnore)
 
       appBundle.hmr({ port })
-      if (settings.universal.enabled) { serverBundle.watch(watchDir) }
-      if (settings.electron.enabled) { electronBundle.watch(watchDir) }
+      if (settings.universal.enabled) { serverBundle.watch(watchDir, pathIgnore) }
+      if (settings.electron.enabled) { electronBundle.watch(watchDir, pathIgnore) }
     }
   }
 

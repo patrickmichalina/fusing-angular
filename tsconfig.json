@@ -15,7 +15,10 @@
     "noUnusedLocals": true,
     "allowSyntheticDefaultImports": false,
     "sourceMap": true,
-    "lib": ["es2016", "dom"],
+    "lib": [
+      "es2016",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true
   },

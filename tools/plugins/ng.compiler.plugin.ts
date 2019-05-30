@@ -1,9 +1,8 @@
 import { main as ngc } from '@angular/compiler-cli/src/main'
 import { Plugin } from 'fuse-box'
-import { resolve } from 'path';
+import { resolve } from 'path'
 
-const defaults: NgcPluginOptions = {
-}
+const defaults: NgcPluginOptions = { }
 
 export interface NgcPluginOptions { 
   enabled?: boolean
