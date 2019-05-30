@@ -4,6 +4,7 @@ import { NgCompilerPlugin } from "../plugins/ng.compiler.plugin"
 import { NgPolyfillPlugin } from "../plugins/ng.polyfill.plugin"
 import { NgAotFactoryPlugin } from "../plugins/ng.aot-factory.plugin"
 import { NgProdPlugin } from "../plugins/ng.prod.plugin"
+import { spawn, ChildProcessWithoutNullStreams } from "child_process"
 
 export const fuseAngular = (opts: Options) => {
   const shared = {
@@ -108,7 +109,13 @@ export const fuseAngular = (opts: Options) => {
 
       appBundle.hmr({ port })
       if (opts.universal.enabled) { serverBundle.watch(watchDir, pathIgnore) }
-      if (opts.electron.enabled) { electronBundle.watch(watchDir, pathIgnore) }
+      if (opts.electron.enabled) {
+        let electronref: ChildProcessWithoutNullStreams
+        electronBundle.watch(watchDir, pathIgnore).completed(() => {
+          if (electronref) { electronref.kill() }
+          electronref = spawn('npm', ['run', 'electron'])
+        })
+       }
     }
   }
 

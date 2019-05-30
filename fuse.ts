@@ -5,7 +5,6 @@ import { Options } from './tools/runner/interfaces'
 import { mergeOptions, removeUndefinedValuesFromObj } from './tools/runner/merge'
 import { DEFAULT_CONFIG } from './tools/runner/config'
 import { compressStatic } from './tools/scripts/compress'
-import { spawn } from 'child_process'
 
 interface IAppArgs {
   readonly serve?: boolean
@@ -64,11 +63,7 @@ task('clean', (ctx: Config) => src(ctx.bundle.outputDirectory).clean(ctx.bundle.
 task('build', ['&app', '&assets'])
 task('compress', async (ctx: Config) => await compressStatic([`${ctx.bundle.outputDirectory}/${ctx.bundle.wwwroot}`]))
 task('build.prod', ['clean', 'build', 'compress'])
-task('build.dev', ['clean', 'build'], (ctx: Config) => {
-  if (ctx.cliArgs.electron) {
-    spawn('npm', ['run', 'electron'])
-  }
-})
+task('build.dev', ['clean', 'build'])
 task('app', (ctx: Config) => fuseAngular(ctx.bundle))
 
 task("assets", async (ctx: Config) => {
