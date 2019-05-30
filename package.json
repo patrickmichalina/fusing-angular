@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "ts-node -r dotenv/config fuse build.dev --watch --serve",
+    "start.prod": "ts-node -r dotenv/config fuse build.prod --prod --serve",
     "build.prod": "ts-node fuse build.prod --prod",
     "electron": "electron .",
     "heroku-postbuild": "ts-node fuse build.prod --prod"
