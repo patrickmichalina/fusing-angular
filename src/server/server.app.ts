@@ -1,5 +1,5 @@
 import * as express from 'express'
-import * as cookieParser from 'cookie-parser'
+import * as cookies from 'cookie-parser'
 import { resolve } from 'path'
 import { ngExpressEngine } from '@nguniversal/express-engine'
 import { AppServerModule } from './server.angular.module'
@@ -9,8 +9,8 @@ const dir = resolve('dist')
 const publicDir = `${dir}/public`
 const expressStaticGzip = require('express-static-gzip')
 
-app.disable('x-powered-by');
-app.use(cookieParser())
+app.disable('x-powered-by')
+app.use(cookies())
 app.set('view engine', 'html')
 app.set('views', publicDir)
 app.engine('html', ngExpressEngine({ bootstrap: AppServerModule }))
