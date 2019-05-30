@@ -18,7 +18,7 @@ export class NgProdPluginClass implements Plugin {
   }
 
   public dependencies: ['@angular/core']
-  public test = this.regex || /(main.ts|main.aot.ts)/
+  public test = this.regex || /(main.ts|main.js|main.aot.ts|main.aot.js)/
 
   get regex() {
     return this.opts &&
@@ -28,6 +28,7 @@ export class NgProdPluginClass implements Plugin {
 
   onTypescriptTransform(file: File) {
     if (!this.opts.enabled || !this.test.test(file.relativePath)) return
+    file.loadContents()
     file.contents = `import { enableProdMode } from '@angular/core';
     enableProdMode()
     ${file.contents}`

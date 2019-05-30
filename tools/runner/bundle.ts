@@ -19,10 +19,10 @@ export const fuseAngular = (opts: Options) => {
     ignoreModules: opts.browser.bundle.ignoredModules,
     output: `${opts.outputDirectory}/${opts.browser.bundle.outputPath}/$name.js`,
     plugins: [
-      NgAotFactoryPlugin({ enabled: opts.enableAotCompilaton }),
+      NgProdPlugin({ enabled: opts.optimizations.enabled }),
       NgPolyfillPlugin({ isAot: opts.enableAotCompilaton }),
+      NgAotFactoryPlugin({ enabled: opts.enableAotCompilaton }),
       NgCompilerPlugin({ enabled: opts.enableAotCompilaton }),
-      NgProdPlugin({ enabled: opts.optimizations.enabled, fileTest: opts.browser.bundle.inputPath }),
       opts.optimizations.enabled && QuantumPlugin({
         uglify: opts.optimizations.minify,
         treeshake: opts.optimizations.treeshake,
@@ -42,7 +42,7 @@ export const fuseAngular = (opts: Options) => {
     target: 'server',
     ignoreModules: opts.universal.bundle.ignoredModules,
     plugins: [
-      NgPolyfillPlugin({ isServer: true, fileTest: /server.ts/ }),
+      NgPolyfillPlugin({ isServer: true, fileTest: /server.ts|server.js/ }),
       opts.optimizations.enabled && QuantumPlugin({
         replaceProcessEnv: false,
         uglify: opts.optimizations.minify,
