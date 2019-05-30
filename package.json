@@ -9,10 +9,10 @@
     "url": "https://github.com/patrickmichalina/fusing-angular"
   },
   "scripts": {
-    "start": "ts-node -r dotenv/config index build --watch --serve",
-    "build.prod": "ts-node index build --prod",
+    "start": "ts-node -r dotenv/config fuse build --watch --serve",
+    "build.prod": "ts-node fuse build --prod",
     "electron": "electron .",
-    "heroku-postbuild": "ts-node index --prod"
+    "heroku-postbuild": "ts-node fuse build --prod"
   },
   "engines": {
     "node": "= 12.3.1"
