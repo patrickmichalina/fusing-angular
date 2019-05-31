@@ -12,7 +12,9 @@ enableProdMode()
     AppModule,
     ServerModule,
     ServerTransferStateModule,
-    NodeEnvTransferServerModule
+    NodeEnvTransferServerModule.config({
+      selectKeys: ['HEROKU_RELEASE_VERSION', 'HEROKU_SLUG_COMMIT']
+    })
   ],
   bootstrap: [AppComponent],
 })
