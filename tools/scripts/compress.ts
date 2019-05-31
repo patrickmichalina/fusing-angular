@@ -2,9 +2,6 @@ import { createReadStream, createWriteStream, readdirSync, statSync } from 'fs'
 import { createBrotliCompress, createGzip } from 'zlib'
 import { resolve } from 'path'
 
-// const extensions: ReadonlyArray<any> = ['js', 'txt', 'json', 'css', 'html', 'map']
-// const files: ReadonlyArray<string> = ['.dist/wwwroot']
-
 const compressFile =
   (filename: string, compression: Function, ext: string) =>
     new Promise((res, _rej) => {
