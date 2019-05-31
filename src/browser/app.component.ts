@@ -23,7 +23,7 @@ const normalizeCss = `html{box-sizing:border-box}*,::after,::before{box-sizing:i
 export class AppComponent {
   constructor(@Inject(ENV) private _env: any) { }
 
-  private version = maybe(this._env.HEROKU_RELEASE_VERSION).map(a => `v${a}`)
+  private version = maybe(this._env.HEROKU_RELEASE_VERSION)
   private commit = maybe(this._env.HEROKU_SLUG_COMMIT)
   public h3 = this.version
     .flatMap(ver => this.commit
