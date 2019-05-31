@@ -99,13 +99,13 @@ export const fuseAngular = (opts: Options) => {
     browser.dev({
       port,
       httpServer,
-      root: 'dist/public',
+      root: `${opts.outputDirectory}/${opts.wwwroot}`,
       fallback: "index.html"
     })
     
     if (opts.watch) {
       const watchDir = `${opts.srcRoot}/**`
-      const pathIgnore = (path: string) => !path.match("assets")
+      const pathIgnore = (path: string) => !path.match(opts.assetRoot)
       appBundle.watch(watchDir, pathIgnore)
 
       appBundle.hmr({ port })
