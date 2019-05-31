@@ -102,6 +102,7 @@ export const fuseAngular = (opts: Options) => {
       root: 'dist/public',
       fallback: "index.html"
     })
+    
     if (opts.watch) {
       const watchDir = `${opts.srcRoot}/**`
       const pathIgnore = (path: string) => !path.match("assets")
@@ -113,7 +114,7 @@ export const fuseAngular = (opts: Options) => {
         let electronref: ChildProcessWithoutNullStreams
         electronBundle.watch(watchDir, pathIgnore).completed(() => {
           if (electronref) { electronref.kill() }
-          electronref = spawn('npm', ['run', 'electron'])
+          electronref = spawn('electron', ['.'])
         })
        }
     }
