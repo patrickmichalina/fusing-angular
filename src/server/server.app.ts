@@ -1,8 +1,10 @@
 import * as express from 'express'
 import * as cookies from 'cookie-parser'
+import * as compression from 'compression'
 import { resolve } from 'path'
 import { ngExpressEngine } from '@nguniversal/express-engine'
 import { AppServerModule } from './server.angular.module'
+import { registerApi } from './api'
 
 const app = express()
 const dir = resolve('dist')
@@ -15,16 +17,18 @@ app.set('view engine', 'html')
 app.set('views', publicDir)
 app.engine('html', ngExpressEngine({ bootstrap: AppServerModule }))
 
-app.get('/', (req, res) => res.render('index', { req }))
+app.get('/', compression(), (req, res) => res.render('index', { req }))
 
 app.use('/', expressStaticGzip(publicDir, {
   enableBrotli: true,
   orderPreference: ['br', 'gzip'] as ReadonlyArray<string>,
   fallthrough: true
-  // maxAge: config.NODE_DEBUG ? '0' : '7d'
+  //TODO: maxAge: config.NODE_DEBUG ? '0' : '7d'
 }))
 
-app.get('*', (req, res) => {
+registerApi(app)
+
+app.get('*', compression(), (req, res) => {
   res.render('index', { req })
 })
 

@@ -1,21 +1,30 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core'
 import { NodeEnvTransferService } from '@flosportsinc/ng-env-transfer-state'
-
-const red = 'red'
+import { HttpClient } from '@angular/common/http'
 
 @Component({
   selector: 'app-home',
-  template: `<h3>THIS IS HOME2222!</h3>`,
+  template: `<h3>HOME</h3>
+    <h3>Internal API Request</h3>
+    <ul>
+     <li *ngFor="let item of notesInternal$ | async">{{ item }}</li>
+    </ul>
+
+    <h3>External API Request</h3>
+    <ul>
+      <li *ngFor="let item of notesExternal$ | async">{{ item }}</li>
+    </ul>
+  `,
   styles: [`
     :host {
-      background-color: ${red};
       display: block;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent {
-  constructor(public env: NodeEnvTransferService) {
-    console.log(env.env)
-  }
+  constructor(public env: NodeEnvTransferService, private http: HttpClient) { }
+
+  public notesInternal$ = this.http.get('api/notes')
+  public notesExternal$ = this.http.get('https://jsonplaceholder.typicode.com/posts')
 }

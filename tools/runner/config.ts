@@ -33,7 +33,7 @@ export const DEFAULT_CONFIG: Options = {
       name: 'server',
       inputPath: 'server.ts',
       outputPath: '/public/js/',
-      ignoredModules: ['express', 'domino', 'express-static-gzip']
+      ignoredModules: ['express', 'domino', 'express-static-gzip', 'compression']
     }
   },
   electron: {

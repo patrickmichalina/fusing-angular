@@ -1,6 +1,5 @@
 
 import { NgModule } from '@angular/core'
-import { TransferHttpCacheModule } from '@nguniversal/common'
 import { AppModule } from './app.module'
 import { AppComponent } from './app.component'
 import { NodeEnvTransferBrowserModule } from '@flosportsinc/ng-env-transfer-state/browser'
@@ -8,10 +7,7 @@ import { NodeEnvTransferBrowserModule } from '@flosportsinc/ng-env-transfer-stat
 @NgModule({
   imports: [
     AppModule,
-    NodeEnvTransferBrowserModule,
-    
-    TransferHttpCacheModule,
-    
+    NodeEnvTransferBrowserModule
   ],
   bootstrap: [AppComponent]
 })

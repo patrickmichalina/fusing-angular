@@ -9,12 +9,12 @@ enableProdMode()
 
 @NgModule({
   imports: [
-    AppModule,
     ServerModule,
     ServerTransferStateModule,
     NodeEnvTransferServerModule.config({
       selectKeys: ['HEROKU_RELEASE_VERSION', 'HEROKU_SLUG_COMMIT']
-    })
+    }),
+    AppModule
   ],
   bootstrap: [AppComponent],
 })
