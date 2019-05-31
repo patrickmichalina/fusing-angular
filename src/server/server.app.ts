@@ -3,7 +3,7 @@ import * as cookies from 'cookie-parser'
 import * as compression from 'compression'
 import { resolve } from 'path'
 import { ngExpressEngine } from '@nguniversal/express-engine'
-import { AppServerModule } from './server.angular.module'
+import { AppServerModule } from './angular/server.angular.module'
 import { registerApi } from './api'
 
 const app = express()

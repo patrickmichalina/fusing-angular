@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http'
 
     <h3>External API Request</h3>
     <ul>
-      <li *ngFor="let item of notesExternal$ | async">{{ item }}</li>
+      <li *ngFor="let item of notesExternal$ | async">{{ item.title }}</li>
     </ul>
   `,
   styles: [`
