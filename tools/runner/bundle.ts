@@ -32,7 +32,8 @@ export const fuseAngular = (opts: Options) => {
       WebIndexPlugin({
         path: `${opts.jsOutputDir}`,
         template: `${opts.srcRoot}/${opts.browser.rootDir}/${opts.browser.indexTemplatePath}`,
-        target: '../index.html'
+        target: '../index.html',
+        scriptAttributes: 'defer'
       })
     ]
   })
