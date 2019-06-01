@@ -61,7 +61,10 @@ context(() => {
 
 task('clean', (ctx: Config) => src(ctx.bundle.outputDirectory).clean(ctx.bundle.outputDirectory))
 task('build', ['&app', '&assets'])
-task('compress', async (ctx: Config) => await compressStatic([`${ctx.bundle.outputDirectory}/${ctx.bundle.wwwroot}`]))
+task('compress', async (ctx: Config) => await compressStatic([
+  `${ctx.bundle.outputDirectory}/${ctx.bundle.wwwroot}`,
+  `${ctx.bundle.outputDirectory}/electron/${ctx.bundle.wwwroot}`
+]))
 task('build.prod', ['clean', 'build', 'compress'])
 task('build.dev', ['clean', 'build'])
 task('app', (ctx: Config) => fuseAngular(ctx.bundle))
@@ -69,10 +72,13 @@ task('app', (ctx: Config) => fuseAngular(ctx.bundle))
 task("assets", async (ctx: Config) => {
   const base = `${ctx.bundle.srcRoot}/${ctx.bundle.assetRoot}`
   const dest = `${ctx.bundle.outputDirectory}/${ctx.bundle.wwwroot}`
+  const destElectron = `${ctx.bundle.outputDirectory}/electron/${ctx.bundle.wwwroot}`
 
   if (ctx.cliArgs.watch) {
     await watch("**/**.**", { base }).dest(dest).exec();
+    if (opts.electron.enabled) await watch("**/**.**", { base }).dest(destElectron).exec()
   } else {
     await src("**/**.**", { base }).dest(dest).exec()
+    if (opts.electron.enabled) await src("**/**.**", { base }).dest(destElectron).exec()
   }
 })
