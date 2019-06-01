@@ -14,7 +14,8 @@
     "start.desktop": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.dev --watch --serve --electron",
     "start.prod": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.prod --prod --serve",
     "start.prod.desktop": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.prod --prod --serve --electron",
-    "build.prod": "ts-node fuse build.prod --prod --electron",
+    "build.prod": "ts-node fuse build.prod --prod",
+    "build.prod.desktop": "ts-node fuse build.prod --prod --electron",
     "heroku-postbuild": "ts-node fuse build.prod --prod"
   },
   "engines": {
