@@ -14,7 +14,8 @@ export const fuseAngular = (opts: Options) => {
     sourceMaps: opts.optimizations.enabled,
     cache: !opts.optimizations.enabled,
     homeDir: opts.srcRoot,
-    output: `${opts.outputDirectory}/$name.js`
+    output: `${opts.outputDirectory}/$name.js`,
+    log: false
   }
 
   const browser = FuseBox.init({

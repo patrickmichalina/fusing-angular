@@ -9,10 +9,10 @@
     "url": "https://github.com/patrickmichalina/fusing-angular"
   },
   "scripts": {
-    "start": "ts-node -r dotenv/config fuse build.dev --watch --serve",
+    "start": "NODE_OPTIONS=--no-warnings ts-node --transpile-only -r dotenv/config fuse build.dev --watch --serve",
     "start.spa": "ts-node -r dotenv/config fuse build.dev --watch --serve --universal=0",
-    "start.desktop": "ts-node -r dotenv/config fuse build.dev --watch --serve --electron",
-    "start.prod": "ts-node -r dotenv/config fuse build.prod --prod --serve",
+    "start.desktop": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.dev --watch --serve --electron",
+    "start.prod": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.prod --prod --serve",
     "build.prod": "ts-node fuse build.prod --prod --electron",
     "heroku-postbuild": "ts-node fuse build.prod --prod"
   },
