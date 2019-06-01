@@ -1,5 +1,5 @@
 import { Options } from "./interfaces"
-import { FuseBox, QuantumPlugin, WebIndexPlugin } from "fuse-box"
+import { FuseBox, QuantumPlugin, WebIndexPlugin, EnvPlugin } from "fuse-box"
 import { NgCompilerPlugin } from "../plugins/ng.compiler.plugin"
 import { NgPolyfillPlugin } from "../plugins/ng.polyfill.plugin"
 import { NgAotFactoryPlugin } from "../plugins/ng.aot-factory.plugin"
@@ -56,11 +56,17 @@ export const fuseAngular = (opts: Options) => {
     ]
   })
 
+  const electronVars = Object
+    .keys(process.env)
+    .filter(k => k.includes('NG_'))
+    .reduce((acc, curr) => ({ ...acc, [curr.replace('NG_', '')]: process.env[curr] }), {})
+
   const electron = FuseBox.init({
     ...shared,
-    target: 'server',
+    target: 'electron',
     ignoreModules: opts.electron.bundle.ignoredModules,
     plugins: [
+      EnvPlugin(electronVars),
       opts.optimizations.enabled && QuantumPlugin({
         replaceProcessEnv: false,
         uglify: opts.optimizations.minify,

@@ -7,9 +7,6 @@ let win: BrowserWindow | null;
 
 const isElectronDev = () => true // !process.mainModule.filename.includes('app.asar');
 
-console.log('TEST HERE!')
-// appReader().run(DEFAULT_CONFIG)
-
 function createWindow() {
   win = new BrowserWindow({
     center: true,
