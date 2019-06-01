@@ -5,8 +5,11 @@ import { NgPolyfillPlugin } from "../plugins/ng.polyfill.plugin"
 import { NgAotFactoryPlugin } from "../plugins/ng.aot-factory.plugin"
 import { NgProdPlugin } from "../plugins/ng.prod.plugin"
 import { spawn, ChildProcessWithoutNullStreams } from "child_process"
+import { FuseProcess } from "fuse-box/FuseProcess"
 
 export const fuseAngular = (opts: Options) => {
+  let universalFuseProcess: FuseProcess | undefined
+
   const shared = {
     sourceMaps: opts.optimizations.enabled,
     cache: !opts.optimizations.enabled,
@@ -89,7 +92,9 @@ export const fuseAngular = (opts: Options) => {
     .splitConfig({ dest: opts.jsLazyModuleDir })
     .instructions(` > ${opts.universal.rootDir}/${opts.universal.bundle.inputPath}`)
     .completed(svr => {
-      if (opts.serve && opts.universal.enabled) { svr.start() }
+      if (opts.serve && opts.universal.enabled) {
+        universalFuseProcess = svr.start()
+      }
     })
 
   const electronBundle = electron
@@ -103,7 +108,7 @@ export const fuseAngular = (opts: Options) => {
       root: `${opts.outputDirectory}/${opts.wwwroot}`,
       fallback: "index.html"
     })
-    
+
     if (opts.watch) {
       const watchDir = `${opts.srcRoot}/**`
       const pathIgnore = (path: string) => !path.match(opts.assetRoot)
@@ -116,8 +121,15 @@ export const fuseAngular = (opts: Options) => {
         electronBundle.watch(watchDir, pathIgnore).completed(() => {
           if (electronref) { electronref.kill() }
           electronref = spawn('electron', ['.'])
+          electronref.stdout.on('data', e => console.log(`${e}`))
+          electronref.stderr.on('data', e => console.log(`${e}`))
+
+          electronref.on('exit', () => {
+            if (universalFuseProcess) { universalFuseProcess.node.kill() }
+            process.exit(0)
+          })
         })
-       }
+      }
     }
   }
 
