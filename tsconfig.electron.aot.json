@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "outDir": "src/electron/angular/.ngc"
+  },
+  "include": [
+    "src/electron/angular"
+  ],
+  "angularCompilerOptions": {
+    "preserveWhitespaces": false,
+    "disableTypeScriptVersionCheck": true
+  }
+}

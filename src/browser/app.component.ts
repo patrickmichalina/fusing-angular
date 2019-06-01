@@ -29,7 +29,9 @@ interface AppVersion {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  constructor(@Inject(ENV) private _env: any, @Inject(DOCUMENT) private _doc: any, private _rd: Renderer2) { }
+  constructor(@Inject(ENV) private _env: any, @Inject(DOCUMENT) private _doc: any, private _rd: Renderer2) {
+    console.log(_env)
+  }
 
   private version = maybe(this._env.HEROKU_RELEASE_VERSION)
   private commit = maybe(this._env.HEROKU_SLUG_COMMIT)

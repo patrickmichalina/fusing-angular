@@ -5,10 +5,10 @@ import { NgPolyfillPlugin } from "../plugins/ng.polyfill.plugin"
 import { NgAotFactoryPlugin } from "../plugins/ng.aot-factory.plugin"
 import { NgProdPlugin } from "../plugins/ng.prod.plugin"
 import { spawn, ChildProcessWithoutNullStreams } from "child_process"
-import { FuseProcess } from "fuse-box/FuseProcess"
+// import { FuseProcess } from "fuse-box/FuseProcess"
 
 export const fuseAngular = (opts: Options) => {
-  let universalFuseProcess: FuseProcess | undefined
+  // let universalFuseProcess: FuseProcess | undefined
 
   const shared = {
     sourceMaps: opts.optimizations.enabled,
@@ -42,6 +42,32 @@ export const fuseAngular = (opts: Options) => {
     ]
   })
 
+  const electronBrowser = FuseBox.init({
+    ...shared,
+    target: 'electron',
+    ignoreModules: opts.browser.bundle.ignoredModules,
+    output: `${opts.outputDirectory}/${'electron'}/public/js/$name.js`,
+    plugins: [
+      NgProdPlugin({ enabled: opts.optimizations.enabled }),
+      NgPolyfillPlugin({ isAot: opts.enableAotCompilaton }),
+      NgAotFactoryPlugin({ enabled: opts.enableAotCompilaton }),
+      NgCompilerPlugin({ enabled: opts.enableAotCompilaton, tsconfig: 'tsconfig.electron.aot.json' }),
+      opts.optimizations.enabled && QuantumPlugin({
+        uglify: opts.optimizations.minify,
+        treeshake: opts.optimizations.treeshake,
+        bakeApiIntoBundle: opts.vendorBundleName,
+        processPolyfill: opts.enableAotCompilaton,
+        replaceProcessEnv: false
+      }) as any,
+      WebIndexPlugin({
+        path: `${opts.jsOutputDir}`,
+        template: `${opts.srcRoot}/${opts.browser.rootDir}/${opts.browser.indexTemplatePath}`,
+        target: '../index.html',
+        scriptAttributes: 'defer'
+      })
+    ]
+  })
+
   const server = FuseBox.init({
     ...shared,
     target: 'server',
@@ -57,37 +83,43 @@ export const fuseAngular = (opts: Options) => {
     ]
   })
 
-  const electronVars = Object
-    .keys(process.env)
-    .filter(k => k.includes('NG_'))
-    .reduce((acc, curr) => ({ ...acc, [curr.replace('NG_', '')]: process.env[curr] }), {})
-
-  const electron = FuseBox.init({
-    ...shared,
-    target: 'electron',
-    ignoreModules: opts.electron.bundle.ignoredModules,
-    plugins: [
-      EnvPlugin(electronVars),
-      opts.optimizations.enabled && QuantumPlugin({
-        replaceProcessEnv: false,
-        uglify: opts.optimizations.minify,
-        bakeApiIntoBundle: opts.electron.bundle.name,
-        treeshake: opts.optimizations.treeshake
-      }) as any
-    ]
-  })
+  const httpServer = opts.serve && !opts.universal.enabled
+  const UNIVERSAL_PORT = 5000
+  const port = httpServer ? UNIVERSAL_PORT : 5001
 
   const mainAppEntry = opts.enableAotCompilaton
     ? `${opts.browserAotEntry}`
     : `${opts.browser.bundle.inputPath}`
 
-  const httpServer = opts.serve && !opts.universal.enabled
-  const UNIVERSAL_PORT = 5000
-  const port = httpServer ? UNIVERSAL_PORT : 5001
+  const electronVars = Object
+    .keys(process.env)
+    .filter(k => k.includes('NG_'))
+    .reduce((acc, curr) => ({ ...acc, [curr.replace('NG_', '')]: process.env[curr] }), {
+      NG_SERVER_HOST: `http://localhost:${UNIVERSAL_PORT}`
+    })
+
+  const electron = FuseBox.init({
+    ...shared,
+    target: 'electron',
+    output: `${opts.outputDirectory}/${'electron'}/$name.js`,
+    ignoreModules: opts.electron.bundle.ignoredModules,
+    plugins: [
+      EnvPlugin(electronVars)
+    ]
+  })
 
   browser
     .bundle(opts.vendorBundleName)
     .instructions(` ~ ${mainAppEntry}`)
+
+  electronBrowser
+    .bundle(opts.vendorBundleName)
+    .instructions(` ~ ${'electron/angular/main.aot.ts'}`)
+
+  electronBrowser
+    .bundle(opts.browser.bundle.name)
+    .splitConfig({ dest: opts.jsLazyModuleDir, browser: `/${opts.jsOutputDir}/` })
+    .instructions(` !> [${'electron/angular/main.aot.ts'}]`)
 
   const appBundle = browser
     .bundle(opts.browser.bundle.name)
@@ -100,7 +132,8 @@ export const fuseAngular = (opts: Options) => {
     .instructions(` > ${opts.universal.rootDir}/${opts.universal.bundle.inputPath}`)
     .completed(svr => {
       if (opts.serve && opts.universal.enabled) {
-        universalFuseProcess = svr.start()
+        // universalFuseProcess = 
+        svr.start()
       }
     })
 
@@ -131,17 +164,21 @@ export const fuseAngular = (opts: Options) => {
           electronref.stdout.on('data', e => console.log(`${e}`))
           electronref.stderr.on('data', e => console.log(`${e}`))
 
-          electronref.on('exit', () => {
-            if (universalFuseProcess) { universalFuseProcess.node.kill() }
-            process.exit(0)
-          })
+          // electronref.on('close', () => {
+          //   if (universalFuseProcess) { universalFuseProcess.node.kill() }
+          //   process.exit(0)
+          // })
         })
       }
     }
   }
 
-  return browser.run().then(_ => {
-    if (opts.electron.enabled) { electron.run() }
-    if (opts.universal.enabled) { server.run() }
-  })
+  const electronPromise = () => opts.electron.enabled
+    ? electronBrowser.run().then(() => electron.run()) as Promise<void>
+    : Promise.resolve()
+
+  Promise.all([browser.run(), electronPromise()])
+    .then(() => {
+      if (opts.universal.enabled) { server.run() }
+    })
 }

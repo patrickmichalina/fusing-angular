@@ -2,17 +2,20 @@ import { main as ngc } from '@angular/compiler-cli/src/main'
 import { Plugin } from 'fuse-box'
 import { resolve } from 'path'
 
-const defaults: NgcPluginOptions = { }
+const defaults: NgcPluginOptions = { 
+  tsconfig: 'tsconfig.aot.json'
+}
 
 export interface NgcPluginOptions { 
-  enabled?: boolean
+  enabled?: boolean,
+  tsconfig?: string
 }
 
 export class NgcPluginClass implements Plugin {
   constructor(private opts: NgcPluginOptions = defaults) { }
 
   bundleStart() {
-    this.opts.enabled && ngc(['-p', resolve('tsconfig.aot.json')])
+    this.opts.enabled && this.opts.tsconfig && ngc(['-p', resolve(this.opts.tsconfig)])
   }
 }
 

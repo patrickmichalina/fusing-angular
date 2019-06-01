@@ -5,19 +5,22 @@ import { app, BrowserWindow } from 'electron';
  
 let win: BrowserWindow | null;
 
-const isElectronDev = () => true // !process.mainModule.filename.includes('app.asar');
+const isElectronDev = () => true; // !process.mainModule.filename.includes('app.asar');
 
 function createWindow() {
   win = new BrowserWindow({
     center: true,
     width: 800,
-    height: 500
-  });
+    height: 500,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
 
   // and load the index.html of the app.
   win.loadURL(
     format({
-      pathname: join(app.getAppPath(), 'dist/public/index.html'),
+      pathname: join(app.getAppPath(), 'dist/electron/public/index.html'),
       protocol: 'file:',
       slashes: true,
     })

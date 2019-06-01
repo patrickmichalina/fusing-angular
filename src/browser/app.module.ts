@@ -17,7 +17,7 @@ import { TransferHttpCacheModule } from '@nguniversal/common'
     NotFoundModule,
     TransferHttpCacheModule,
     BrowserModule.withServerTransition({ appId: 'my-app' }),
-    NodeEnvTransferModule,
+    NodeEnvTransferModule
   ],
   exports: [CommonModule]
 })
