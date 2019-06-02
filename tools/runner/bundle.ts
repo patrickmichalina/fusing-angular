@@ -177,7 +177,7 @@ export const fuseAngular = (opts: Options) => {
     ? electronBrowser.run().then(() => electron.run()) as Promise<void>
     : Promise.resolve()
 
-  Promise.all([browser.run(), electronPromise()])
+  return Promise.all([browser.run(), electronPromise()])
     .then(() => {
       if (opts.universal.enabled) { server.run() }
     })
