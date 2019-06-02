@@ -62,7 +62,6 @@
     "@angular/platform-server": "^8.1.0-beta.0",
     "compression": "git://github.com/patrickmichalina/compression",
     "express": "^4.17.1",
-    "express-expeditious": "^5.0.0",
     "express-static-gzip": "^1.1.3"
   }
 }
