@@ -20,7 +20,8 @@
       "dom"
     ],
     "skipLibCheck": true,
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "types": ["jest", "node"]
   },
   "include": [
     "fuse.ts",
