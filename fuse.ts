@@ -3,7 +3,7 @@ import { argv } from 'yargs'
 import { task, context, watch, src } from 'fuse-box/sparky'
 import { Options } from './tools/runner/interfaces'
 import { mergeOptions, removeUndefinedValuesFromObj } from './tools/runner/merge'
-import { DEFAULT_CONFIG } from './tools/runner/config'
+import { DEFAULT_FUSEBOX_CONFIG } from './tools/runner/config'
 import { compressStatic } from './tools/scripts/compress'
 
 interface IAppArgs {
@@ -55,9 +55,9 @@ const opts = {
 context(() => {
   return {
     cliArgs,
-    bundle: mergeOptions(DEFAULT_CONFIG)(removeUndefinedValuesFromObj(opts))
+    bundle: mergeOptions(DEFAULT_FUSEBOX_CONFIG)(removeUndefinedValuesFromObj(opts))
   } as Config
-});
+})
 
 task('clean', (ctx: Config) => src(ctx.bundle.outputDirectory).clean(ctx.bundle.outputDirectory))
 task('build', ['&app', '&assets'])
@@ -75,7 +75,7 @@ task("assets", async (ctx: Config) => {
   const destElectron = `${ctx.bundle.outputDirectory}/electron/${ctx.bundle.wwwroot}`
 
   if (ctx.cliArgs.watch) {
-    await watch("**/**.**", { base }).dest(dest).exec();
+    await watch("**/**.**", { base }).dest(dest).exec()
     if (opts.electron.enabled) await watch("**/**.**", { base }).dest(destElectron).exec()
   } else {
     await src("**/**.**", { base }).dest(dest).exec()

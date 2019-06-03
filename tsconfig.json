@@ -23,6 +23,7 @@
     "skipDefaultLibCheck": true
   },
   "include": [
+    "fuse.ts",
     "src",
     "tools"
   ],
