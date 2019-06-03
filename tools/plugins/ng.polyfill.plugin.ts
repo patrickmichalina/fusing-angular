@@ -79,4 +79,4 @@ export const NgPolyfillPlugin = (options?: Partial<NgPolyfillPluginOptions>) =>
   new NgPolyfillPluginClass({
     ...defaults,
     ...options,
-  });
+  })

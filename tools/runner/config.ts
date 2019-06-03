@@ -1,6 +1,6 @@
-import { Options } from "./interfaces";
+import { Options } from "./interfaces"
 
-export const DEFAULT_CONFIG: Options = {
+export const DEFAULT_FUSEBOX_CONFIG: Options = {
   enableAotCompilaton: false,
   enableServiceWorker: false,
   enableAngularBuildOptimizer: false,

@@ -35,4 +35,4 @@ export class NgProdPluginClass implements Plugin {
   }
 }
 
-export const NgProdPlugin = (options?: NgProdPluginOptions) => new NgProdPluginClass(options);
+export const NgProdPlugin = (options?: NgProdPluginOptions) => new NgProdPluginClass(options)

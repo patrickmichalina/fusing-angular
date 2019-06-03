@@ -20,4 +20,4 @@ export class NgcPluginClass implements Plugin {
   }
 }
 
-export const NgCompilerPlugin = (options?: NgcPluginOptions) => new NgcPluginClass(options);
+export const NgCompilerPlugin = (options?: NgcPluginOptions) => new NgcPluginClass(options)

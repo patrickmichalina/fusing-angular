@@ -40,3 +40,4 @@ Designed to get a team up and running with a fast development toolkit for Angula
 <!-- - [x] [angular-tslint-rules](https://github.com/fulls1z3/angular-tslint-rules) as configuration preset for [TSLint](https://github.com/palantir/tslint) and [codelyzer](https://github.com/mgechev/codelyzer). -->
 <!-- - [x] Automatic static file cache invalidation -->
 - [ ] [Lazy Loaded](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules
+- [x] Server prepped to support clustered mode for horizontal scaling via [throng](https://github.com/hunterloftis/throng)

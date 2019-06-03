@@ -1,0 +1,83 @@
+{
+  "rules": {
+    "i18n": [
+      false
+    ],
+    "newline-per-chained-call": [
+      false
+    ],
+    "no-unnecessary-class": [
+      false
+    ],
+    "no-var-keyword": true,
+    "no-let": false,
+    "no-parameter-reassignment": false,
+    "readonly-keyword": false,
+    "readonly-array": false,
+    "no-object-mutation": false,
+    "no-delete": true,
+    "no-method-signature": false,
+    "typedef": [
+      false
+    ],
+    "angular-whitespace": [
+      true,
+      "check-interpolation",
+      "check-semicolon"
+    ],
+    "space-within-parens": [
+      false
+    ],
+    "object-literal-key-quotes": [
+      false
+    ],
+    "semicolon": [
+      true,
+      "never"
+    ],
+    "align": [
+      false
+    ],
+    "no-console": [
+      false
+    ],
+    "curly": false,
+    "member-ordering": [
+      false
+    ],
+    "member-access": [
+      false,
+      "no-public"
+    ],
+    "newline-before-return": false,
+    "directive-selector": [
+      true,
+      "attribute",
+      [
+        "app",
+        "pm"
+      ],
+      "camelCase"
+    ],
+    "component-selector": [
+      true,
+      "element",
+      [
+        "pm",
+        "app",
+        "test",
+        "i18n"
+      ],
+      "kebab-case"
+    ],
+    "use-view-encapsulation": false,
+    "pipe-naming": [
+      true,
+      "camelCase",
+      "pm"
+    ],
+    "array-type": [
+      false
+    ]
+  }
+}

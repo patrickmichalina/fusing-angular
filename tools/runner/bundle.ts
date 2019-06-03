@@ -18,6 +18,14 @@ export const fuseAngular = (opts: Options) => {
     log: false
   }
 
+  const httpServer = opts.serve && !opts.universal.enabled
+  const UNIVERSAL_PORT = 4200
+  const port = httpServer ? UNIVERSAL_PORT : 4201
+
+  const mainAppEntry = opts.enableAotCompilaton
+    ? `${opts.browserAotEntry}`
+    : `${opts.browser.bundle.inputPath}`
+
   const browser = FuseBox.init({
     ...shared,
     ignoreModules: opts.browser.bundle.ignoredModules,
@@ -82,14 +90,6 @@ export const fuseAngular = (opts: Options) => {
       }) as any
     ]
   })
-
-  const httpServer = opts.serve && !opts.universal.enabled
-  const UNIVERSAL_PORT = 5000
-  const port = httpServer ? UNIVERSAL_PORT : 5001
-
-  const mainAppEntry = opts.enableAotCompilaton
-    ? `${opts.browserAotEntry}`
-    : `${opts.browser.bundle.inputPath}`
 
   const electronVars = Object
     .keys(process.env)

@@ -1,4 +1,4 @@
-import { PartialOptions, IRequiredBrowserOptions, IRequiredUniversalServerOptions, IRequiredElectronOptions, Options } from "./interfaces";
+import { PartialOptions, IRequiredBrowserOptions, IRequiredUniversalServerOptions, IRequiredElectronOptions, Options } from "./interfaces"
 
 export const mergeOptions =
   (defaultsOptions: Options) =>

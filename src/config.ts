@@ -1,1 +1,22 @@
-export const PORT = process.env.PORT && +process.env.PORT || 5000
+import { maybe } from 'typescript-monads'
+import { resolve } from 'path'
+
+export interface StringDictionary {
+  readonly [key: string]: string
+}
+
+export interface IConfig {
+  readonly PORT: number
+  readonly NODE_DEBUG: boolean
+  readonly CLUSTERED_WORKERS: number
+  readonly DIST_FOLDER: string
+  readonly WWW_ROOT: string
+}
+
+export const STANDARD_CONFIG: IConfig = {
+  NODE_DEBUG: maybe(process.env.NODE_ENV).filter(a => a === 'production').isSome(),
+  PORT: maybe(process.env.PORT).map(p => +p).valueOr(4200),
+  CLUSTERED_WORKERS: maybe(process.env.WEB_CONCURRENCY).map(a => +a).valueOr(1),
+  DIST_FOLDER: resolve('dist'),
+  WWW_ROOT: 'public'
+}

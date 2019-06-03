@@ -1,10 +1,4 @@
-import { createServer } from 'http'
-import { app } from './server.app'
-import { PORT } from '../config'
+import { STANDARD_CONFIG } from "../config"
+import { spawnServerCluster } from "./cluster"
 
-const port = PORT
-const server = createServer(app)
-
-server.listen(port, () => {
-  console.log(`Angular Universal Server listening on port ${port}!`)
-})
+spawnServerCluster.run(STANDARD_CONFIG)
