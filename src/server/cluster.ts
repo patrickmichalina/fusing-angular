@@ -1,4 +1,4 @@
-import { IConfig } from "../config"
+import { IConfig } from "./config"
 import { Application } from "express"
 import { Server, createServer } from "http"
 import { reader } from "typescript-monads"

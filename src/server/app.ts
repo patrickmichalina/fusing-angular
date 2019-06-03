@@ -5,7 +5,7 @@ import { ngExpressEngine } from '@nguniversal/express-engine'
 import { AppServerModule } from './angular/server.angular.module'
 import { registerApi } from './api'
 import { reader } from 'typescript-monads'
-import { IConfig } from '../config'
+import { IConfig } from './config'
 import { join } from 'path'
 
 export const createExpressApplication = reader<IConfig, express.Application>(config => {
