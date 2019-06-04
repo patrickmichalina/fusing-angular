@@ -17,7 +17,7 @@ export const fuseAngular = (opts: Options) => {
     cache: false, // !opts.optimizations.enabled,
     homeDir: opts.srcRoot,
     output: `${opts.outputDirectory}/$name.js`,
-    log: true
+    log: false
   }
 
   const httpServer = opts.serve && !opts.universal.enabled
