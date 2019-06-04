@@ -14,7 +14,6 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
   const publicDir = join(config.DIST_FOLDER, config.WWW_ROOT)
   const expressStaticGzip = require('express-static-gzip')
 
-
   app.use(cookies())
   app.disable('etag')
   app.disable('x-powered-by')
@@ -29,7 +28,13 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
     enableBrotli: true,
     fallthrough: true,
     orderPreference: ['br', 'gzip'] as ReadonlyArray<string>,
-    maxAge: config.NODE_DEBUG ? '0' : '7d'
+    setHeaders: (res: express.Response) => {
+      res.setHeader('Cache-Control',
+        config.NODE_DEBUG
+          ? 'no-store'
+          : `public, max-age=31536000, s-maxage=31536000}`
+      )
+    }
   }))
 
   registerApi(app)
