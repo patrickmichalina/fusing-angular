@@ -76,8 +76,13 @@
   "jest": {
     "rootDir": "src",
     "preset": "jest-preset-angular",
-    "testPathIgnorePatterns": ["node_modules", ".ngc"],
-    "setupFilesAfterEnv": ["../tools/scripts/jest-setup.ts"],
+    "testPathIgnorePatterns": [
+      "node_modules",
+      ".ngc"
+    ],
+    "setupFilesAfterEnv": [
+      "../tools/scripts/jest-setup.ts"
+    ],
     "globals": {
       "ts-jest": {
         "tsConfig": "./tsconfig.json",
