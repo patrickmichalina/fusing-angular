@@ -26,6 +26,9 @@ Designed to get a team up and running with a fast development toolkit for Angula
 - [x] Hot Module Reloading (HMR) for faster browser reloads during client development.
 - [x] [Ahead-of-Time](https://angular.io/guide/aot-compiler) (AOT) compilation support.
 - [x] Server prepped to support clustered mode for horizontal scaling via [throng](https://github.com/hunterloftis/throng).
+- [ ] Seamless server/client integration for of cookies, logging, and authentication.
+- [ ] HTTP Cache-Tag support.
+- [ ] HTTP 301 Redirection support.
 - [ ] SEO support for Title and Meta tags.
 - [ ] Open Graph (OG) tags for social sharing.
 - [ ] [Lazy Loaded](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules.
