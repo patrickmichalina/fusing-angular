@@ -29,8 +29,6 @@ Designed to get a team up and running with a fast development toolkit for Angula
 - [ ] Seamless server/client integration for of cookies, logging, and authentication.
 - [ ] HTTP Cache-Tag support.
 - [ ] HTTP 301 Redirection support.
-- [ ] SEO support for Title and Meta tags.
-- [ ] Open Graph (OG) tags for social sharing.
 - [ ] [Lazy Loaded](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules.
 - [ ] [Heroku](https://www.heroku.com), Docker, and Serverless (GC, AWS) Deployment Examples.
 - [x] Angular specific TSLint rules.
