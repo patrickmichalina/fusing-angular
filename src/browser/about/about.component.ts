@@ -2,12 +2,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core'
 
 @Component({
   selector: 'app-about',
-  template: `<h3>About Page</h3>`,
-  styles: [`
-    :host {
-      display: block;
-    }
-  `],
+  templateUrl: './about.component.html',
+  styleUrls: ['./about.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AboutComponent {

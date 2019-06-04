@@ -24,12 +24,12 @@ export class NgTemplateClass implements Plugin {
 
     try {
       const templateFile = readFileSync(templatePath)
-      file.contents = file.contents.replace(/templateUrl(.*?)\',/, `template: '${templateFile.toString().replace(/\r?\n|\r/g, '')}',`)
+      file.contents = file.contents.replace(/templateUrl(.*?)(["'`])(.*?)(["'`])/g, `template: '${templateFile.toString().replace(/\r?\n|\r/g, '')}'`)
     } catch { }
 
     try {
       const cssFile = readFileSync(cssPath)
-      file.contents = file.contents.replace(/styleUrls(.*?)\'],/, `styles: ['${cssFile.toString().replace(/\r?\n|\r/g, '')}'],`)
+      file.contents = file.contents.replace(/styleUrls(.*?)(["'`])]/g, `styles: ['${cssFile.toString().replace(/\r?\n|\r/g, '')}']`)
     } catch { }
   }
 }
