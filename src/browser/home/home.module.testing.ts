@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core'
 import { HomeModule } from './home.module'
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { NodeEnvTransferBrowserModule } from '@flosportsinc/ng-env-transfer-state/browser'
 
 @NgModule({
-  imports: [HomeModule, HttpClientModule, NodeEnvTransferBrowserModule],
+  imports: [HomeModule, HttpClientTestingModule, NodeEnvTransferBrowserModule],
   exports: [HomeModule],
 })
 export class HomeTestingModule { }

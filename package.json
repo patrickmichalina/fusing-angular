@@ -80,7 +80,11 @@
     "setupFilesAfterEnv": ["../tools/scripts/jest-setup.ts"],
     "globals": {
       "ts-jest": {
-        "tsConfig": "./tsconfig.json"
+        "tsConfig": "./tsconfig.json",
+        "stringifyContentPathRegex": "\\.html$",
+        "astTransformers": [
+          "jest-preset-angular/InlineHtmlStripStylesTransformer"
+        ]
       }
     }
   }
