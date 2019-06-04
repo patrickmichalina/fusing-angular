@@ -3,8 +3,7 @@ import { AppComponent } from './app.component'
 import { AppRoutingModule } from './app-routing.module'
 import { NotFoundModule } from './not-found/not-found.module'
 import { BrowserModule } from '@angular/platform-browser'
-import { CommonModule } from '@angular/common'
-import { SharedModule } from './shared.module'
+import { SharedModule } from './shared/shared.module'
 
 @NgModule({
   declarations: [AppComponent],
@@ -13,7 +12,6 @@ import { SharedModule } from './shared.module'
     NotFoundModule,
     SharedModule,
     BrowserModule.withServerTransition({ appId: 'my-app' })
-  ],
-  exports: [CommonModule]
+  ]
 })
 export class AppModule { }

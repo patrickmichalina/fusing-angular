@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core'
 
 @Component({
   selector: 'app-about',
-  template: `<h3>ABOUT PAGE</h3>`,
+  template: `<h3>About Page</h3>`,
   styles: [`
     :host {
       display: block;

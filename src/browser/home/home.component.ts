@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http'
 
 @Component({
   selector: 'app-home',
-  template: `<h3>HOME</h3>
+  template: `<h3>Home</h3>
     <h3>Internal API Request</h3>
     <ul>
      <li *ngFor="let item of notesInternal$ | async">{{ item }}</li>
