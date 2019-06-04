@@ -1,11 +1,11 @@
 import 'jest-preset-angular'
 
 const mock = () => {
-  let storage = {}
+  let storage: { [key: string]: any } = {}
   return {
     getItem: (key: string) => key in storage ? (<any>storage)[key] : null,
     setItem: (key: string, value: any) => (<any>storage)[key] = value || '',
-    removeItem: (key: string) => delete (<any>storage)[key],
+    removeItem: (key: string) => Object.keys(storage).filter(a => a !== key).reduce((acc, key) => ({ ...acc, [key]: storage[key] }), {}),
     clear: () => storage = {},
   }
 }

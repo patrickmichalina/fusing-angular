@@ -33,6 +33,7 @@ Designed to get a team up and running with a fast development toolkit for Angula
 - [ ] Open Graph (OG) tags for social sharing.
 - [ ] [Lazy Loaded](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules.
 - [ ] [Heroku](https://www.heroku.com), Docker, and Serverless (GC, AWS) Deployment Examples.
+- [x] Angular specific TSLint rules.
 
 ## Application Configuration
 

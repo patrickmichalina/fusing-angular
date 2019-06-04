@@ -30,8 +30,8 @@
   ],
   "exclude": [
     "src/browser/main.aot.ts",
-    "src/browser/.ngc",
+    "src/browser/.ngc/**/**",
     "src/electron/angular/main.aot.ts",
-    "src/electron/angular/.ngc"
+    "src/electron/angular/.ngc/**/**"
   ]
 }
