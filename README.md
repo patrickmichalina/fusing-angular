@@ -1,6 +1,6 @@
 <h1 align="center" style="border-bottom: none;">fusing-angular</h1>
 <h3 align="center">Provides an extremely fast seed project for the development of Angular Universal (SSR) projects.</h3>
-<p align="center">
+<!-- <p align="center">
   <a href="https://greenkeeper.io">
     <img alt="greenkeeper" src="https://badges.greenkeeper.io/semantic-release/semantic-release.svg">
   </a>
@@ -10,7 +10,7 @@
   <a href="https://david-dm.org/patrickmichalina/onvif-probe-rx?type=dev">
     <img alt="greenkeeper" src="https://david-dm.org/patrickmichalina/onvif-probe-rx/dev-status.svg">
   </a>
-</p>
+</p> -->
 
 ## Goals
 Designed to get a team up and running with a fast development toolkit for Angular Univerasl, Electron, and NativeScript applications.
