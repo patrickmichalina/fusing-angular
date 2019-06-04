@@ -5,6 +5,8 @@ import { NgPolyfillPlugin } from "../plugins/ng.polyfill.plugin"
 import { NgAotFactoryPlugin } from "../plugins/ng.aot-factory.plugin"
 import { NgProdPlugin } from "../plugins/ng.prod.plugin"
 import { spawn, ChildProcessWithoutNullStreams } from "child_process"
+import { NgTemplatePlugin } from "../plugins/ng.template.plugin"
+import { NgAotServerPlugin } from "../plugins/ng.aot-server.plugin"
 // import { FuseProcess } from "fuse-box/FuseProcess"
 
 export const fuseAngular = (opts: Options) => {
@@ -12,10 +14,10 @@ export const fuseAngular = (opts: Options) => {
 
   const shared = {
     sourceMaps: opts.optimizations.enabled,
-    cache: !opts.optimizations.enabled,
+    cache: false, // !opts.optimizations.enabled,
     homeDir: opts.srcRoot,
     output: `${opts.outputDirectory}/$name.js`,
-    log: false
+    log: true
   }
 
   const httpServer = opts.serve && !opts.universal.enabled
@@ -33,6 +35,7 @@ export const fuseAngular = (opts: Options) => {
     plugins: [
       NgProdPlugin({ enabled: opts.optimizations.enabled }),
       NgPolyfillPlugin({ isAot: opts.enableAotCompilaton }),
+      NgTemplatePlugin(),
       NgAotFactoryPlugin({ enabled: opts.enableAotCompilaton }),
       NgCompilerPlugin({ enabled: opts.enableAotCompilaton }),
       opts.optimizations.enabled && QuantumPlugin({
@@ -58,6 +61,7 @@ export const fuseAngular = (opts: Options) => {
     plugins: [
       NgProdPlugin({ enabled: opts.optimizations.enabled }),
       NgPolyfillPlugin({ isAot: opts.enableAotCompilaton }),
+      NgTemplatePlugin({ enabled: !opts.enableAotCompilaton }),
       NgAotFactoryPlugin({ enabled: opts.enableAotCompilaton }),
       NgCompilerPlugin({ enabled: opts.enableAotCompilaton, tsconfig: 'tsconfig.electron.aot.json' }),
       opts.optimizations.enabled && QuantumPlugin({
@@ -81,7 +85,9 @@ export const fuseAngular = (opts: Options) => {
     target: 'server',
     ignoreModules: opts.universal.bundle.ignoredModules,
     plugins: [
+      NgAotServerPlugin({ useAot: opts.enableAotCompilaton, file: /app.ts/g }),
       NgPolyfillPlugin({ isServer: true, fileTest: /server.ts|server.js/ }),
+      NgTemplatePlugin({ enabled: !opts.enableAotCompilaton }),
       opts.optimizations.enabled && QuantumPlugin({
         replaceProcessEnv: false,
         uglify: opts.optimizations.minify,

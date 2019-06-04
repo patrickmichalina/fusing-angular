@@ -6,7 +6,8 @@
     "outDir": "src/browser/.ngc"
   },
   "include": [
-    "src/browser"
+    "src/browser",
+    "src/server/angular"
   ],
   "angularCompilerOptions": {
     "preserveWhitespaces": false,

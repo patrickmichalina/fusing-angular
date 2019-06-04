@@ -4,22 +4,8 @@ import { HttpClient } from '@angular/common/http'
 
 @Component({
   selector: 'app-home',
-  template: `<h3>Home</h3>
-    <h3>Internal API Request</h3>
-    <ul>
-     <li *ngFor="let item of notesInternal$ | async">{{ item }}</li>
-    </ul>
-
-    <h3>External API Request</h3>
-    <ul>
-      <li *ngFor="let item of notesExternal$ | async">{{ item.title }}</li>
-    </ul>
-  `,
-  styles: [`
-    :host {
-      display: block;
-    }
-  `],
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent {
