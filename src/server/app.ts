@@ -14,6 +14,7 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
   const expressStaticGzip = require('express-static-gzip')
 
   app.use(cookies())
+  app.disable('etag')
   app.disable('x-powered-by')
   app.set('view engine', 'html')
   app.set('views', publicDir)
@@ -22,6 +23,7 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
   app.get('/', compression(), (req, res) => res.render('index', { req }))
 
   app.use('/', expressStaticGzip(publicDir, {
+    etag: false,
     enableBrotli: true,
     fallthrough: true,
     orderPreference: ['br', 'gzip'] as ReadonlyArray<string>,

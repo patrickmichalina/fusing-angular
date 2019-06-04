@@ -14,7 +14,7 @@ export interface IConfig {
 }
 
 export const STANDARD_CONFIG: IConfig = {
-  NODE_DEBUG: maybe(process.env.NODE_ENV).filter(a => a === 'production').isSome(),
+  NODE_DEBUG: maybe(process.env.NODE_ENV).filter(a => a === 'production').isNone(),
   PORT: maybe(process.env.PORT).map(p => +p).valueOr(4200),
   CLUSTERED_WORKERS: maybe(process.env.WEB_CONCURRENCY).map(a => +a).valueOr(1),
   DIST_FOLDER: resolve('dist'),
