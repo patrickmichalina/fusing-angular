@@ -26,12 +26,27 @@ Designed to get a team up and running with a fast development toolkit for Angula
 - [x] Hot Module Reloading (HMR) for faster browser reloads during client development.
 - [x] [Ahead-of-Time](https://angular.io/guide/aot-compiler) (AOT) compilation support.
 - [x] Server prepped to support clustered mode for horizontal scaling via [throng](https://github.com/hunterloftis/throng).
+- [x] Angular specific TSLint rules.
 - [ ] Seamless server/client integration for of cookies, logging, and authentication.
 - [ ] HTTP Cache-Tag support.
 - [ ] HTTP 301 Redirection support.
 - [ ] [Lazy Loaded](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules.
 - [ ] [Heroku](https://www.heroku.com), Docker, and Serverless (GC, AWS) Deployment Examples.
-- [x] Angular specific TSLint rules.
+
+## Commands
+| Command  | Info |
+| ------------- | ------------- |
+| test  | Runs all .spec.ts files through [Jest](https://facebook.github.io/jest)  |
+| test.watch  | Continous testing of all .spec.ts files through [Jest](https://facebook.github.io/jest)  |
+| start  | Starts the Angular Universal server for development with HMR enabled.  |
+| start.deving | Starts the Angular Universal server for development with HMR enabled and runs unit tests continuously. |
+| start.spa  | Similiar to the Angular CLI experience - no server side rendering support.  |
+| start.desktop  | Electorn app watches for changes and rebuild accordinlgy.  |
+| start.prod  | Starts the Angular Universal server as if on a production environment.  |
+| start.prod.desktop  | Starts Universal and electron with production level optimizations.  |
+| build.prod  | Build server/browser production files  |
+| build.prod.desktop  | Build server/browser/electron production files  |
+| lint  | Checks your codebase for lint failures |
 
 ## Application Configuration
 

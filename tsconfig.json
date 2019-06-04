@@ -12,6 +12,7 @@
     "strictNullChecks": true,
     "noEmitHelpers": false,
     "noLib": false,
+    "noEmit": true,
     "noUnusedLocals": true,
     "allowSyntheticDefaultImports": false,
     "sourceMap": true,
