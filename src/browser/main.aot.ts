@@ -3,4 +3,4 @@ import { AppBrowserModuleNgFactory } from './.ngc/src/browser/app.browser.module
 
 platformBrowser()
   .bootstrapModuleFactory(AppBrowserModuleNgFactory)
-  .catch(console.log)
+  .catch(console.error)
