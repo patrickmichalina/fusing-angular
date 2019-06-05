@@ -87,7 +87,6 @@ task('css', (ctx: Config) => {
     .dest(`${ctx.bundle.outputDirectory}/electron/${ctx.bundle.wwwroot}/css`)
 })
 
-
 task("assets", async (ctx: Config) => {
   const base = `${ctx.bundle.srcRoot}/${ctx.bundle.assetRoot}`
   const dest = `${ctx.bundle.outputDirectory}/${ctx.bundle.wwwroot}`
