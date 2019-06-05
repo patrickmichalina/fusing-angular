@@ -144,6 +144,8 @@ export const fuseAngular = (opts: Options) => {
     .bundle(opts.electron.bundle.name)
     .instructions(` > ${opts.electron.rootDir}/${opts.electron.bundle.inputPath}`)
 
+  const runElectron = () => spawn('electron', ['.'])
+
   if (opts.serve) {
     browser.dev({
       port,
@@ -163,7 +165,7 @@ export const fuseAngular = (opts: Options) => {
         let electronref: ChildProcessWithoutNullStreams
         electronBundle.watch(watchDir, pathIgnore).completed(() => {
           if (electronref) { electronref.kill() }
-          electronref = spawn('electron', ['.'])
+          electronref = runElectron()
           electronref.stdout.on('data', e => console.log(`${e}`))
           electronref.stderr.on('data', e => console.log(`${e}`))
         })
@@ -172,7 +174,9 @@ export const fuseAngular = (opts: Options) => {
   }
 
   const electronPromise = () => opts.electron.enabled
-    ? electronBrowser.run().then(() => electron.run()) as Promise<void>
+    ? electronBrowser.run().then(() => electron.run().then(_ => {
+      if (!opts.watch) { runElectron() }
+    })) as Promise<void>
     : Promise.resolve()
 
   return Promise.all([browser.run(), electronPromise()])
