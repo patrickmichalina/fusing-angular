@@ -59,7 +59,9 @@ context(() => {
   } as Config
 })
 
-task('clean', (ctx: Config) => src(ctx.bundle.outputDirectory).clean(ctx.bundle.outputDirectory))
+task('clean.fusebox', () => src('.fusebox').clean('.fusebox'))
+task('clean.dist', (ctx: Config) => src(ctx.bundle.outputDirectory).clean(ctx.bundle.outputDirectory))
+task('clean', ['&clean.fusebox', '&clean.dist'])
 task('build', ['&app', '&assets'])
 task('compress', async (ctx: Config) => await compressStatic([
   `${ctx.bundle.outputDirectory}/${ctx.bundle.wwwroot}`,

@@ -7,14 +7,11 @@ import { NgProdPlugin } from "../plugins/ng.prod.plugin"
 import { spawn, ChildProcessWithoutNullStreams } from "child_process"
 import { NgTemplatePlugin } from "../plugins/ng.template.plugin"
 import { NgAotServerPlugin } from "../plugins/ng.aot-server.plugin"
-// import { FuseProcess } from "fuse-box/FuseProcess"
 
 export const fuseAngular = (opts: Options) => {
-  // let universalFuseProcess: FuseProcess | undefined
-
   const shared = {
     sourceMaps: opts.optimizations.enabled,
-    cache: false, // !opts.optimizations.enabled,
+    cache: false, //!opts.optimizations.enabled,
     homeDir: opts.srcRoot,
     output: `${opts.outputDirectory}/$name.js`,
     log: false
@@ -36,7 +33,7 @@ export const fuseAngular = (opts: Options) => {
     plugins: [
       NgProdPlugin({ enabled: opts.optimizations.enabled }),
       NgPolyfillPlugin({ isAot: opts.enableAotCompilaton }),
-      NgTemplatePlugin(),
+      NgTemplatePlugin({ enabled: !opts.enableAotCompilaton }),
       NgAotFactoryPlugin({ enabled: opts.enableAotCompilaton }),
       NgCompilerPlugin({ enabled: opts.enableAotCompilaton }),
       opts.optimizations.enabled && QuantumPlugin({
@@ -139,7 +136,6 @@ export const fuseAngular = (opts: Options) => {
     .instructions(` > ${opts.universal.rootDir}/${opts.universal.bundle.inputPath}`)
     .completed(svr => {
       if (opts.serve && opts.universal.enabled) {
-        // universalFuseProcess = 
         svr.start()
       }
     })
@@ -161,7 +157,7 @@ export const fuseAngular = (opts: Options) => {
       const pathIgnore = (path: string) => !path.match(opts.assetRoot)
       appBundle.watch(watchDir, pathIgnore)
 
-      appBundle.hmr({ port })
+      // appBundle.hmr({ port })
       if (opts.universal.enabled) { serverBundle.watch(watchDir, pathIgnore) }
       if (opts.electron.enabled) {
         let electronref: ChildProcessWithoutNullStreams
@@ -170,11 +166,6 @@ export const fuseAngular = (opts: Options) => {
           electronref = spawn('electron', ['.'])
           electronref.stdout.on('data', e => console.log(`${e}`))
           electronref.stderr.on('data', e => console.log(`${e}`))
-
-          // electronref.on('close', () => {
-          //   if (universalFuseProcess) { universalFuseProcess.node.kill() }
-          //   process.exit(0)
-          // })
         })
       }
     }
