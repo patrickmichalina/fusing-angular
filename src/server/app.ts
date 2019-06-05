@@ -32,7 +32,7 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
       res.setHeader('Cache-Control',
         config.NODE_DEBUG
           ? 'no-store'
-          : `public, max-age=31536000, s-maxage=31536000}`
+          : `public, max-age=31536000, s-maxage=31536000`
       )
     }
   }))

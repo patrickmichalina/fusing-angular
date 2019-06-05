@@ -1,10 +1,12 @@
 import { fuseAngular } from './tools/runner/bundle'
 import { argv } from 'yargs'
 import { task, context, watch, src } from 'fuse-box/sparky'
+import { SparkyFile } from 'fuse-box/sparky/SparkyFile'
 import { Options } from './tools/runner/interfaces'
 import { mergeOptions, removeUndefinedValuesFromObj } from './tools/runner/merge'
 import { DEFAULT_FUSEBOX_CONFIG } from './tools/runner/config'
 import { compressStatic } from './tools/scripts/compress'
+import * as cleancss from 'clean-css'
 
 interface IAppArgs {
   readonly serve?: boolean
@@ -62,7 +64,7 @@ context(() => {
 task('clean.fusebox', () => src('.fusebox').clean('.fusebox'))
 task('clean.dist', (ctx: Config) => src(ctx.bundle.outputDirectory).clean(ctx.bundle.outputDirectory))
 task('clean', ['&clean.fusebox', '&clean.dist'])
-task('build', ['&app', '&assets'])
+task('build', ['&app', '&assets', '&css'])
 task('compress', async (ctx: Config) => await compressStatic([
   `${ctx.bundle.outputDirectory}/${ctx.bundle.wwwroot}`,
   `${ctx.bundle.outputDirectory}/electron/${ctx.bundle.wwwroot}`
@@ -70,6 +72,21 @@ task('compress', async (ctx: Config) => await compressStatic([
 task('build.prod', ['clean', 'build', 'compress'])
 task('build.dev', ['clean', 'build'])
 task('app', (ctx: Config) => fuseAngular(ctx.bundle))
+task('css', (ctx: Config) => {
+  const cssc = new cleancss()
+  const ref = '**/**'
+  const base = 'src/browser/styles'
+  const staticOrWatch = () => ctx.cliArgs.watch ? watch(ref, { base }) : src(ref, { base })
+
+  return staticOrWatch()
+    .file("*.css", (file: SparkyFile) => {
+      file.read()
+      file.setContent(cssc.minify(file.contents.toString()).styles)
+    })
+    .dest(`${ctx.bundle.outputDirectory}/${ctx.bundle.wwwroot}/css`)
+    .dest(`${ctx.bundle.outputDirectory}/electron/${ctx.bundle.wwwroot}/css`)
+})
+
 
 task("assets", async (ctx: Config) => {
   const base = `${ctx.bundle.srcRoot}/${ctx.bundle.assetRoot}`
