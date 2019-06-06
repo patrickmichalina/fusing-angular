@@ -18,9 +18,9 @@ export interface IEnableable {
 }
 
 export interface IUniversalServerOptions extends IBundleable, IEnableable { }
-export interface IElectronOptions extends IBundleable, IEnableable { }
 export interface IRequiredUniversalServerOptions extends IRequiredBundleable, IEnableable { }
 export interface IRequiredElectronOptions extends IRequiredBundleable, IEnableable { }
+export interface IElectronOptions extends IBundleable, IEnableable { }
 
 export interface BaseBrowserOptions {
   readonly supportIE11: boolean
@@ -50,6 +50,7 @@ export interface BaseOptions {
   readonly jsLazyModuleDir: string
   readonly serve: boolean
   readonly log: boolean
+  readonly logFilters: string[]
   readonly browser: Partial<IBrowserOptions>
   readonly electron: Partial<IElectronOptions>
   readonly universal: Partial<IUniversalServerOptions>

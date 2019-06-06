@@ -14,6 +14,7 @@ export const DEFAULT_FUSEBOX_CONFIG: Options = {
   jsOutputDir: 'js',
   jsLazyModuleDir: 'modules',
   vendorBundleName: 'vendor',
+  logFilters: ['WARNING: Textured window'],
   browser: {
     supportIE11: false,
     supportIE11Animations: false,

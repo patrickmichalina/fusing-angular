@@ -164,11 +164,16 @@ export const fuseAngular = (opts: Options) => {
       if (opts.universal.enabled) { serverBundle.watch(watchDir, pathIgnore) }
       if (opts.electron.enabled) {
         let electronref: ChildProcessWithoutNullStreams
+        const print = (e: Buffer) => {
+          const str = e.toString()
+          if (opts.logFilters.some(a => str.includes(a))) return
+          console.log(str)
+        }
         electronBundle.watch(watchDir, pathIgnore).completed(() => {
           if (electronref) { electronref.kill() }
           electronref = runElectron()
-          electronref.stdout.on('data', e => console.log(`${e}`))
-          electronref.stderr.on('data', e => console.log(`${e}`))
+          electronref.stdout.on('data', print)
+          electronref.stderr.on('data', print)
         })
       }
     }
