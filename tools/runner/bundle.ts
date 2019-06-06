@@ -11,10 +11,10 @@ import { NgAotServerPlugin } from "../plugins/ng.aot-server.plugin"
 export const fuseAngular = (opts: Options) => {
   const shared = {
     sourceMaps: opts.optimizations.enabled,
-    cache: false, //!opts.optimizations.enabled,
     homeDir: opts.srcRoot,
     output: `${opts.outputDirectory}/$name.js`,
-    log: false
+    log: false,
+    cache: false, //!opts.optimizations.enabled,
   }
 
   const httpServer = opts.serve && !opts.universal.enabled
@@ -22,8 +22,12 @@ export const fuseAngular = (opts: Options) => {
   const port = httpServer ? UNIVERSAL_PORT : 4201
 
   const mainAppEntry = opts.enableAotCompilaton
-    ? `${opts.browserAotEntry}`
-    : `${opts.browser.bundle.inputPath}`
+    ? `${opts.browser.rootDir}/${opts.browserAotEntry}`
+    : `${opts.browser.rootDir}/${opts.browser.bundle.inputPath}`
+
+  const electronAppEntry = opts.enableAotCompilaton
+    ? `${opts.electron.rootDir}/${'angular/main.aot.ts'}`
+    : `${opts.electron.rootDir}/${'angular/main.ts'}`
 
   const browser = FuseBox.init({
     ...shared,
@@ -46,7 +50,8 @@ export const fuseAngular = (opts: Options) => {
         path: `${opts.jsOutputDir}`,
         template: `${opts.srcRoot}/${opts.browser.rootDir}/${opts.browser.indexTemplatePath}`,
         target: '../index.html',
-        scriptAttributes: 'defer'
+        scriptAttributes: 'defer',
+        pre: 'load'
       })
     ]
   })
@@ -118,12 +123,12 @@ export const fuseAngular = (opts: Options) => {
 
   electronBrowser
     .bundle(opts.vendorBundleName)
-    .instructions(` ~ ${'electron/angular/main.ts'}`)
+    .instructions(` ~ ${electronAppEntry}`)
 
   electronBrowser
     .bundle(opts.browser.bundle.name)
     .splitConfig({ dest: opts.jsLazyModuleDir, browser: `/${opts.jsOutputDir}/` })
-    .instructions(` !> [${'electron/angular/main.ts'}]`)
+    .instructions(` !> [${electronAppEntry}]`)
 
   const appBundle = browser
     .bundle(opts.browser.bundle.name)

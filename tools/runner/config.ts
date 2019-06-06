@@ -13,7 +13,7 @@ export const DEFAULT_FUSEBOX_CONFIG: Options = {
   jsOutputDir: 'js',
   jsLazyModuleDir: 'modules',
   vendorBundleName: 'vendor',
-  browserAotEntry: 'browser/main.aot.ts',
+  browserAotEntry: 'main.aot.ts',
   browser: {
     supportIE11: false,
     supportIE11Animations: false,
@@ -21,7 +21,7 @@ export const DEFAULT_FUSEBOX_CONFIG: Options = {
     rootDir: 'browser',
     bundle: {
       name: 'app',
-      inputPath: 'browser/main.ts',
+      inputPath: 'main.ts',
       outputPath: 'public/js',
       ignoredModules: []
     }
