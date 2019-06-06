@@ -1,6 +1,7 @@
 export interface IBundleOptions {
   readonly name: string
   readonly inputPath: string
+  readonly aotInputPath: string
   readonly outputPath: string
   readonly ignoredModules: string[]
 }
@@ -45,10 +46,10 @@ export interface BaseOptions {
   readonly wwwroot: string
   readonly outputDirectory: string
   readonly vendorBundleName: string
-  readonly browserAotEntry: string
   readonly jsOutputDir: string
   readonly jsLazyModuleDir: string
   readonly serve: boolean
+  readonly log: boolean
   readonly browser: Partial<IBrowserOptions>
   readonly electron: Partial<IElectronOptions>
   readonly universal: Partial<IUniversalServerOptions>

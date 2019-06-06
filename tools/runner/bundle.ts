@@ -12,22 +12,29 @@ export const fuseAngular = (opts: Options) => {
   const shared = {
     sourceMaps: opts.optimizations.enabled,
     homeDir: opts.srcRoot,
+    log: opts.log,
     output: `${opts.outputDirectory}/$name.js`,
-    log: false,
     cache: false, //!opts.optimizations.enabled,
   }
+
+  const webIndexPlugin = WebIndexPlugin({
+    path: `${opts.jsOutputDir}`,
+    template: `${opts.srcRoot}/${opts.browser.rootDir}/${opts.browser.indexTemplatePath}`,
+    target: '../index.html',
+    scriptAttributes: 'defer'
+  })
 
   const httpServer = opts.serve && !opts.universal.enabled
   const UNIVERSAL_PORT = 4200
   const port = httpServer ? UNIVERSAL_PORT : 4201
 
-  const mainAppEntry = opts.enableAotCompilaton
-    ? `${opts.browser.rootDir}/${opts.browserAotEntry}`
+  const browserEntry = opts.enableAotCompilaton
+    ? `${opts.browser.rootDir}/${opts.browser.bundle.aotInputPath}`
     : `${opts.browser.rootDir}/${opts.browser.bundle.inputPath}`
 
-  const electronAppEntry = opts.enableAotCompilaton
-    ? `${opts.electron.rootDir}/${'angular/main.aot.ts'}`
-    : `${opts.electron.rootDir}/${'angular/main.ts'}`
+  const electronBrowserEntry = opts.enableAotCompilaton
+    ? `${opts.electron.rootDir}/${opts.electron.bundle.aotInputPath}`
+    : `${opts.electron.rootDir}/${opts.electron.bundle.inputPath}`
 
   const browser = FuseBox.init({
     ...shared,
@@ -46,12 +53,7 @@ export const fuseAngular = (opts: Options) => {
         bakeApiIntoBundle: opts.vendorBundleName,
         processPolyfill: opts.enableAotCompilaton
       }) as any,
-      WebIndexPlugin({
-        path: `${opts.jsOutputDir}`,
-        template: `${opts.srcRoot}/${opts.browser.rootDir}/${opts.browser.indexTemplatePath}`,
-        target: '../index.html',
-        scriptAttributes: 'defer'
-      })
+      webIndexPlugin
     ]
   })
 
@@ -73,12 +75,7 @@ export const fuseAngular = (opts: Options) => {
         processPolyfill: opts.enableAotCompilaton,
         replaceProcessEnv: false
       }) as any,
-      WebIndexPlugin({
-        path: `${opts.jsOutputDir}`,
-        template: `${opts.srcRoot}/${opts.browser.rootDir}/${opts.browser.indexTemplatePath}`,
-        target: '../index.html',
-        scriptAttributes: 'defer'
-      })
+      webIndexPlugin
     ]
   })
 
@@ -118,21 +115,21 @@ export const fuseAngular = (opts: Options) => {
 
   browser
     .bundle(opts.vendorBundleName)
-    .instructions(` ~ ${mainAppEntry}`)
+    .instructions(` ~ ${browserEntry}`)
 
   electronBrowser
     .bundle(opts.vendorBundleName)
-    .instructions(` ~ ${electronAppEntry}`)
+    .instructions(` ~ ${electronBrowserEntry}`)
 
   electronBrowser
     .bundle(opts.browser.bundle.name)
     .splitConfig({ dest: opts.jsLazyModuleDir, browser: `/${opts.jsOutputDir}/` })
-    .instructions(` !> [${electronAppEntry}]`)
+    .instructions(` !> [${electronBrowserEntry}]`)
 
   const appBundle = browser
     .bundle(opts.browser.bundle.name)
     .splitConfig({ dest: opts.jsLazyModuleDir, browser: `/${opts.jsOutputDir}/` })
-    .instructions(` !> [${mainAppEntry}]`)
+    .instructions(` !> [${browserEntry}]`)
 
   const serverBundle = server
     .bundle(opts.universal.bundle.name)
@@ -146,7 +143,7 @@ export const fuseAngular = (opts: Options) => {
 
   const electronBundle = electron
     .bundle(opts.electron.bundle.name)
-    .instructions(` > ${opts.electron.rootDir}/${opts.electron.bundle.inputPath}`)
+    .instructions(` > ${opts.electron.rootDir}/${'main.ts'}`)
 
   const runElectron = () => spawn('electron', ['.'])
 

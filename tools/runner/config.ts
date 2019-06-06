@@ -6,6 +6,7 @@ export const DEFAULT_FUSEBOX_CONFIG: Options = {
   enableAngularBuildOptimizer: false,
   watch: false,
   serve: false,
+  log: false,
   srcRoot: 'src',
   assetRoot: 'assets',
   wwwroot: 'public',
@@ -13,7 +14,6 @@ export const DEFAULT_FUSEBOX_CONFIG: Options = {
   jsOutputDir: 'js',
   jsLazyModuleDir: 'modules',
   vendorBundleName: 'vendor',
-  browserAotEntry: 'main.aot.ts',
   browser: {
     supportIE11: false,
     supportIE11Animations: false,
@@ -22,6 +22,7 @@ export const DEFAULT_FUSEBOX_CONFIG: Options = {
     bundle: {
       name: 'app',
       inputPath: 'main.ts',
+      aotInputPath: 'main.aot.ts',
       outputPath: 'public/js',
       ignoredModules: []
     }
@@ -32,6 +33,7 @@ export const DEFAULT_FUSEBOX_CONFIG: Options = {
     bundle: {
       name: 'server',
       inputPath: 'server.ts',
+      aotInputPath: '',
       outputPath: '/public/js/',
       ignoredModules: ['express', 'domino', 'express-static-gzip', 'compression']
     }
@@ -41,7 +43,8 @@ export const DEFAULT_FUSEBOX_CONFIG: Options = {
     rootDir: 'electron',
     bundle: {
       name: 'electron',
-      inputPath: 'main.ts',
+      inputPath: 'angular/main.ts',
+      aotInputPath: 'angular/main.aot.ts',
       outputPath: '/',
       ignoredModules: ['electron']
     }
