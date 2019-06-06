@@ -42,6 +42,8 @@
     "@flosportsinc/ng-env-transfer-state": "^7.0.0",
     "@nguniversal/common": "^8.0.0-rc.1",
     "@nguniversal/express-engine": "^8.0.0-rc.1",
+    "@ngx-translate/core": "^11.0.1",
+    "@ngx-translate/http-loader": "^4.0.0",
     "@types/clean-css": "^4.2.1",
     "@types/compression": "0.0.36",
     "@types/cookie-parser": "^1.4.1",

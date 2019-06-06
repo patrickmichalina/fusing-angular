@@ -1,0 +1,9 @@
+{
+  "MENU": {
+    "HOME": "Home",
+    "ABOUT": "About"
+  },
+  "HOME": {
+    "HELLO": "Hello World!"
+  }
+}

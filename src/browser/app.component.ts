@@ -2,6 +2,9 @@ import { Component, ChangeDetectionStrategy, Inject, Renderer2 } from '@angular/
 import { ENV } from '@flosportsinc/ng-env-transfer-state'
 import { maybe } from 'typescript-monads'
 import { DOCUMENT } from '@angular/common'
+import { TranslateService } from '@ngx-translate/core'
+import { ActivatedRoute } from '@angular/router'
+import { skip, pluck } from 'rxjs/operators'
 
 interface AppVersion {
   readonly ngIf: boolean
@@ -17,10 +20,22 @@ interface AppVersion {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  constructor(@Inject(ENV) private _env: any, @Inject(DOCUMENT) private _doc: any, private _rd: Renderer2) {
-    console.log(_env)
-  }
+  constructor(@Inject(ENV) private _env: any, @Inject(DOCUMENT) private _doc: any, private _rd: Renderer2,
+    _translate: TranslateService, ar: ActivatedRoute) {
+    _translate.setDefaultLang('en')
+    _translate.use('en')
 
+    ar.queryParams.pipe(skip(1), pluck('lang')).subscribe(lang => {
+      if (lang) {
+        _translate.use(lang)
+      } else {
+        _translate.use('en')
+      }
+    })
+  }
+  public param = { value: 'John' }
+  public en = { lang: 'en' }
+  public jp = { ang: 'jp' }
   private version = maybe(this._env.HEROKU_RELEASE_VERSION)
   private commit = maybe(this._env.HEROKU_SLUG_COMMIT)
   public appv = this.version
