@@ -10,8 +10,8 @@ export class HttpElectronInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return req.url.includes('http')
       ? next.handle(req)
-      : next.handle(req.clone({
-        url: `${this._env.SERVER_HOST}/${req.url}`
-      }))
+      : req.url.includes('./')
+        ? next.handle(req.clone({ url: `${req.url.replace('./', '')}` }))
+        : next.handle(req.clone({ url: `${this._env.SERVER_HOST}/${req.url}` }))
   }
 }

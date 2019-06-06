@@ -118,12 +118,12 @@ export const fuseAngular = (opts: Options) => {
 
   electronBrowser
     .bundle(opts.vendorBundleName)
-    .instructions(` ~ ${'electron/angular/main.aot.ts'}`)
+    .instructions(` ~ ${'electron/angular/main.ts'}`)
 
   electronBrowser
     .bundle(opts.browser.bundle.name)
     .splitConfig({ dest: opts.jsLazyModuleDir, browser: `/${opts.jsOutputDir}/` })
-    .instructions(` !> [${'electron/angular/main.aot.ts'}]`)
+    .instructions(` !> [${'electron/angular/main.ts'}]`)
 
   const appBundle = browser
     .bundle(opts.browser.bundle.name)
