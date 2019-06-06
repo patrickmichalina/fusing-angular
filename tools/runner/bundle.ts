@@ -78,7 +78,8 @@ export const fuseAngular = (opts: Options) => {
         path: `${opts.jsOutputDir}`,
         template: `${opts.srcRoot}/${opts.browser.rootDir}/${opts.browser.indexTemplatePath}`,
         target: '../index.html',
-        scriptAttributes: 'defer'
+        scriptAttributes: 'defer',
+        pre: 'load'
       })
     ]
   })
