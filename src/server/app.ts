@@ -6,8 +6,10 @@ import { registerApi } from './api'
 import { reader } from 'typescript-monads'
 import { IConfig } from './config'
 import { join } from 'path'
+import { NgModuleFactory } from '@angular/core'
+import { AppModule } from '../browser/app.module'
 
-declare const $ngServerBootstrap: any
+declare const $ngServerBootstrap: NgModuleFactory<AppModule>
 
 export const createExpressApplication = reader<IConfig, express.Application>(config => {
   const app = express()
@@ -19,7 +21,7 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
   app.disable('x-powered-by')
   app.set('view engine', 'html')
   app.set('views', publicDir)
-  app.engine('html', ngExpressEngine({ bootstrap: $ngServerBootstrap }))
+  app.engine('html', ngExpressEngine({ bootstrap: $ngServerBootstrap }) as any)
 
   app.get('/', compression(), (req, res) => res.render('index', { req }))
 

@@ -27,7 +27,8 @@ Designed to get a team up and running with a fast development toolkit for Angula
 - [x] [Ahead-of-Time](https://angular.io/guide/aot-compiler) (AOT) compilation support.
 - [x] Server prepped to support clustered mode for horizontal scaling via [throng](https://github.com/hunterloftis/throng).
 - [x] Angular specific TSLint rules.
-- [x] Multi Language Support
+- [x] Multi Language support.
+- [ ] Angular PWA support.
 - [ ] Seamless server/client integration for of cookies, logging, and authentication.
 - [ ] [HTTP Cache-Tag](https://github.com/flocasts/flo-angular/tree/master/projects/flosportsinc/ng-http-cache-tags) support.
 - [ ] HTTP 301 Redirection support.
