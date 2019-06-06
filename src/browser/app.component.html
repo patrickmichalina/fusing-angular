@@ -1,8 +1,11 @@
 <div class="root">
-  <h1 style="margin-bottom: 0px;">Fusing Angular</h1>
+  <h1 style="margin-bottom: 0px;" translate>HOME.TITLE</h1>
   <h3 style="margin-top: 0px;" *ngIf="appv.ngIf">({{ appv.inline }})</h3>
-  <a routerLinkLang="en">English</a>
-  <a routerLinkLang="jp">Japanese</a>
+  <h4 translate>HOME.LG</h4>
+  <ul>
+    <li><a routerLinkLang="en" translate>LANG.EN</a></li>
+    <li><a routerLinkLang="jp" translate>LANG.JP</a></li>
+  </ul>
   <ul>
     <li><a routerLink translate>MENU.HOME</a></li>
     <li><a routerLink="/about" translate>MENU.ABOUT</a></li>

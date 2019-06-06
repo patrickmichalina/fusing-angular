@@ -1,9 +1,15 @@
 {
+  "LANG": {
+    "EN": "英語 (English)",
+    "JP": "日本語 (Japanese)"
+  },
   "MENU": {
     "HOME": "ホム",
     "ABOUT": "アバウト"
   },
   "HOME": {
-    "HELLO": "こんにちは"
+    "HELLO": "こんにちは",
+    "TITLE": "ヒューズインゴ　アングァル",
+    "LG": "言語"
   }
 }

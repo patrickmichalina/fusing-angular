@@ -1,9 +1,15 @@
 {
+  "LANG": {
+    "EN": "English",
+    "JP": "Japanese"
+  },
   "MENU": {
     "HOME": "Home",
     "ABOUT": "About"
   },
   "HOME": {
-    "HELLO": "Hello World!"
+    "TITLE": "Fusing Angular",
+    "HELLO": "Hello World!",
+    "LG": "Languages"
   }
 }
