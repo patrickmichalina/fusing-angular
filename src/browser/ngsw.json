@@ -1,5 +1,5 @@
 {
-  "index": "/",
+  "index": ".",
   "assetGroups": [
     {
       "name": "appshell",

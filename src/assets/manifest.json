@@ -1,0 +1,13 @@
+{
+  "name": "fusing-angular",
+  "short_name": "fusing-angular",
+  "description": "fusing-angular",
+  "dir": "auto",
+  "lang": "en",
+  "display": "standalone",
+  "orientation": "any",
+  "start_url": "/",
+  "background_color": "#5d4cd2",
+  "theme_color": "#5d4cd2",
+  "icons": []
+}
