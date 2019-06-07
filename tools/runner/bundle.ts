@@ -38,7 +38,7 @@ export const fuseAngular = (opts: Options) => {
 
   const browser = FuseBox.init({
     ...shared,
-    hash: opts.optimizations.enabled,
+    hash: true,
     ignoreModules: opts.browser.bundle.ignoredModules,
     output: `${opts.outputDirectory}/${opts.browser.bundle.outputPath}/$name.js`,
     plugins: [
@@ -59,6 +59,7 @@ export const fuseAngular = (opts: Options) => {
 
   const electronBrowser = FuseBox.init({
     ...shared,
+    hash: true,
     target: 'electron',
     ignoreModules: opts.browser.bundle.ignoredModules,
     output: `${opts.outputDirectory}/${'electron'}/public/js/$name.js`,

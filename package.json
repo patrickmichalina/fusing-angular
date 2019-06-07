@@ -11,15 +11,15 @@
   "scripts": {
     "test": "jest",
     "test.watch": "jest --watch",
-    "start": "NODE_OPTIONS=--no-warnings ts-node --transpile-only -r dotenv/config fuse build.dev --watch --serve",
+    "start": "NODE_OPTIONS=--no-warnings ts-node --transpile-only -r dotenv/config fuse build.dev --watch --serve --pwa",
     "start.deving": "concurrently --kill-others-on-fail \"npm start\" \"npm run test.watch\"",
     "start.spa": "ts-node -r dotenv/config fuse build.dev --watch --serve --universal=0",
-    "start.desktop": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.dev --watch --serve --electron",
-    "start.prod": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.prod --prod --serve",
-    "start.prod.desktop": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.prod --prod --serve --electron",
-    "build.prod": "ts-node fuse build.prod --prod",
-    "build.prod.desktop": "ts-node fuse build.prod --prod --electron",
-    "heroku-postbuild": "tslint -p tsconfig.json && jest && ts-node fuse build.prod --prod",
+    "start.desktop": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.dev --watch --serve --electron --pwa",
+    "start.prod": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.prod --prod --serve --pwa",
+    "start.prod.desktop": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.prod --prod --serve --electron --pwa",
+    "build.prod": "ts-node fuse build.prod --prod --pwa",
+    "build.prod.desktop": "ts-node fuse build.prod --prod --electron --pwa",
+    "heroku-postbuild": "tslint -p tsconfig.json && jest && ts-node fuse build.prod --prod --pwa",
     "lint": "tslint -p tsconfig.json"
   },
   "engines": {

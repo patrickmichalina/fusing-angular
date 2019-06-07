@@ -22,6 +22,7 @@ interface IAppArgs {
   readonly treeshake?: boolean
   readonly electron?: boolean
   readonly universal?: boolean
+  readonly pwa?: boolean
 }
 
 interface Config {
@@ -38,7 +39,8 @@ const cliArgs = {
   serve: argv.serve,
   treeshake: argv.treeshake,
   universal: argv.universal,
-  watch: argv.watch
+  watch: argv.watch,
+  pwa: argv.pwa
 }
 
 const opts = {
@@ -55,7 +57,8 @@ const opts = {
     minify: cliArgs.minify || cliArgs.prod,
     treeshake: cliArgs.treeshake || cliArgs.prod
   },
-  enableAotCompilaton: cliArgs.aot || cliArgs.prod
+  enableAotCompilaton: cliArgs.aot || cliArgs.prod,
+  pwa: cliArgs.pwa
 }
 
 context(() => {
@@ -69,12 +72,12 @@ task('clean.fusebox', () => src('.fusebox').clean('.fusebox'))
 task('clean.dist', (ctx: Config) => src(ctx.bundle.outputDirectory).clean(ctx.bundle.outputDirectory))
 task('clean', ['&clean.fusebox', '&clean.dist'])
 task('build', ['&app', '&assets', '&css'])
-task('compress', async (ctx: Config) => await compressStatic([
+task('compress', (ctx: Config) => compressStatic([
   `${ctx.bundle.outputDirectory}/${ctx.bundle.wwwroot}`,
   `${ctx.bundle.outputDirectory}/electron/${ctx.bundle.wwwroot}`
 ]))
-task('build.prod', ['clean', 'build', 'ngsw', 'compress'])
-task('build.dev', ['clean', 'build', 'ngsw'])
+task('build.prod', ['clean', 'build', 'sw-js', 'sw-json', 'compress'])
+task('build.dev', ['clean', 'build', 'sw-js', 'sw-json'])
 task('app', (ctx: Config) => fuseAngular(ctx.bundle))
 task('css', (ctx: Config) => {
   const cssc = new cleancss()
@@ -98,23 +101,27 @@ task("assets", async (ctx: Config) => {
 
   if (ctx.cliArgs.watch) {
     await watch("**/**.**", { base }).dest(dest).exec()
-    if (opts.electron.enabled) await watch("**/**.**", { base }).dest(destElectron).exec()
+    if (ctx.bundle.electron.enabled) await watch("**/**.**", { base }).dest(destElectron).exec()
   } else {
     await src("**/**.**", { base }).dest(dest).exec()
-    if (opts.electron.enabled) await src("**/**.**", { base }).dest(destElectron).exec()
+    if (ctx.bundle.electron.enabled) await src("**/**.**", { base }).dest(destElectron).exec()
   }
 })
 
-task('ngsw', (ctx: Config) => {
+task('sw-json', async (ctx: Config) => {
+  if (!ctx.cliArgs.pwa) return
   const defer = (ngsw: string, out: string) => new Promise((res, rej) => {
     ensureDir(out)
     const proc = spawn(resolve('node_modules/.bin/ngsw-config'), [out, ngsw])
     proc.stdout.on('data', a => console.log(`${a}`))
     proc.stderr.on('data', a => console.log(`${a}`))
-    proc.once('exit', () => res())
-    proc.once('error', (err) => {
+    proc.once('close', (e) => {
+      res(e)
       proc.kill()
+    })
+    proc.once('error', (err) => {
       rej(err)
+      proc.kill()
     })
   })
 
@@ -126,9 +133,17 @@ task('ngsw', (ctx: Config) => {
   const toWatch = toExecute.map(p => `${p}/**/!(*ngsw.json)`)
   const promises = () => Promise.all(toExecute.map(p => defer(ngswPath, p)))
 
-  return opts.watch
-    ? watch(toWatch)
-      .completed(() => promises())
-      .exec()
+  await ctx.cliArgs.watch
+    ? watch(toWatch).completed(() => promises()).exec()
     : promises()
+})
+
+task('sw-js', (ctx: Config) => {
+  if (!ctx.cliArgs.pwa) return
+
+  const webPath = `${ctx.bundle.outputDirectory}/${ctx.bundle.wwwroot}`
+  const electronPath = `${ctx.bundle.outputDirectory}/electron/${ctx.bundle.wwwroot}`
+  const toExecute = ctx.cliArgs.electron ? [webPath, electronPath] : [webPath]
+
+  return Promise.all(toExecute.map(p => src('ngsw-worker.js', { base: './node_modules/@angular/service-worker' }).dest(p).exec()))
 })

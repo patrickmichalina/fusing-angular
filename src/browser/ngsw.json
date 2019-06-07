@@ -7,10 +7,7 @@
         "files": [
           "/**/*.js",
           "/**/*.css",
-          "!/ngsw-worker.js"
-        ],
-        "urls": [
-          "/absolute/**"
+          "/ngsw-worker.js"
         ]
       }
     }
@@ -23,8 +20,8 @@
       ],
       "cacheConfig": {
         "maxSize": 100,
-        "maxAge": "1d",
-        "timeout": "1m",
+        "maxAge": "2m",
+        "timeout": "30s",
         "strategy": "freshness"
       }
     }

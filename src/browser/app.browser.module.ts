@@ -1,5 +1,5 @@
-
 import { NgModule } from '@angular/core'
+import { ServiceWorkerModule } from '@angular/service-worker'
 import { AppModule } from './app.module'
 import { AppComponent } from './app.component'
 import { NodeEnvTransferBrowserModule } from '@flosportsinc/ng-env-transfer-state/browser'
@@ -21,7 +21,8 @@ export function createTranslateLoader(http: HttpClient) {
         useFactory: createTranslateLoader,
         deps: [HttpClient]
       }
-    })
+    }),
+    ServiceWorkerModule.register('ngsw-worker.js')
   ],
   bootstrap: [AppComponent]
 })
