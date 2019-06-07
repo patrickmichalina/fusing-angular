@@ -1,0 +1,32 @@
+{
+  "index": "/",
+  "assetGroups": [
+    {
+      "name": "appshell",
+      "resources": {
+        "files": [
+          "/**/*.js",
+          "/**/*.css",
+          "!/ngsw-worker.js"
+        ],
+        "urls": [
+          "/absolute/**"
+        ]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "api",
+      "urls": [
+        "/api/**"
+      ],
+      "cacheConfig": {
+        "maxSize": 100,
+        "maxAge": "1d",
+        "timeout": "1m",
+        "strategy": "freshness"
+      }
+    }
+  ]
+}

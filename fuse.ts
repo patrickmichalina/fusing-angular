@@ -6,7 +6,11 @@ import { Options } from './tools/runner/interfaces'
 import { mergeOptions, removeUndefinedValuesFromObj } from './tools/runner/merge'
 import { DEFAULT_FUSEBOX_CONFIG } from './tools/runner/config'
 import { compressStatic } from './tools/scripts/compress'
+import { spawn } from 'child_process'
+import { resolve } from 'path'
+import { ensureDir } from 'fuse-box/Utils'
 import * as cleancss from 'clean-css'
+
 
 interface IAppArgs {
   readonly serve?: boolean
@@ -69,8 +73,8 @@ task('compress', async (ctx: Config) => await compressStatic([
   `${ctx.bundle.outputDirectory}/${ctx.bundle.wwwroot}`,
   `${ctx.bundle.outputDirectory}/electron/${ctx.bundle.wwwroot}`
 ]))
-task('build.prod', ['clean', 'build', 'compress'])
-task('build.dev', ['clean', 'build'])
+task('build.prod', ['clean', 'build', 'ngsw', 'compress'])
+task('build.dev', ['clean', 'build', 'ngsw'])
 task('app', (ctx: Config) => fuseAngular(ctx.bundle))
 task('css', (ctx: Config) => {
   const cssc = new cleancss()
@@ -99,4 +103,32 @@ task("assets", async (ctx: Config) => {
     await src("**/**.**", { base }).dest(dest).exec()
     if (opts.electron.enabled) await src("**/**.**", { base }).dest(destElectron).exec()
   }
+})
+
+task('ngsw', (ctx: Config) => {
+  const defer = (ngsw: string, out: string) => new Promise((res, rej) => {
+    ensureDir(out)
+    const proc = spawn(resolve('node_modules/.bin/ngsw-config'), [out, ngsw])
+    proc.stdout.on('data', a => console.log(`${a}`))
+    proc.stderr.on('data', a => console.log(`${a}`))
+    proc.once('exit', () => res())
+    proc.once('error', (err) => {
+      proc.kill()
+      rej(err)
+    })
+  })
+
+  const ngswPath = `${'src/browser/ngsw.json'}`
+  const webPath = `${ctx.bundle.outputDirectory}/${ctx.bundle.wwwroot}`
+  const electronPath = `${ctx.bundle.outputDirectory}/electron/${ctx.bundle.wwwroot}`
+
+  const toExecute = ctx.cliArgs.electron ? [webPath, electronPath] : [webPath]
+  const toWatch = toExecute.map(p => `${p}/**/!(*ngsw.json)`)
+  const promises = () => Promise.all(toExecute.map(p => defer(ngswPath, p)))
+
+  return opts.watch
+    ? watch(toWatch)
+      .completed(() => promises())
+      .exec()
+    : promises()
 })
