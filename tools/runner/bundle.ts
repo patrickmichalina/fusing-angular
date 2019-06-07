@@ -18,10 +18,16 @@ export const fuseAngular = (opts: Options) => {
   }
 
   const webIndexPlugin = WebIndexPlugin({
+    engine: 'pug',
     path: `${opts.jsOutputDir}`,
     template: `${opts.srcRoot}/${opts.browser.rootDir}/${opts.browser.indexTemplatePath}`,
     target: '../index.html',
-    scriptAttributes: 'defer'
+    scriptAttributes: 'defer',
+    locals: {
+      csp: opts.enableAotCompilaton
+        ? `script-src 'self'; object-src 'self'`
+        : `script-src 'self' 'unsafe-eval'; object-src 'self'`
+    }
   })
 
   const httpServer = opts.serve && !opts.universal.enabled

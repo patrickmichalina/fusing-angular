@@ -18,7 +18,7 @@ export const DEFAULT_FUSEBOX_CONFIG: Options = {
   browser: {
     supportIE11: false,
     supportIE11Animations: false,
-    indexTemplatePath: 'index.html',
+    indexTemplatePath: 'index.pug',
     rootDir: 'browser',
     bundle: {
       name: 'app',
