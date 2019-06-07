@@ -8,9 +8,10 @@ import { HttpElectronInterceptor } from './electron.interceptor'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { HttpClient } from '@angular/common/http'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
+import { ElectronRoutingModule } from './app-routing.module'
 
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './i18n/', `.json?v=123`)
+  return new TranslateHttpLoader(http, './i18n/', `.json?v=appVersionNeedsToGoHere`)
 }
 
 export function maybeGetElectronVars() {
@@ -21,7 +22,6 @@ export function maybeGetElectronVars() {
 
 @NgModule({
   imports: [
-    
     NodeEnvTransferBrowserModule,
     TranslateModule.forRoot({
       loader: {
@@ -30,7 +30,8 @@ export function maybeGetElectronVars() {
         deps: [HttpClient]
       }
     }),
-    AppModule
+    AppModule,
+    ElectronRoutingModule
   ],
   providers: [
     {

@@ -3,8 +3,7 @@ import { RouterModule } from '@angular/router'
 import { HomeModule } from './home/home.module'
 import { lazyRoutes } from './app-routing.lazy'
 import { AboutModule } from './about/about.module'
-import { getBaseRef, getLocationStrategy } from './app-routing.electron'
-import { APP_BASE_HREF, PlatformLocation, LocationStrategy } from '@angular/common'
+import { APP_BASE_HREF } from '@angular/common'
 
 @NgModule({
   imports: [
@@ -14,8 +13,7 @@ import { APP_BASE_HREF, PlatformLocation, LocationStrategy } from '@angular/comm
     RouterModule.forRoot(lazyRoutes, { initialNavigation: 'enabled' })
   ],
   providers: [
-    { provide: APP_BASE_HREF, useFactory: getBaseRef },
-    { provide: LocationStrategy, useFactory: getLocationStrategy, deps: [PlatformLocation, APP_BASE_HREF] }
+    { provide: APP_BASE_HREF, useValue: '/' }
   ],
   exports: [RouterModule]
 })
