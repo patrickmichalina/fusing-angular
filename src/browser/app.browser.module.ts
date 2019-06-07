@@ -22,7 +22,7 @@ export function createTranslateLoader(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    ServiceWorkerModule.register('ngsw-worker.js')
+    ServiceWorkerModule.register('/ngsw-worker.js')
   ],
   bootstrap: [AppComponent]
 })
