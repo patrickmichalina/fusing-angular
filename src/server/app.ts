@@ -1,6 +1,7 @@
 import * as express from 'express'
 import * as cookies from 'cookie-parser'
 import * as compression from 'compression'
+import * as expeditious from 'express-expeditious'
 import { ngExpressEngine } from '@nguniversal/express-engine'
 import { registerApi } from './api'
 import { reader } from 'typescript-monads'
@@ -17,16 +18,18 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
   const expressStaticGzip = require('express-static-gzip')
 
   app.use(cookies())
-  app.disable('etag')
   app.disable('x-powered-by')
   app.set('view engine', 'html')
   app.set('views', publicDir)
   app.engine('html', ngExpressEngine({ bootstrap: $ngServerBootstrap }) as any)
 
+  const cache = expeditious({ defaultTtl: '30s', namespace: 'expresscache', exposeHeader: false } as any)
+
+  app.use(cache)
+
   app.get('/', compression(), (req, res) => res.render('index', { req }))
 
-  app.use('/', expressStaticGzip(publicDir, {
-    etag: false,
+  app.use('/', expressStaticGzip(publicDir, cache.withTtl('1 yr'), {
     enableBrotli: true,
     fallthrough: true,
     orderPreference: ['br', 'gzip'] as ReadonlyArray<string>,
