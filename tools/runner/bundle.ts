@@ -187,9 +187,7 @@ export const fuseAngular = (opts: Options) => {
   }
 
   const electronPromise = () => opts.electron.enabled
-    ? electronBrowser.run().then(() => electron.run().then(_ => {
-      if (!opts.watch) { runElectron() }
-    })) as Promise<void>
+    ? electronBrowser.run().then(() => electron.run()) as Promise<void>
     : Promise.resolve()
 
   return Promise.all([browser.run(), electronPromise()])
