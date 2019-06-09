@@ -30,7 +30,7 @@ Designed to get a team up and running with a fast development toolkit for Angula
 - [x] Multi Language support.
 - [ ] Angular PWA support.
 - [ ] Seamless server/client integration for of cookies, logging, and authentication.
-- [ ] [HTTP Cache-Tag](https://github.com/flocasts/flo-angular/tree/master/projects/flosportsinc/ng-http-cache-tags) support.
+- [x] [HTTP Cache-Tag](https://github.com/flocasts/flo-angular/tree/master/projects/flosportsinc/ng-http-cache-tags) support.
 - [ ] HTTP 301 Redirection support.
 - [ ] [Lazy Loaded](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules.
 - [ ] [Heroku](https://www.heroku.com), Docker, and Serverless (GC, AWS) Deployment Examples.

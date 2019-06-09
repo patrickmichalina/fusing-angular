@@ -23,11 +23,15 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
   app.set('views', publicDir)
   app.engine('html', ngExpressEngine({ bootstrap: $ngServerBootstrap }) as any)
 
-  const cache = expeditious({ defaultTtl: '30s', namespace: 'expresscache', exposeHeader: false } as any)
+  const cache = expeditious({ defaultTtl: '30s', namespace: 'expresscache', cacheStatusHeader: false } as any)
 
   app.use(cache)
 
-  app.get('/', compression(), (req, res) => res.render('index', { req }))
+  const angularRender = (req: express.Request, res: express.Response) => {
+    res.render('index', { req, res })
+  }
+
+  app.get('/', compression(), angularRender)
 
   app.use('/', expressStaticGzip(publicDir, cache.withTtl('1 yr'), {
     enableBrotli: true,
@@ -44,9 +48,7 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
 
   registerApi(app)
 
-  app.get('*', compression(), (req, res) => {
-    res.render('index', { req })
-  })
+  app.get('*', compression(), angularRender)
 
   return app
 })
