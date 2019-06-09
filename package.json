@@ -21,7 +21,7 @@
     "build.prod.desktop": "ts-node fuse build.prod --prod --electron --pwa",
     "heroku-postbuild": "tslint -p tsconfig.json && jest && ts-node fuse build.prod --prod --pwa",
     "lint": "tslint -p tsconfig.json",
-    "release.mac": "npm run build.prod.desktop && electron-builder --mac"
+    "release.mac": "npm run build.prod.desktop && ts-node tools/scripts/electron-deps.ts && electron-builder --mac && ts-node tools/scripts/electron-deps-revert.ts "
   },
   "engines": {
     "node": "= 12.4.0"
@@ -33,6 +33,7 @@
     "express-expeditious": "git://github.com/patrickmichalina/express-expeditious.git",
     "express-static-gzip": "^1.1.3"
   },
+  "electron-natives": [],
   "devDependencies": {
     "@angular-devkit/build-optimizer": "^0.800.2",
     "@angular/animations": "^8.1.0-next.1",
