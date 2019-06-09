@@ -23,7 +23,6 @@ export class AppComponent {
   constructor(@Inject(ENV) private _env: any, @Inject(DOCUMENT) private _doc: any, private _rd: Renderer2,
     _translate: TranslateService, ar: ActivatedRoute) {
     _translate.setDefaultLang('en')
-    _translate.use('en')
 
     ar.queryParams.pipe(skip(1), pluck('lang')).subscribe(lang => {
       if (lang) {
