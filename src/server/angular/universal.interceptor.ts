@@ -11,7 +11,7 @@ export class HttpUniversalInterceptor implements HttpInterceptor {
     return req.url.includes('http')
       ? next.handle(req)
       : next.handle(req.clone({
-        url: `${(req.headers as any)['x-forwarded-proto'] && process.env.NODE_ENV === 'production' ? 'https' : this._req.protocol}://${this._req.get('host')}/${req.url}`
+        url: `${(req.headers as any)['x-forwarded-proto'] || this._req.protocol}://${this._req.get('host')}/${req.url}`
       }))
   }
 }
