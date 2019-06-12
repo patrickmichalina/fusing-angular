@@ -33,7 +33,7 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
 
   app.get('/', compression(), angularRender)
 
-  app.use('/', expressStaticGzip(publicDir, cache.withTtl('1 yr'), {
+  app.use('/', cache.withTtl('1 yr'), expressStaticGzip(publicDir, {
     enableBrotli: true,
     fallthrough: true,
     orderPreference: ['br', 'gzip'] as ReadonlyArray<string>,
