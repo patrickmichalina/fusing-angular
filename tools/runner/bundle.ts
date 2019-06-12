@@ -1,5 +1,5 @@
 import { Options } from "./interfaces"
-import { FuseBox, QuantumPlugin, WebIndexPlugin, EnvPlugin } from "fuse-box"
+import { FuseBox, QuantumPlugin, WebIndexPlugin, EnvPlugin, ReplacePlugin } from "fuse-box"
 import { NgCompilerPlugin } from "../plugins/ng.compiler.plugin"
 import { NgPolyfillPlugin } from "../plugins/ng.polyfill.plugin"
 import { NgAotFactoryPlugin } from "../plugins/ng.aot-factory.plugin"
@@ -7,6 +7,7 @@ import { NgProdPlugin } from "../plugins/ng.prod.plugin"
 import { spawn, ChildProcessWithoutNullStreams } from "child_process"
 import { NgTemplatePlugin } from "../plugins/ng.template.plugin"
 import { NgAotServerPlugin } from "../plugins/ng.aot-server.plugin"
+import * as pkg from '../../package.json'
 
 export const fuseAngular = (opts: Options) => {
   const shared = {
@@ -29,6 +30,8 @@ export const fuseAngular = (opts: Options) => {
         : `script-src 'self' 'unsafe-eval'; object-src 'self'`
     }
   })
+
+  const replacePlugin = ReplacePlugin({ "__APPVERSION__": pkg.version })
 
   const httpServer = opts.serve && !opts.universal.enabled
   const UNIVERSAL_PORT = 4200
@@ -59,7 +62,8 @@ export const fuseAngular = (opts: Options) => {
         bakeApiIntoBundle: opts.vendorBundleName,
         processPolyfill: opts.enableAotCompilaton
       }) as any,
-      webIndexPlugin
+      webIndexPlugin,
+      replacePlugin
     ]
   })
 
@@ -82,7 +86,8 @@ export const fuseAngular = (opts: Options) => {
         processPolyfill: opts.enableAotCompilaton,
         replaceProcessEnv: false
       }) as any,
-      webIndexPlugin
+      webIndexPlugin,
+      replacePlugin
     ]
   })
 
@@ -99,7 +104,8 @@ export const fuseAngular = (opts: Options) => {
         uglify: opts.optimizations.minify,
         bakeApiIntoBundle: opts.universal.bundle.name,
         treeshake: opts.optimizations.treeshake
-      }) as any
+      }) as any,
+      replacePlugin
     ]
   })
 

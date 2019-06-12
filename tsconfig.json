@@ -16,6 +16,7 @@
     "noUnusedLocals": true,
     "allowSyntheticDefaultImports": false,
     "sourceMap": true,
+    "resolveJsonModule": true,
     "lib": [
       "es2016",
       "dom"

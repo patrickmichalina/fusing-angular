@@ -10,9 +10,10 @@ import { HttpUniversalInterceptor } from './universal.interceptor'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { HttpClient } from '@angular/common/http'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
+import { EnvironmentService } from '../../browser/shared/environment.service'
 
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'i18n/', '.json?v=appVersionNeedsToGoHere')
+export function createTranslateLoader(http: HttpClient, es: EnvironmentService) {
+  return new TranslateHttpLoader(http, 'i18n/', `.json?v=${es.config.APP_VERSION}`)
 }
 
 enableProdMode()
@@ -29,7 +30,7 @@ enableProdMode()
       loader: {
         provide: TranslateLoader,
         useFactory: createTranslateLoader,
-        deps: [HttpClient]
+        deps: [HttpClient, EnvironmentService]
       }
     }),
     AppModule
