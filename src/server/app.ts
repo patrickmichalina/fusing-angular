@@ -1,7 +1,6 @@
 import * as express from 'express'
 import * as cookies from 'cookie-parser'
 import * as compression from 'compression'
-// import * as expeditious from 'express-expeditious'
 import { ngExpressEngine } from '@nguniversal/express-engine'
 import { registerApi } from './api'
 import { reader } from 'typescript-monads'
@@ -22,10 +21,6 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
   app.set('view engine', 'html')
   app.set('views', publicDir)
   app.engine('html', ngExpressEngine({ bootstrap: $ngServerBootstrap }) as any)
-
-  // const cache = expeditious({ defaultTtl: '30s', namespace: 'expresscache', cacheStatusHeader: false } as any)
-
-  // app.use(cache)
 
   const angularRender = (req: express.Request, res: express.Response) => {
     res.render('index', { req, res })

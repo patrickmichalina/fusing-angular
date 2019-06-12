@@ -36,7 +36,7 @@ export const DEFAULT_FUSEBOX_CONFIG: Options = {
       inputPath: 'server.ts',
       aotInputPath: '',
       outputPath: '/public/js/',
-      ignoredModules: ['express', 'domino', 'express-static-gzip', 'compression', 'express-expeditious']
+      ignoredModules: ['express', 'domino', 'express-static-gzip', 'compression']
     }
   },
   electron: {

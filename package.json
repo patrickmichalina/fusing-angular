@@ -30,7 +30,6 @@
     "@angular/platform-server": "^8.1.0-next.1",
     "compression": "git://github.com/patrickmichalina/compression.git",
     "express": "^4.17.1",
-    "express-expeditious": "^5.1.0",
     "express-static-gzip": "^1.1.3"
   },
   "electron-natives": [],
