@@ -11,7 +11,6 @@ import { resolve } from 'path'
 import { ensureDir } from 'fuse-box/Utils'
 import * as cleancss from 'clean-css'
 
-
 interface IAppArgs {
   readonly serve?: boolean
   readonly watch?: boolean
