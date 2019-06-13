@@ -118,6 +118,7 @@ export const fuseAngular = (opts: Options) => {
 
   const electron = FuseBox.init({
     ...shared,
+    sourceMaps: false,
     target: 'electron',
     output: `${opts.outputDirectory}/${'electron'}/$name.js`,
     ignoreModules: opts.electron.bundle.ignoredModules,
@@ -155,8 +156,12 @@ export const fuseAngular = (opts: Options) => {
     })
 
   const electronBundle = electron
+    .bundle('window')
+    .instructions(` > ${opts.electron.rootDir}/${'window.ts'}`)
+
+  electron
     .bundle(opts.electron.bundle.name)
-    .instructions(` > ${opts.electron.rootDir}/${'main.ts'}`)
+    .instructions(` > ${opts.electron.rootDir}/${opts.electron.bundle.name}.ts`)
 
   const runElectron = () => spawn('electron', ['.'])
 

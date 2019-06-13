@@ -4,7 +4,7 @@
   "author": "Patrick Michalina",
   "license": "MIT",
   "version": "0.0.1",
-  "main": "dist/electron/electron.js",
+  "main": "dist/electron/main.js",
   "repository": {
     "url": "https://github.com/patrickmichalina/fusing-angular"
   },
@@ -21,7 +21,7 @@
     "build.prod.desktop": "ts-node fuse build.prod --prod --electron --pwa",
     "heroku-postbuild": "tslint -p tsconfig.json && jest && ts-node fuse build.prod --prod --pwa",
     "lint": "tslint -p tsconfig.json",
-    "release.mac": "npm run build.prod.desktop && ts-node tools/scripts/electron-deps.ts && electron-builder --mac && ts-node tools/scripts/electron-deps-revert.ts "
+    "release.mac": "npm run build.prod.desktop && BUILD_BYTECODE=true electron . && ts-node tools/scripts/electron-deps.ts && electron-builder --mac && ts-node tools/scripts/electron-deps-revert.ts "
   },
   "engines": {
     "node": "= 12.4.0"

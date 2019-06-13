@@ -34,6 +34,7 @@ Designed to get a team up and running with a fast development toolkit for Angula
 - [ ] HTTP 301 Redirection support.
 - [ ] [Lazy Loaded](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules.
 - [ ] [Heroku](https://www.heroku.com), Docker, and Serverless (GC, AWS) Deployment Examples.
+- [x] Electron app compiled to V8 bytecode via [bytenode](https://github.com/OsamaAbbas/bytenode) so that you can protect your source code.
 
 ## Commands
 | Command  | Info |

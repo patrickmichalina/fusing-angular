@@ -43,7 +43,7 @@ export const DEFAULT_FUSEBOX_CONFIG: Options = {
     enabled: false,
     rootDir: 'electron',
     bundle: {
-      name: 'electron',
+      name: 'main',
       inputPath: 'angular/main.ts',
       aotInputPath: 'angular/main.aot.ts',
       outputPath: '/',
