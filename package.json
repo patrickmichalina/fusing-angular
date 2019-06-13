@@ -10,6 +10,7 @@
   },
   "scripts": {
     "test": "jest",
+    "test.cov": "jest --coverage",
     "test.watch": "jest --watch",
     "start": "NODE_OPTIONS=--no-warnings ts-node --transpile-only -r dotenv/config fuse build.dev --watch --serve --pwa",
     "start.deving": "concurrently --kill-others-on-fail \"npm start\" \"npm run test.watch\"",
@@ -19,7 +20,7 @@
     "start.prod.desktop": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.prod --prod --serve --electron --pwa",
     "build.prod": "ts-node fuse build.prod --prod --pwa",
     "build.prod.desktop": "ts-node fuse build.prod --prod --electron --pwa",
-    "heroku-postbuild": "tslint -p tsconfig.json && jest && ts-node fuse build.prod --prod --pwa",
+    "heroku-postbuild": "tslint -p tsconfig.json && jest --json 2>/dev/null | jest-json-to-tap && ts-node fuse build.prod --prod --pwa",
     "lint": "tslint -p tsconfig.json",
     "release.mac": "npm run build.prod.desktop && BUILD_BYTECODE=true electron . && ts-node tools/scripts/electron-deps.ts && electron-builder --mac && ts-node tools/scripts/electron-deps-revert.ts "
   },
@@ -73,6 +74,7 @@
     "electron-updater": "^4.0.6",
     "fuse-box": "^3.7.1",
     "jest": "^24.8.0",
+    "jest-json-to-tap": "^2.1.0",
     "jest-preset-angular": "^7.1.1",
     "pug": "^2.0.3",
     "rxjs": "^6.5.2",
@@ -89,6 +91,7 @@
   "jest": {
     "rootDir": "src",
     "preset": "jest-preset-angular",
+    "collectCoverageFrom": ["<rootDir>/**/*.ts"],
     "testPathIgnorePatterns": [
       "node_modules",
       ".ngc"
@@ -102,7 +105,18 @@
         "stringifyContentPathRegex": "\\.html$",
         "astTransformers": [
           "jest-preset-angular/InlineHtmlStripStylesTransformer"
-        ]
+        ],
+        "diagnostics": {
+          "pathRegex": "\\.(spec|test)\\.ts$"
+        }
+      }
+    },
+    "coveragePathIgnorePatterns": ["<rootDir>/node_modules/", "<rootDir>/.ngc"],
+    "coverageReporters": ["json", "lcov", "text", "clover", "text-summary"],
+    "coverageDirectory": "../coverage",
+    "coverageThreshold": {
+      "src/browser/": {
+        "statements": 10
       }
     }
   },
