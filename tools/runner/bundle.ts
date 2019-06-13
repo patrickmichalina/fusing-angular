@@ -15,7 +15,7 @@ export const fuseAngular = (opts: Options) => {
     homeDir: opts.srcRoot,
     log: opts.log,
     output: `${opts.outputDirectory}/$name.js`,
-    cache: false, //!opts.optimizations.enabled,
+    cache: false, //TODO: fix this !opts.optimizations.enabled,
   }
 
   const webIndexPlugin = WebIndexPlugin({
