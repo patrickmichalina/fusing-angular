@@ -1,4 +1,6 @@
-import 'jest-preset-angular'
+if(!(window as any).jasmine.testPath.includes('src/server')) {
+  require('jest-preset-angular')
+}
 
 const mock = () => {
   let storage: { [key: string]: any } = {}
