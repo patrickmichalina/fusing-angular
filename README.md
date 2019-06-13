@@ -19,7 +19,7 @@ Designed to get a team up and running with a fast development toolkit for Angula
 - [x] [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) as the application framework.
 - [x] [FuseBox](http://fuse-box.org) as the TypeScript/JavaScript bundler.
 - [x] [Sparky](http://fuse-box.org/page/sparky) as the task runner.
-- [x] [Jest](https://facebook.github.io/jest) for unit and component testing.
+- [x] [Jest](https://facebook.github.io/jest) for testing.
 - [x] Production ready builds.
 - [x] Flicker free Angular Universal server built on Express.
 - [x] [Brotli compression](https://github.com/google/brotli) with [gzip](http://www.gzip.org) fallback.
@@ -40,6 +40,7 @@ Designed to get a team up and running with a fast development toolkit for Angula
 | Command  | Info |
 | ------------- | ------------- |
 | test  | Runs all .spec.ts files through [Jest](https://facebook.github.io/jest)  |
+| test.cov  | Runs all .spec.ts files through [Jest](https://facebook.github.io/jest) w/ coverage reporting.  |
 | test.watch  | Continous testing of all .spec.ts files through [Jest](https://facebook.github.io/jest)  |
 | start  | Starts the Angular Universal server for development with HMR enabled.  |
 | start.deving | Starts the Angular Universal server for development with HMR enabled and runs unit tests continuously. |
