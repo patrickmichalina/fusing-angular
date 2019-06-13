@@ -1,14 +1,15 @@
 import { join } from 'path'
 import { format } from 'url'
 import { app, BrowserWindow } from 'electron'
+import { maybe } from 'typescript-monads'
 import setChromiumFlags from './flags'
-// import { windowReader } from './main/window';
+import initAutoUpdater from './updater'
 
 let win: BrowserWindow | null
 
 setChromiumFlags()
 
-const isElectronDev = () => true // !process.mainModule.filename.includes('app.asar');
+const isElectronDev = () => maybe(process.mainModule).filter(a => a.filename.includes('app.asar')).isNone()
 
 function createWindow() {
   win = new BrowserWindow({
@@ -19,6 +20,8 @@ function createWindow() {
       nodeIntegration: true
     }
   })
+
+  initAutoUpdater(win)
 
   // and load the index.html of the app.
   win.loadURL(
