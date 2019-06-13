@@ -2,7 +2,7 @@ import { Plugin, File } from 'fuse-box'
 
 const DEFAULTS: NgAotServerPluginOptions = {
   useAot: false,
-  key: /bootstrap.*\$ngServerBootstrap/g,
+  key: /require.*.AppServerModule/g,
   file: /server.ts/
 }
 
@@ -23,12 +23,11 @@ export class NgAotServerPluginClass implements Plugin {
 
   onTypescriptTransform?(file: File) {
     if (!this._opts.file.test(file.relativePath)) return
+    if (!this._opts.useAot) return
     file.loadContents()
 
     // TODO: this are hardcoded paths but can be changed based on fuse options!
-    file.contents = this.opts.useAot
-      ? file.contents.replace(this._opts.key, `bootstrap: require('../browser/.ngc/src/server/angular/server.angular.module.ngfactory.js').AppServerModuleNgFactory`)
-      : file.contents.replace(this._opts.key, `bootstrap: require('./angular/server.angular.module').AppServerModule`)
+    file.contents = file.contents.replace(this._opts.key, `require('../browser/.ngc/src/server/angular/server.angular.module.ngfactory.js').AppServerModuleNgFactory`)
   }
 }
 
