@@ -62,7 +62,7 @@ export class RouterLinkLangDirective {
   }
 
   @HostListener('click', ['$event.button', '$event.ctrlKey', '$event.metaKey'])
-  public onClick(button: number, ctrlKey: boolean, metaKey: boolean): boolean {
+  public onClick(): boolean {
     this.router.navigateByUrl(this.href, { relativeTo: this.route })
     return false
   }
