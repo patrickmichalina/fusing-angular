@@ -15,26 +15,34 @@
 ## Goals
 Designed to get a team up and running with a fast development toolkit for Angular Univerasl, Electron, and NativeScript applications.
 
-## Features
-- [x] [Angular](https://github.com/angular/angular/blob/master/CHANGELOG.md) as the application framework.
+### Development Features
 - [x] [FuseBox](http://fuse-box.org) as the TypeScript/JavaScript bundler.
 - [x] [Sparky](http://fuse-box.org/page/sparky) as the task runner.
 - [x] [Jest](https://facebook.github.io/jest) for testing.
-- [x] Production ready builds.
-- [x] Flicker-free Angular Universal server built on Express.
-- [x] [Brotli compression](https://github.com/google/brotli) with [gzip](http://www.gzip.org) fallback.
 - [x] Hot Module Reloading (HMR) for faster browser reloads during client development.
-- [x] [Ahead-of-Time](https://angular.io/guide/aot-compiler) (AOT) compilation support.
-- [x] Server prepped to support clustered mode for horizontal scaling via [throng](https://github.com/hunterloftis/throng).
+- [x] Production ready builds.
 - [x] Angular specific TSLint rules.
-- [x] Multi Language support.
-- [x] [HTTP Cache-Tag](https://github.com/flocasts/flo-angular/tree/master/projects/flosportsinc/ng-http-cache-tags) support.
-- [x] Electron app compiled to V8 bytecode via [bytenode](https://github.com/OsamaAbbas/bytenode) so that you can protect your source code.
-- [ ] HTTP 301 Redirection support.
-- [ ] [Lazy Loaded](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules.
 - [ ] [Heroku](https://www.heroku.com), Docker, and Serverless (GC, AWS) Deployment Examples.
+
+### App Features
+- [x] Multi Language support.
 - [ ] Angular PWA support.
+
+### Performance Features
+- [x] [Brotli compression](https://github.com/google/brotli) with [gzip](http://www.gzip.org) fallback.
+- [x] [Ahead-of-Time](https://angular.io/guide/aot-compiler) (AOT) compilation support.
+- [ ] [Lazy Loaded](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules.
+
+### Universal (SSR) Features
+- [x] Flicker-free Angular Universal server built on Express.
+- [x] Server prepped to support clustered mode for horizontal scaling via [throng](https://github.com/hunterloftis/throng).
+- [x] [HTTP Cache-Tag](https://github.com/flocasts/flo-angular/tree/master/projects/flosportsinc/ng-http-cache-tags) support.
+- [ ] HTTP 301 Redirection support.
 - [ ] Seamless server/client integration for of cookies, logging, and authentication.
+
+### Electron Features
+- [x] App compiled to V8 bytecode via [bytenode](https://github.com/OsamaAbbas/bytenode) so that you can protect your source code.
+- [ ] Configured to ouput windows, mac, and linux builds.
 
 ## Commands
 | Command  | Info |
