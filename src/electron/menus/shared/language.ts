@@ -1,4 +1,4 @@
-import { MenuItem, app } from 'electron'
+import { app } from 'electron'
 import { join } from 'path'
 import { promises } from 'fs'
 
@@ -20,8 +20,8 @@ export default function tester() {
     .then(mapMenu)
 }
 
-const mapMenu = (submenu: MenuItem[]) => ({ submenu, label: 'Language' })
-const mapMenuItem = (i: interm[]) => i.map<MenuItem>(b => {
+const mapMenu = (submenu: any[]) => ({ submenu, label: 'Language' })
+const mapMenuItem = (i: interm[]) => i.map(b => {
   return {
     label: b.language,
     enabled: true,

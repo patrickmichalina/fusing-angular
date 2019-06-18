@@ -1,4 +1,4 @@
-import { MenuItem, app } from 'electron'
+import { app } from 'electron'
 
 export const macMainMenuTemplate = {
   label: app.getName(),
@@ -6,5 +6,5 @@ export const macMainMenuTemplate = {
     { label: `About ${app.getName()}` },
     { type: 'separator' },
     { label: 'Quit' }
-  ] as MenuItem[]
+  ]
 }
