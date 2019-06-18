@@ -71,6 +71,7 @@ export const fuseAngular = (opts: Options) => {
     ...shared,
     hash: true,
     target: 'electron',
+    sourceMaps: false,
     ignoreModules: opts.browser.bundle.ignoredModules,
     output: `${opts.outputDirectory}/${'electron'}/public/js/$name.js`,
     plugins: [
