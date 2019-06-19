@@ -11,6 +11,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { HttpClient } from '@angular/common/http'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { EnvironmentService } from '../../browser/shared/environment.service'
+import { UniversalCookieServerModule } from './universal-cookie/universal-cookie.server.module'
 
 export function createTranslateLoader(http: HttpClient, es: EnvironmentService) {
   return new TranslateHttpLoader(http, 'i18n/', `.json?v=${es.config.APP_VERSION}`)
@@ -20,9 +21,11 @@ enableProdMode()
 
 @NgModule({
   imports: [
+    AppModule,
     ServerModule,
     ServerTransferStateModule,
     HttpCacheTagExpressServerModule,
+    UniversalCookieServerModule,
     NodeEnvTransferServerModule.config({
       selectKeys: ['HEROKU_RELEASE_VERSION', 'HEROKU_SLUG_COMMIT']
     }),
@@ -32,8 +35,7 @@ enableProdMode()
         useFactory: createTranslateLoader,
         deps: [HttpClient, EnvironmentService]
       }
-    }),
-    AppModule
+    })
   ],
   providers: [
     HttpUniversalInterceptor,

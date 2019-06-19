@@ -7,6 +7,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { HttpClient } from '@angular/common/http'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { EnvironmentService } from './shared/environment.service'
+import { UniversalCookieBrowserModule } from '../server/angular/universal-cookie/universal-cookie.browser.module'
 
 export function createTranslateLoader(http: HttpClient, es: EnvironmentService) {
   return new TranslateHttpLoader(http, 'i18n/', `.json?v=${es.config.APP_VERSION}`)
@@ -16,6 +17,7 @@ export function createTranslateLoader(http: HttpClient, es: EnvironmentService) 
   imports: [
     AppModule,
     NodeEnvTransferBrowserModule,
+    UniversalCookieBrowserModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

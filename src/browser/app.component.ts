@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { ActivatedRoute } from '@angular/router'
 import { skip, pluck } from 'rxjs/operators'
 import { EnvironmentService } from './shared/environment.service'
+import { COOKIES } from '../server/angular/universal-cookie/token'
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,8 @@ import { EnvironmentService } from './shared/environment.service'
 })
 export class AppComponent {
   constructor(@Inject(DOCUMENT) private _doc: any, private _rd: Renderer2, ts: TranslateService, ar: ActivatedRoute,
-    private env: EnvironmentService) {
+    private env: EnvironmentService, @Inject(COOKIES) cookies: any) {
+    console.log(cookies)
     ts.setDefaultLang('en')
     ar.queryParams.pipe(skip(1), pluck('lang')).subscribe(lang => {
       if (lang) {
