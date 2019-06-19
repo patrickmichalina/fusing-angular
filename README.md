@@ -31,13 +31,12 @@ Designed to get a team up and running with a fast development toolkit for Angula
 ### Performance Features
 - [x] [Brotli compression](https://github.com/google/brotli) with [gzip](http://www.gzip.org) fallback.
 - [x] [Ahead-of-Time](https://angular.io/guide/aot-compiler) (AOT) compilation support.
-- [ ] [Lazy Loaded](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules.
+- [ ] [Lazy Loaded](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules. (Not working with AOT at the moment)
 
 ### Universal (SSR) Features
 - [x] Flicker-free Angular Universal server built on Express.
 - [x] Server prepped to support clustered mode for horizontal scaling via [throng](https://github.com/hunterloftis/throng).
 - [x] [HTTP Cache-Tag](https://github.com/flocasts/flo-angular/tree/master/projects/flosportsinc/ng-http-cache-tags) support.
-- [ ] HTTP 301 Redirection support.
 - [ ] Seamless server/client integration for of cookies, logging, and authentication.
 
 ### Electron Features
@@ -70,6 +69,3 @@ TODO
 
 
 <!-- - [x] Full favicon icon generation for multiple devices derived from a single seed image -->
-<!-- - [x] [angular-tslint-rules](https://github.com/fulls1z3/angular-tslint-rules) as configuration preset for [TSLint](https://github.com/palantir/tslint) and [codelyzer](https://github.com/mgechev/codelyzer). -->
-<!-- - [x] Automatic static file cache invalidation -->
-<!-- - [x] Vendor-agnostic analytics using [angulartics2](https://github.com/angulartics/angulartics2) -->
