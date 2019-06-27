@@ -3,8 +3,8 @@ import { ServerModule, ServerTransferStateModule } from '@angular/platform-serve
 import { enableProdMode } from '@angular/core'
 import { AppComponent } from '../../browser/app.component'
 import { AppModule } from '../../browser/app.module'
-import { NodeEnvTransferServerModule, } from '@flosportsinc/ng-env-transfer-state/server'
-import { HttpCacheTagExpressServerModule } from '@flosportsinc/ng-http-cache-tags'
+import { FloNodeEnvTransferServerModule, } from '@flosportsinc/ng-env-transfer-state/server'
+import { FloHttpCacheTagExpressServerModule } from '@flosportsinc/ng-http-cache-tags'
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { HttpUniversalInterceptor } from './universal.interceptor'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
@@ -24,9 +24,9 @@ enableProdMode()
     AppModule,
     ServerModule,
     ServerTransferStateModule,
-    HttpCacheTagExpressServerModule,
+    FloHttpCacheTagExpressServerModule,
     UniversalCookieServerModule,
-    NodeEnvTransferServerModule.config({
+    FloNodeEnvTransferServerModule.config({
       selectKeys: ['HEROKU_RELEASE_VERSION', 'HEROKU_SLUG_COMMIT']
     }),
     TranslateModule.forRoot({

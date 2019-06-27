@@ -1,5 +1,5 @@
 import { NgModule, PLATFORM_ID } from '@angular/core'
-import { NodeEnvTransferBrowserModule } from '@flosportsinc/ng-env-transfer-state/browser'
+import { FloNodeEnvTransferBrowserModule } from '@flosportsinc/ng-env-transfer-state/browser'
 import { AppModule } from '../../browser/app.module'
 import { AppComponent } from '../../browser/app.component'
 import { ENV_CONFIG_DEFAULT } from '@flosportsinc/ng-env-transfer-state'
@@ -23,7 +23,7 @@ export function maybeGetElectronVars() {
 
 @NgModule({
   imports: [
-    NodeEnvTransferBrowserModule,
+    FloNodeEnvTransferBrowserModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

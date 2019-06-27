@@ -6,7 +6,7 @@ import { BrowserModule } from '@angular/platform-browser'
 import { SharedModule } from './shared/shared.module'
 import { TranslateModule } from '@ngx-translate/core'
 import { PreserveQueryParamsDirective, RouterLinkLangDirective } from './param-router-link.directive'
-import { NodeEnvTransferModule } from '@flosportsinc/ng-env-transfer-state'
+import { FloNodeEnvTransferModule } from '@flosportsinc/ng-env-transfer-state'
 import { UniversalCookieModule } from '../server/angular/universal-cookie/universal-cookie.module'
 
 @NgModule({
@@ -17,7 +17,7 @@ import { UniversalCookieModule } from '../server/angular/universal-cookie/univer
     SharedModule,
     TranslateModule,
     UniversalCookieModule,
-    NodeEnvTransferModule.config({
+    FloNodeEnvTransferModule.config({
       useValues: {
         APP_VERSION: "__APPVERSION__" // to sync server/web version to the electron version. Otherwise recommend using Node Environment variable.
       }

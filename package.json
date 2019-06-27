@@ -21,7 +21,7 @@
     "build.prod": "ts-node fuse build.prod --prod --pwa",
     "build.prod.desktop": "ts-node fuse build.prod --prod --electron --pwa",
     "heroku-postbuild": "tslint -p tsconfig.json && npm run test.cov && ts-node fuse build.prod --prod --pwa",
-    "lint": "tslint -p tsconfig.json",
+    "lint": "tsc && tslint -p tsconfig.json",
     "release.mac": "npm run build.prod.desktop && BUILD_BYTECODE=true electron . && ts-node tools/scripts/electron-deps.ts && electron-builder --mac && ts-node tools/scripts/electron-deps-revert.ts "
   },
   "engines": {
@@ -47,8 +47,8 @@
     "@angular/platform-browser-dynamic": "^8.0.3",
     "@angular/router": "^8.0.3",
     "@angular/service-worker": "^8.0.3",
-    "@flosportsinc/ng-env-transfer-state": "^7.5.4",
-    "@flosportsinc/ng-http-cache-tags": "^7.5.4",
+    "@flosportsinc/ng-env-transfer-state": "^8.0.0",
+    "@flosportsinc/ng-http-cache-tags": "^8.0.0",
     "@nguniversal/common": "^8.0.0-rc.1",
     "@nguniversal/express-engine": "^8.0.0-rc.1",
     "@ngx-translate/core": "^11.0.1",
