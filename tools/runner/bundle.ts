@@ -8,6 +8,7 @@ import { spawn, ChildProcessWithoutNullStreams } from "child_process"
 import { NgTemplatePlugin } from "../plugins/ng.template.plugin"
 import { NgAotServerPlugin } from "../plugins/ng.aot-server.plugin"
 import * as pkg from '../../package.json'
+import { Subject, zip } from "rxjs"
 
 export const fuseAngular = (opts: Options) => {
   const shared = {
@@ -136,7 +137,7 @@ export const fuseAngular = (opts: Options) => {
     .bundle(opts.vendorBundleName)
     .instructions(` ~ ${electronBrowserEntry}`)
 
-  electronBrowser
+  const electronBrowserBundle = electronBrowser
     .bundle(opts.browser.bundle.name)
     .splitConfig({ dest: opts.jsLazyModuleDir, browser: `/${opts.jsOutputDir}/` })
     .instructions(` !> [${electronBrowserEntry}]`)
@@ -166,6 +167,10 @@ export const fuseAngular = (opts: Options) => {
 
   const runElectron = () => spawn('electron', ['.'])
 
+  const appSource = new Subject()
+  const electronSource = new Subject()
+  const electronBrowserSource = new Subject()
+
   if (opts.serve) {
     browser.dev({
       port,
@@ -177,7 +182,9 @@ export const fuseAngular = (opts: Options) => {
     if (opts.watch) {
       const watchDir = `${opts.srcRoot}/**`
       const pathIgnore = (path: string) => !path.match(opts.assetRoot)
-      appBundle.watch(watchDir, pathIgnore)
+      appBundle.watch(watchDir, pathIgnore).completed(() => {
+        appSource.next()
+      })
 
       // appBundle.hmr({ port })
       if (opts.universal.enabled) { serverBundle.watch(watchDir, pathIgnore) }
@@ -188,12 +195,14 @@ export const fuseAngular = (opts: Options) => {
           if (opts.logFilters.some(a => str.includes(a))) return
           console.log(str)
         }
-        electronBundle.watch(watchDir, pathIgnore).completed(() => {
+        zip(appSource, electronSource, electronBrowserSource).subscribe(() => {
           if (electronref) { electronref.kill() }
           electronref = runElectron()
           electronref.stdout.on('data', print)
           electronref.stderr.on('data', print)
         })
+        electronBrowserBundle.watch(watchDir, pathIgnore).completed(() => electronBrowserSource.next())
+        electronBundle.watch(watchDir, pathIgnore).completed(() => electronSource.next())
       }
     }
   }

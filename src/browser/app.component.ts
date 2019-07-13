@@ -15,7 +15,7 @@ import { COOKIES } from '../server/angular/universal-cookie/token'
 export class AppComponent {
   constructor(@Inject(DOCUMENT) private _doc: any, private _rd: Renderer2, ts: TranslateService, ar: ActivatedRoute,
     private env: EnvironmentService, @Inject(COOKIES) cookies: any) {
-    console.log(cookies)
+    console.log('cookies', cookies)
     ts.setDefaultLang('en')
     ar.queryParams.pipe(skip(1), pluck('lang')).subscribe(lang => {
       if (lang) {
