@@ -158,12 +158,12 @@ export const fuseAngular = (opts: Options) => {
     })
 
   const electronBundle = electron
-    .bundle('window')
-    .instructions(` > ${opts.electron.rootDir}/${'window.ts'}`)
+    .bundle('app')
+    .instructions(` > ${opts.electron.rootDir}/${'app.ts'}`)
 
   electron
     .bundle(opts.electron.bundle.name)
-    .instructions(` > ${opts.electron.rootDir}/${opts.electron.bundle.name}.ts`)
+    .instructions(` > ${opts.electron.rootDir}/${'bytecode-entry'}.ts`)
 
   const runElectron = () => spawn('electron', ['.'])
 
