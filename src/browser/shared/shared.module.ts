@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common'
 import { TransferHttpCacheModule } from '@nguniversal/common'
 import { PlatformService } from './platform.service'
 import { EnvironmentService } from './environment.service'
+import { ElectronService } from './electron.service'
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { EnvironmentService } from './environment.service'
   ],
   providers: [
     PlatformService,
-    EnvironmentService
+    EnvironmentService,
+    ElectronService
   ]
 })
 export class SharedModule { }
