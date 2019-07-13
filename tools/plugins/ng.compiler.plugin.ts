@@ -1,6 +1,5 @@
-import { main as ngc } from '@angular/compiler-cli/src/main'
 import { Plugin } from 'fuse-box'
-import { resolve } from 'path'
+import { spawnSync } from 'child_process'
 
 const defaults: NgcPluginOptions = {
   tsconfig: 'tsconfig.aot.json'
@@ -16,7 +15,9 @@ export class NgcPluginClass implements Plugin {
 
   bundleStart() {
     const opts = { ...defaults, ...this.opts }
-    opts.enabled && opts.tsconfig && ngc(['-p', resolve(opts.tsconfig)])
+    if (opts.enabled && opts.tsconfig) {
+      spawnSync('ngc', ['-p', opts.tsconfig])
+    }
   }
 }
 
