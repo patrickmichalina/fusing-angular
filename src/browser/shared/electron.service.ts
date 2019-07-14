@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core'
 import { maybe } from 'typescript-monads'
 import { PlatformService } from './platform.service'
-import { IAppIPCMessage } from './electron.events'
+import { IAangularIPCMessage, IElectronIPCMessage } from './electron.events'
+import { EMPTY, fromEvent } from 'rxjs'
+import { map, filter } from 'rxjs/operators'
 import * as fs from 'fs'
 import * as Electron from 'electron'
 import * as ChildProcess from 'child_process'
@@ -36,6 +38,17 @@ export class ElectronService {
   public readonly shell = this.electron.map(e => e.desktopCapturer)
 
   public readonly sendMsgToElectron =
-    <TMessageType extends keyof IAppIPCMessage, TMessage extends IAppIPCMessage[TMessageType]>(type: TMessageType, message: TMessage) => 
+    <TMessageType extends keyof IAangularIPCMessage, TMessage extends IAangularIPCMessage[TMessageType]>(type: TMessageType, message: TMessage) =>
       this.ipcRenderer.tapSome(a => a.send('angular-messages', type, message))
+
+  public readonly electronMessages = () => this.ipcRenderer.match({
+    none: () => EMPTY,
+    some: ipc => fromEvent(ipc, 'electron-messages').pipe(map((a: any) => [a[1], a[2]] as [keyof IElectronIPCMessage, IElectronIPCMessage[keyof IElectronIPCMessage]]))
+  })
+
+  public readonly electronMessage = <TMessageType extends keyof IElectronIPCMessage, TMessage extends IElectronIPCMessage[TMessageType]>(type: TMessageType) =>
+    this.electronMessages().pipe(
+      filter(a => a[0] === type),
+      map(a => a[1] as TMessage)
+    )
 }

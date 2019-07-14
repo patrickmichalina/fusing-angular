@@ -18,6 +18,10 @@ export class AppComponent {
     private env: EnvironmentService, @Inject(COOKIES) cookies: any, es: ElectronService) {
 
     es.sendMsgToElectron('app-loaded', true)
+    // es.electronMessages().subscribe(console.log)
+    es.electronMessage('thing').subscribe(a => {
+      console.log(a)
+    })
 
     ts.setDefaultLang('en')
     ar.queryParams.pipe(skip(1), pluck('lang')).subscribe(lang => {

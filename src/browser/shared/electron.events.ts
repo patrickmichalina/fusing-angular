@@ -1,6 +1,12 @@
-export type IPCMessageTuple = [keyof IAppIPCMessage, IAppIPCMessage[keyof IAppIPCMessage]]
+export type IPCMessageTuple = [keyof IAangularIPCMessage, IAangularIPCMessage[keyof IAangularIPCMessage]]
 
-// Extend this interface to make your event channel strongly typed
-export interface IAppIPCMessage {
+// Extend these interfaces to make your event channels strongly typed
+export interface IAangularIPCMessage {
   readonly 'app-loaded': boolean
+  readonly 'test': string
+}
+
+export interface IElectronIPCMessage {
+  readonly 'log': string
+  readonly 'thing': number
 }

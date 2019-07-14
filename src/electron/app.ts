@@ -1,9 +1,9 @@
-import { fromEvent, Subject, combineLatest } from 'rxjs'
+import { fromEvent, Subject, combineLatest, interval } from 'rxjs'
 import { take, share, filter, map } from 'rxjs/operators'
 import { app, BrowserWindow, ipcMain } from 'electron'
 import { createWindow } from './window'
 import setChromiumFlags from './flags'
-import { filterIPCMessages } from './util'
+import { filterIPCMessages, sendAngularMessage } from './util'
 import { IPCMessageTuple } from '../browser/shared/electron.events'
 
 setChromiumFlags()
@@ -19,7 +19,18 @@ export const appAngularEvents$ = fromEvent(ipcMain, 'angular-messages').pipe(
   share()
 )
 
-appAngularEvents$.pipe(filterIPCMessages('app-loaded')).subscribe(console.log)
+window$.subscribe(w => {
+  if (w) {
+    interval(1000).subscribe(() => {
+      sendAngularMessage(w, 'thing', 1)
+    })
+  }
+})
+
+
+appAngularEvents$.pipe(filterIPCMessages('test')).subscribe(a => {
+  console.log(a)
+})
 
 appReady$.pipe(take(1)).subscribe(() => {
   windowSource.next(createWindow().on('close', ()=> windowSource.next(undefined)))
