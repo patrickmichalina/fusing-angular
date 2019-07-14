@@ -9,6 +9,11 @@ type RequireWindow = Window & { process: any, require: any }
 
 const mapToRequire = (name: string) => (func: Function) => func(name)
 
+export interface Message {
+  readonly 'app-loaded': boolean
+  readonly thing: string
+}
+
 @Injectable()
 export class ElectronService {
   constructor(private ps: PlatformService) { }
@@ -20,7 +25,8 @@ export class ElectronService {
         .filter(p => p.type === 'renderer')
         .map<Function>(_ => w.require))
 
-  easyMap = <T>(name: string) => this.maybeRequireFunc.map<T>(mapToRequire(name))
+  private readonly easyMap = <T>(name: string) => this.maybeRequireFunc.map<T>(mapToRequire(name))
+
   public readonly fs = this.easyMap<typeof fs>('fs')
   public readonly childProcess = this.easyMap<typeof ChildProcess>('child_process')
   public readonly electron = this.easyMap<typeof Electron>('electron')
@@ -32,4 +38,8 @@ export class ElectronService {
   public readonly desktopCapturer = this.electron.map(e => e.desktopCapturer)
   public readonly nativeImage = this.electron.map(e => e.desktopCapturer)
   public readonly shell = this.electron.map(e => e.desktopCapturer)
+
+  public readonly sendElectronMessage =
+    <TMessageType extends keyof Message, TMessage extends Message[TMessageType]>(type: TMessageType, message: TMessage) => 
+      this.ipcRenderer.tapSome(a => a.send('angular-messages', type, message))
 }
