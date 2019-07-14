@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { maybe } from 'typescript-monads'
 import { PlatformService } from './platform.service'
+import { IAppIPCMessage } from './electron.events'
 import * as fs from 'fs'
 import * as Electron from 'electron'
 import * as ChildProcess from 'child_process'
@@ -8,11 +9,6 @@ import * as ChildProcess from 'child_process'
 type RequireWindow = Window & { process: any, require: any }
 
 const mapToRequire = (name: string) => (func: Function) => func(name)
-
-export interface Message {
-  readonly 'app-loaded': boolean
-  readonly thing: string
-}
 
 @Injectable()
 export class ElectronService {
@@ -39,7 +35,7 @@ export class ElectronService {
   public readonly nativeImage = this.electron.map(e => e.desktopCapturer)
   public readonly shell = this.electron.map(e => e.desktopCapturer)
 
-  public readonly sendElectronMessage =
-    <TMessageType extends keyof Message, TMessage extends Message[TMessageType]>(type: TMessageType, message: TMessage) => 
+  public readonly sendMsgToElectron =
+    <TMessageType extends keyof IAppIPCMessage, TMessage extends IAppIPCMessage[TMessageType]>(type: TMessageType, message: TMessage) => 
       this.ipcRenderer.tapSome(a => a.send('angular-messages', type, message))
 }

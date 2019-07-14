@@ -16,10 +16,8 @@ import { ElectronService } from './shared/electron.service'
 export class AppComponent {
   constructor(@Inject(DOCUMENT) private _doc: any, private _rd: Renderer2, ts: TranslateService, ar: ActivatedRoute,
     private env: EnvironmentService, @Inject(COOKIES) cookies: any, es: ElectronService) {
-    // console.log('cookies', cookies)
 
-    es.sendElectronMessage('app-loaded', true)
-    // es.ipcRenderer.tapSome(a => a.send('angular-messages', { eventName: 'app-loaded', body: { test: 1 } }))
+    es.sendMsgToElectron('app-loaded', true)
 
     ts.setDefaultLang('en')
     ar.queryParams.pipe(skip(1), pluck('lang')).subscribe(lang => {
