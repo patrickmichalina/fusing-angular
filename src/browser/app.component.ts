@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router'
 import { skip, pluck } from 'rxjs/operators'
 import { EnvironmentService } from './shared/environment.service'
 import { COOKIES } from '../server/angular/universal-cookie/token'
+import { ElectronService } from './shared/electron.service'
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,7 @@ import { COOKIES } from '../server/angular/universal-cookie/token'
 })
 export class AppComponent {
   constructor(@Inject(DOCUMENT) private _doc: any, private _rd: Renderer2, ts: TranslateService, ar: ActivatedRoute,
-    private env: EnvironmentService, @Inject(COOKIES) cookies: any) {
+    private env: EnvironmentService, @Inject(COOKIES) cookies: any, es: ElectronService) {
     console.log('cookies', cookies)
 
     ts.setDefaultLang('en')
