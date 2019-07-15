@@ -51,7 +51,6 @@
     "@angular/service-worker": "^8.1.1",
     "@flosportsinc/ng-env-transfer-state": "^9.2.5",
     "@flosportsinc/ng-http-cache-tags": "^9.2.5",
-    "@mdi/angular-material": "^3.7.95",
     "@nguniversal/common": "^8.1.1",
     "@nguniversal/express-engine": "^8.1.1",
     "@ngx-translate/core": "^11.0.1",
