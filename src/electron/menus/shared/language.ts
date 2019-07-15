@@ -1,8 +1,11 @@
-import { app } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { promises } from 'fs'
 import { from } from 'rxjs'
 import { maybe } from 'typescript-monads'
+import { sendAngularMessage } from '../../util'
+import { window$ } from '../../app'
+import { take, filter } from 'rxjs/operators'
 
 type StringDict = { readonly [key: string]: string }
 type Interem = { key: string, language: string }
@@ -42,6 +45,7 @@ const convertTranslatonFilePath =
     (paths: string[]) =>
       paths
         .map(path => path.split('.')[0])
+        .filter((el, i, a) => i === a.indexOf(el))
         .map<Interem>(key => ({ key, language: langMap[key] }))
 
 const setLangauge = (lang: string) => () => {
@@ -50,7 +54,12 @@ const setLangauge = (lang: string) => () => {
     .map(a => a.submenu.items)
     .tapSome(items => {
       items.forEach(i => i.checked = false)
-      maybe(items.find(b => b.id === lang)).tapSome(b => b.checked = true)
+      maybe(items.find(b => b.id === lang)).tapSome(b => {
+        window$.pipe(filter(Boolean), take(1)).subscribe((a: BrowserWindow) => {
+          sendAngularMessage(a, 'change-language', lang)
+        })
+        b.checked = true
+      })
     })
 }
 

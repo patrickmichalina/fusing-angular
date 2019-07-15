@@ -1,8 +1,8 @@
-import { fromEvent, Subject, combineLatest, interval } from 'rxjs'
-import { take, share, filter, map, flatMap } from 'rxjs/operators'
+import { fromEvent, Subject, combineLatest } from 'rxjs'
+import { take, share, filter, map, flatMap, shareReplay } from 'rxjs/operators'
 import { app, BrowserWindow, ipcMain } from 'electron'
 import { createWindow } from './window'
-import { filterIPCMessages, sendAngularMessage } from './util'
+import { filterIPCMessages } from './util'
 import { IAangularIPCMessageTuple } from '../browser/shared/electron.events'
 import { menu$ } from './menus/shared'
 import setChromiumFlags from './flags'
@@ -10,7 +10,7 @@ import setChromiumFlags from './flags'
 setChromiumFlags()
 
 const windowSource = new Subject<BrowserWindow | undefined>()
-const window$ = windowSource.asObservable().pipe(share())
+export const window$ = windowSource.asObservable().pipe(shareReplay(1))
 
 export const appReady$ = fromEvent(app, 'ready').pipe(share())
 export const appActivate$ = fromEvent(app, 'activate').pipe(share())
@@ -19,15 +19,6 @@ export const appAngularEvents$ = fromEvent(ipcMain, 'angular-messages').pipe(
   map((a: any[]) => [a[1], a[2]] as IAangularIPCMessageTuple), 
   share()
 )
-
-window$.subscribe(w => {
-  if (w) {
-    interval(1000).subscribe(() => {
-      sendAngularMessage(w, 'log', 'asd')
-    })
-  }
-})
-
 
 appAngularEvents$.pipe(filterIPCMessages('app-loaded')).subscribe(a => {
   console.log(a)

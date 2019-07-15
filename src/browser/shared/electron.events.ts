@@ -8,4 +8,5 @@ export interface IAangularIPCMessage {
 
 export interface IElectronIPCMessage {
   readonly 'log': string
+  readonly 'change-language': string
 }
