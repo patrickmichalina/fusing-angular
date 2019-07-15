@@ -1,32 +1,38 @@
 import { app } from 'electron'
 import { join } from 'path'
 import { promises } from 'fs'
+import { from } from 'rxjs'
+import { maybe } from 'typescript-monads'
 
 type StringDict = { readonly [key: string]: string }
-type interm = { key: string, language: string }
+type Interem = { key: string, language: string }
 
 // to enable a menu to appear in the Electron app, add your key/value entry here
 // as long as the file exists in the /i18n folder it will work!
-const langMap: StringDict = {
+const supportedLanguages: StringDict = {
   'en': 'English',
   'jp': 'Japanese'
 }
 
-export default function tester() {
-  return promises
+const LANGUAGE_MENU_ID = 'lang-menu'
+
+export default function getUsableLanguageMenu() {
+  return from(promises
     .readdir(join(app.getAppPath(), 'dist/electron/public/i18n'))
-    .then(convertTranslatonFilePath(langMap))
+    .then(convertTranslatonFilePath(supportedLanguages))
     .then(mapMenuItem)
-    .then(mapMenu)
+    .then(mapMenu))
 }
 
-const mapMenu = (submenu: any[]) => ({ submenu, label: 'Language' })
-const mapMenuItem = (i: interm[]) => i.map(b => {
+const mapMenu = (submenu: any[]) => ({ submenu, label: 'Language', id: LANGUAGE_MENU_ID })
+const mapMenuItem = (i: Interem[]) => i.map(b => {
   return {
+    type: 'checkbox',
+    id: b.key,
     label: b.language,
     enabled: true,
-    checked: true,
     visible: true,
+    checked: b.key === 'en' ? true : false,
     click: setLangauge(b.key)
   }
 })
@@ -36,9 +42,15 @@ const convertTranslatonFilePath =
     (paths: string[]) =>
       paths
         .map(path => path.split('.')[0])
-        .map<interm>(key => ({ key, language: langMap[key] }))
+        .map<Interem>(key => ({ key, language: langMap[key] }))
 
 const setLangauge = (lang: string) => () => {
-  console.log('TODO: setting language to', lang)
+  maybe(app.applicationMenu)
+    .flatMapAuto(a => a.items.find(a => a.id === LANGUAGE_MENU_ID))
+    .map(a => a.submenu.items)
+    .tapSome(items => {
+      items.forEach(i => i.checked = false)
+      maybe(items.find(b => b.id === lang)).tapSome(b => b.checked = true)
+    })
 }
 

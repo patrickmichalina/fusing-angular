@@ -70,13 +70,14 @@ context(() => {
 task('clean.fusebox', () => src('.fusebox').clean('.fusebox'))
 task('clean.dist', (ctx: Config) => src(ctx.bundle.outputDirectory).clean(ctx.bundle.outputDirectory))
 task('clean', ['&clean.fusebox', '&clean.dist'])
-task('build', ['&app', '&assets', '&css'])
+task('static', ['&assets', '&css'])
+task('build', ['&app'])
 task('compress', (ctx: Config) => compressStatic([
   `${ctx.bundle.outputDirectory}/${ctx.bundle.wwwroot}`,
   `${ctx.bundle.outputDirectory}/electron/${ctx.bundle.wwwroot}`
 ]))
-task('build.prod', ['clean', 'build', 'sw-js', 'sw-json', 'compress'])
-task('build.dev', ['clean', 'build', 'sw-js', 'sw-json'])
+task('build.prod', ['clean', 'static', 'build', 'sw-js', 'sw-json', 'compress'])
+task('build.dev', ['clean', 'static', 'build', 'sw-js', 'sw-json'])
 task('app', (ctx: Config) => fuseAngular(ctx.bundle))
 task('css', (ctx: Config) => {
   const cssc = new cleancss()
