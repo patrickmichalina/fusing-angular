@@ -147,3 +147,8 @@ task('sw-js', (ctx: Config) => {
 
   return Promise.all(toExecute.map(p => src('ngsw-worker.js', { base: './node_modules/@angular/service-worker' }).dest(p).exec()))
 })
+
+task('svg', (ctx: Config) => {
+  // node_modules/@mdi/angular-material/mdi.svg
+  src("node_modules/@mdi/angular-material/mdi.svg").dest('src/assets').exec()
+})

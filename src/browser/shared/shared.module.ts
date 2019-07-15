@@ -6,19 +6,22 @@ import { TransferHttpCacheModule } from '@nguniversal/common'
 import { PlatformService } from './platform.service'
 import { EnvironmentService } from './environment.service'
 import { ElectronService } from './electron.service'
+import { MaterialModule } from './material.module'
 
 @NgModule({
   imports: [
     CommonModule,
     HttpClientModule,
     TransferHttpCacheModule,
-    FloNodeEnvTransferModule
+    FloNodeEnvTransferModule,
+    MaterialModule
   ],
   exports: [
     CommonModule,
     HttpClientModule,
     TransferHttpCacheModule,
-    FloNodeEnvTransferModule
+    FloNodeEnvTransferModule,
+    MaterialModule
   ],
   providers: [
     PlatformService,

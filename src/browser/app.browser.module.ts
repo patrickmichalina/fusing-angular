@@ -1,3 +1,4 @@
+import 'hammerjs'
 import { NgModule } from '@angular/core'
 import { ServiceWorkerModule } from '@angular/service-worker'
 import { AppModule } from './app.module'
