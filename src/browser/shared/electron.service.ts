@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { maybe } from 'typescript-monads'
 import { PlatformService } from './platform.service'
-import { IAangularIPCMessage, IElectronIPCMessage } from './electron.events'
+import { IAangularIPCMessage, IElectronIPCMessage, IElectronIPCMessageTuple } from './electron.events'
 import { EMPTY, fromEvent } from 'rxjs'
 import { map, filter } from 'rxjs/operators'
 import * as fs from 'fs'
@@ -43,7 +43,7 @@ export class ElectronService {
 
   public readonly electronMessages = () => this.ipcRenderer.match({
     none: () => EMPTY,
-    some: ipc => fromEvent(ipc, 'electron-messages').pipe(map((a: any) => [a[1], a[2]] as [keyof IElectronIPCMessage, IElectronIPCMessage[keyof IElectronIPCMessage]]))
+    some: ipc => fromEvent(ipc, 'electron-messages').pipe(map((a: any) => [a[1], a[2]] as IElectronIPCMessageTuple))
   })
 
   public readonly electronMessage = <TMessageType extends keyof IElectronIPCMessage, TMessage extends IElectronIPCMessage[TMessageType]>(type: TMessageType) =>

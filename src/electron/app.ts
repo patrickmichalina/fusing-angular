@@ -4,7 +4,7 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 import { createWindow } from './window'
 import setChromiumFlags from './flags'
 import { filterIPCMessages, sendAngularMessage } from './util'
-import { IPCMessageTuple } from '../browser/shared/electron.events'
+import { IAangularIPCMessageTuple } from '../browser/shared/electron.events'
 
 setChromiumFlags()
 
@@ -15,20 +15,20 @@ export const appReady$ = fromEvent(app, 'ready').pipe(share())
 export const appActivate$ = fromEvent(app, 'activate').pipe(share())
 export const appAllWindowsClosed$ = fromEvent(app, 'window-all-closed').pipe(share())
 export const appAngularEvents$ = fromEvent(ipcMain, 'angular-messages').pipe(
-  map((a: any[]) => [a[1], a[2]] as IPCMessageTuple), 
+  map((a: any[]) => [a[1], a[2]] as IAangularIPCMessageTuple), 
   share()
 )
 
 window$.subscribe(w => {
   if (w) {
     interval(1000).subscribe(() => {
-      sendAngularMessage(w, 'thing', 1)
+      sendAngularMessage(w, 'log', '')
     })
   }
 })
 
 
-appAngularEvents$.pipe(filterIPCMessages('test')).subscribe(a => {
+appAngularEvents$.pipe(filterIPCMessages('app-loaded')).subscribe(a => {
   console.log(a)
 })
 
