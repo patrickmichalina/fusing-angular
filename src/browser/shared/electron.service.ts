@@ -41,13 +41,13 @@ export class ElectronService {
     <TMessageType extends keyof IAangularIPCMessage, TMessage extends IAangularIPCMessage[TMessageType]>(type: TMessageType, message: TMessage) =>
       this.ipcRenderer.tapSome(a => a.send('angular-messages', type, message))
 
-  public readonly electronMessages = () => this.ipcRenderer.match({
+  public readonly electronMessages$ = () => this.ipcRenderer.match({
     none: () => EMPTY,
     some: ipc => fromEvent(ipc, 'electron-messages').pipe(map((a: any) => [a[1], a[2]] as IElectronIPCMessageTuple))
   })
 
-  public readonly electronMessage = <TMessageType extends keyof IElectronIPCMessage, TMessage extends IElectronIPCMessage[TMessageType]>(type: TMessageType) =>
-    this.electronMessages().pipe(
+  public readonly electronMessage$ = <TMessageType extends keyof IElectronIPCMessage, TMessage extends IElectronIPCMessage[TMessageType]>(type: TMessageType) =>
+    this.electronMessages$().pipe(
       filter(a => a[0] === type),
       map(a => a[1] as TMessage)
     )

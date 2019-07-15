@@ -18,8 +18,7 @@ export class AppComponent {
     private env: EnvironmentService, @Inject(COOKIES) cookies: any, es: ElectronService) {
 
     es.sendMsgToElectron('app-loaded', true)
-    // es.electronMessages().subscribe(console.log)
-    es.electronMessage('thing').subscribe(a => {
+    es.electronMessage$('log').subscribe(a => {
       console.log(a)
     })
 
