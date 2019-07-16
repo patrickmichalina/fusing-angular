@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { EnvironmentService } from './shared/environment.service'
 import { UniversalCookieBrowserModule } from '../server/angular/universal-cookie/universal-cookie.browser.module'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 export function createTranslateLoader(http: HttpClient, es: EnvironmentService) {
   return new TranslateHttpLoader(http, 'i18n/', `.json?v=${es.config.APP_VERSION}`)
@@ -26,7 +27,8 @@ export function createTranslateLoader(http: HttpClient, es: EnvironmentService) 
         deps: [HttpClient, EnvironmentService]
       }
     }),
-    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: true })
+    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: true }),
+    BrowserAnimationsModule
   ],
   bootstrap: [AppComponent]
 })

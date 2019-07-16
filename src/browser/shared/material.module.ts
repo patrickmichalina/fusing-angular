@@ -1,15 +1,17 @@
 
 import { NgModule } from '@angular/core'
 import { DomSanitizer } from '@angular/platform-browser'
-import { MatIconRegistry, MatIconModule } from '@angular/material'
+import { MatIconRegistry, MatIconModule, MatToolbarModule } from '@angular/material'
 import { PlatformService } from './platform.service'
 
 @NgModule({
   imports: [
-    MatIconModule
+    MatIconModule,
+    MatToolbarModule
   ],
   exports: [
-    MatIconModule
+    MatIconModule,
+    MatToolbarModule
   ]
 })
 export class MaterialModule {

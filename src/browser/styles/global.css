@@ -156,6 +156,10 @@
     url('../fonts/roboto-latin-900italic.woff') format('woff'); /* Modern Browsers */
 }
 
+body {
+  margin: 0;
+}
+
 button.mat-menu-item {
   line-height: 24px !important;
 }
