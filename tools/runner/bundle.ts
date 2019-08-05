@@ -1,5 +1,5 @@
 import { Options } from "./interfaces"
-import { FuseBox, QuantumPlugin, WebIndexPlugin, EnvPlugin, ReplacePlugin } from "fuse-box"
+import { FuseBox, QuantumPlugin, WebIndexPlugin, EnvPlugin, ReplacePlugin, JSONPlugin } from "fuse-box"
 import { NgCompilerPlugin } from "../plugins/ng.compiler.plugin"
 import { NgPolyfillPlugin } from "../plugins/ng.polyfill.plugin"
 import { NgAotFactoryPlugin } from "../plugins/ng.aot-factory.plugin"
@@ -98,6 +98,7 @@ export const fuseAngular = (opts: Options) => {
     target: 'server',
     ignoreModules: opts.universal.bundle.ignoredModules,
     plugins: [
+      JSONPlugin(),
       NgAotServerPlugin({ useAot: opts.enableAotCompilaton, file: /app.ts/g }),
       NgPolyfillPlugin({ isServer: true, fileTest: /server.ts|server.js/ }),
       NgTemplatePlugin({ enabled: !opts.enableAotCompilaton }),
