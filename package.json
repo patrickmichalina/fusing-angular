@@ -16,9 +16,10 @@
 
 
     "build.dev": "ts-node fuse",
-    "build.prod": "ts-node fuse",
-    "start.dev": "ts-node fuse",
-    "start.prod": "ts-node fuse",
+    "build.prod": "ts-node fuse --prod --verbose",
+    "start": "ts-node fuse --watch --serve",
+    "start.dev": "ts-node fuse --watch --serve",
+    "start.prod": "ts-node fuse --watch --serve --prod --verbose",
     "start.built": "node dist/server_entry.js",
 
 
