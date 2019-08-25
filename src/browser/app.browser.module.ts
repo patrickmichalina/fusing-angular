@@ -10,7 +10,7 @@ import { UniversalCookieBrowserModule } from '../server/angular/universal-cookie
     AppModule,
     FloNodeEnvTransferBrowserModule,
     UniversalCookieBrowserModule,
-    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: true })
+    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: false })
   ],
   bootstrap: [AppComponent]
 })

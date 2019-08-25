@@ -4,9 +4,11 @@ import { ngc, ngcWatch } from './tools/scripts/ngc.spawn'
 import { IMaybe, maybe } from 'typescript-monads'
 import { ServerLauncher } from 'fuse-box/user-handler/ServerLauncher'
 import { ChildProcess } from 'child_process'
+import { compressStatic } from './tools/scripts/compress'
 
 class BuildContext {
   minify = argv.minify ? true : false
+  lint = argv.lint ? true : false
   prod = argv.prod ? true : false
   serve = argv.serve ? true : false
   watch = argv.watch ? true : false
@@ -23,10 +25,12 @@ class BuildContext {
   })
   fusebox = {
     server: fusebox({
+      logging: { level: 'disabled' },
       target: 'server',
       entry: 'ngc/server/server.js'
     }),
     browser: fusebox({
+      logging: { level: 'disabled' },
       target: 'browser',
       entry: 'ngc/browser/main.js',
       output: 'dist/wwwroot/js',
@@ -38,10 +42,19 @@ class BuildContext {
   }
 }
 
-const { task, exec, rm } = sparky(BuildContext)
+const { task, exec, rm, src } = sparky(BuildContext)
 
-task('assets.copy', ctx => { })
-task('assets.compress', ctx => { })
+task('assets.copy', _ctx =>
+  src('./src/assets/**/*.*')
+    .dest('./dist/wwwroot', 'assets')
+    .exec())
+
+task('assets.compress', ctx => {
+  return compressStatic(['dist/wwwroot']).catch(err => {
+    console.log(err)
+    process.exit(-1)
+  })
+})
 
 task('ngc', ctx => {
   return (ctx.watch ? ngcWatch().then(proc => ctx.ngcProcess = maybe(proc)) : ngc())
@@ -51,7 +64,9 @@ task('ngc', ctx => {
     })
 })
 
-task('build', ctx => exec('ngc').then(() => ctx.prod ? exec('build.prod') : exec('build.dev')))
+task('build', ctx => exec('ngc')
+  .then(() => exec('assets.copy'))
+  .then(() => ctx.prod ? exec('build.prod') : exec('build.dev')))
 
 task('build.dev', ctx => {
   exec('build.dev.server').then(() => exec('build.dev.browser'))
@@ -63,7 +78,7 @@ task('build.dev.server', ctx => {
       ctx.killServer()
       handler.onComplete(complete => {
         ctx.setServerRef(complete.server)
-        complete.server.handleEntry()
+        exec('assets.copy').then(() => complete.server.handleEntry())
       })
     }
   })
