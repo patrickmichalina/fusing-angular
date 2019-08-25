@@ -3,6 +3,7 @@ import { spawn, ChildProcess } from "child_process"
 export const ngc = () => new Promise((resolve, reject) => {
   const child = spawn('node_modules/.bin/ngc', ['-p', 'src/tsconfig.json'])
   child.stderr && child.stderr.on('data', resolve)
+  child.addListener("exit", resolve)
   child.addListener("error", reject)
 })
 

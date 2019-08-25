@@ -68,9 +68,7 @@ task('build', ctx => exec('ngc')
   .then(() => exec('assets.copy'))
   .then(() => ctx.prod ? exec('build.prod') : exec('build.dev')))
 
-task('build.dev', ctx => {
-  exec('build.dev.server').then(() => exec('build.dev.browser'))
-})
+task('build.dev', _ctx => exec('build.dev.server').then(() => exec('build.dev.browser')))
 task('build.dev.browser', ctx => { return ctx.fusebox.browser.runDev() })
 task('build.dev.server', ctx => {
   return ctx.fusebox.server.runDev(handler => {
@@ -83,6 +81,12 @@ task('build.dev.server', ctx => {
     }
   })
 })
+
+task('build.prod', _ctx => exec('build.prod.server')
+  .then(() => exec('build.prod.browser'))
+  .then(() => exec('assets.compress')))
+task('build.prod.browser', ctx => ctx.fusebox.browser.runProd())
+task('build.prod.server', ctx => ctx.fusebox.server.runProd())
 
 task('default', ctx => {
   rm('dist')
