@@ -1,6 +1,6 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
+import { platformBrowser } from '@angular/platform-browser'
 import { AppElectronModule } from './app.electron.module'
 
-platformBrowserDynamic()
+platformBrowser()
   .bootstrapModule(AppElectronModule)
   .catch(console.log)

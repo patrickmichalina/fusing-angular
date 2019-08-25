@@ -11,6 +11,6 @@ import { HttpClient } from '@angular/common/http'
 export class HomeComponent {
   constructor(public env: NodeEnvTransferService, private http: HttpClient) { }
 
-  public notesInternal$ = this.http.get('api/notes')
-  public notesExternal$ = this.http.get('https://jsonplaceholder.typicode.com/posts')
+  public notesInternal$ = this.http.get<any[]>('api/notes')
+  public notesExternal$ = this.http.get<any[]>('https://jsonplaceholder.typicode.com/posts')
 }
