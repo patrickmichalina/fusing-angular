@@ -17,7 +17,7 @@ export class TranslateHttpLoader implements TranslateLoader {
   constructor(private http: HttpClient, private es: EnvironmentService) { }
 
   public getTranslation(lang: string): Observable<Object> {
-    return this.http.get(`i18n/${lang}.json?v=${this.es.config.APP_VERSION}`).pipe(
+    return this.http.get(`static/i18n/${lang}.json?v=${this.es.config.APP_VERSION}`).pipe(
       catchError(_err => of({}),
     ))
   }

@@ -25,11 +25,9 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
     res.render('index', { req, res })
   }
   
-  app.get('/', compression(), angularRender)
-  
-  app.use('/', expressStaticGzip(publicDir, {
+  app.use('/static', expressStaticGzip(publicDir + '/static', {
     enableBrotli: true,
-    fallthrough: true,
+    fallthrough: false,
     orderPreference: ['br', 'gzip'] as ReadonlyArray<string>,
     setHeaders: (res: express.Response) => {
       res.setHeader('Cache-Control',
@@ -39,8 +37,6 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
       )
     }
   }))
-
-  
 
   registerApi(app)
 

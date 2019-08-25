@@ -16,8 +16,8 @@ class BuildContext {
     browser: fusebox({
       target: 'browser',
       entry: 'ngc/browser/main.js',
-      output: 'dist/wwwroot/js',
-      webIndex: { template: 'src/browser/index.html', distFileName: '../index.html', publicPath: 'js' }
+      output: 'dist/wwwroot/static/js',
+      webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'static/js' }
     }),
     electron: fusebox({
       target: 'electron'

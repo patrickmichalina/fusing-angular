@@ -8,11 +8,7 @@ import { catchError, tap, distinctUntilChanged } from 'rxjs/operators'
 export class HttpUniversalInterceptor implements HttpInterceptor {
   constructor(@Inject(REQUEST) private req: any) { }
 
-  prev?: string
-
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log(`${(req.headers as any)['x-forwarded-proto'] || this.req.protocol}://${this.req.get('host')}/${req.url}`)
-    
     return req.url.includes('http')
       ? next.handle(req)
       : next.handle(req.clone({
