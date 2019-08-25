@@ -8,7 +8,7 @@ import { COOKIES } from '../server/angular/universal-cookie/token'
 import { ElectronService } from './shared/electron.service'
 
 @Component({
-  selector: 'app-root',
+  selector: 'pm-app',
   styleUrls: ['./app.component.css'],
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush

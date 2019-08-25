@@ -18,5 +18,5 @@ export const STANDARD_CONFIG: IConfig = {
   PORT: maybe(process.env.PORT).map(p => +p).valueOr(4200),
   CLUSTERED_WORKERS: maybe(process.env.WEB_CONCURRENCY).map(a => +a).valueOr(1),
   DIST_FOLDER: resolve('dist'),
-  WWW_ROOT: 'public'
+  WWW_ROOT: 'wwwroot'
 }

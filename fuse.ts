@@ -11,12 +11,13 @@ class BuildContext {
   fusebox = {
     server: fusebox({
       target: 'server',
-      entry: 'ngc/server/server.js',
-      watch: false
+      entry: 'ngc/server/server.js'
     }),
     browser: fusebox({
       target: 'browser',
       entry: 'ngc/browser/main.js',
+      output: 'dist/wwwroot/js',
+      webIndex: { template: 'src/browser/index.html', distFileName: '../index.html', publicPath: 'js' }
     }),
     electron: fusebox({
       target: 'electron'
@@ -44,7 +45,13 @@ task('build.dev', ctx => {
 })
 task('build.dev.browser', ctx => { return ctx.fusebox.browser.runDev() })
 task('build.dev.server', ctx => {
-  return ctx.fusebox.server.runDev()
+  return ctx.fusebox.server.runDev(handler => {
+    if (ctx.serve) {
+      handler.onComplete(complete => {
+        complete.server.handleEntry()
+      })
+    }
+  })
 })
 
 task('default', ctx => {
