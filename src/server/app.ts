@@ -21,11 +21,7 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
   app.set('views', publicDir)
   app.engine('html', ngExpressEngine({ bootstrap: AppServerModule }) as any)
 
-  const angularRender = (req: express.Request, res: express.Response) => {
-    res.render('index', { req, res })
-  }
-  
-  app.use('/static', expressStaticGzip(publicDir + '/static', {
+  app.use('/assets', expressStaticGzip(publicDir, {
     enableBrotli: true,
     fallthrough: false,
     orderPreference: ['br', 'gzip'] as ReadonlyArray<string>,
@@ -40,7 +36,9 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
 
   registerApi(app)
 
-  app.get('*', compression(), angularRender)
+  app.get('*', compression(),  (req: express.Request, res: express.Response) => {
+    res.render('index', { req, res })
+  })
 
   return app
 })

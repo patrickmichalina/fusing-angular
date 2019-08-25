@@ -7,8 +7,8 @@ export const HTTP_TEST_APP =
       CLUSTERED_WORKERS: 1,
       NODE_DEBUG: true,
       PORT: 4201,
-      DIST_FOLDER: '.dist/wwwroot',
-      WWW_ROOT: 'dist'
+      DIST_FOLDER: 'dist',
+      WWW_ROOT: 'dist/wwwroot'
     })
 
 export const serverTestAgent = agent(HTTP_TEST_APP)
