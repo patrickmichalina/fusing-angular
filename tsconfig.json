@@ -16,7 +16,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
-    "incremental": true
+    "incremental": true,
+    "noEmit": true
   },
-  "include": ["tools"]
+  "include": ["tools", "fuse.ts"]
 }

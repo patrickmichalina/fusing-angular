@@ -21,7 +21,9 @@
     "build.prod": "ts-node fuse build.prod --prod --pwa",
     "build.prod.desktop": "ts-node fuse build.prod --prod --electron --pwa",
     "heroku-postbuild": "tslint -p tsconfig.json && npm run test.cov && ts-node fuse build.prod --prod --pwa",
-    "lint": "tslint -p tsconfig.json && tslint -p src/tsconfig.json",
+    "lint": "npm run lint.app & npm run lint.tools",
+    "lint.app": "tslint -p src/tsconfig.json",
+    "lint.tools": "tsc && tslint -p tsconfig.json",
     "release.mac": "npm run build.prod.desktop && BUILD_BYTECODE=true electron . && ts-node tools/scripts/electron-deps.ts && electron-builder --mac && ts-node tools/scripts/electron-deps-revert.ts "
   },
   "engines": {
