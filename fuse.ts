@@ -1,6 +1,6 @@
 import { argv } from 'yargs'
 
-const cliArgs = {
+const cli = {
   electron: argv.electron,
   minify: argv.minify,
   prod: argv.prod,

@@ -13,14 +13,15 @@
     "test": "jest",
     "test.cov": "jest --coverage",
     "test.watch": "jest --watch",
-    "start": "NODE_OPTIONS=--no-warnings ts-node --transpile-only -r dotenv/config fuse build.dev --watch --serve --pwa",
-    "start.deving": "concurrently --kill-others-on-fail \"npm start\" \"npm run test.watch\"",
-    "start.spa": "ts-node -r dotenv/config fuse build.dev --watch --serve --universal=0",
-    "start.desktop": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.dev --watch --serve --electron --pwa",
-    "start.prod": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.prod --prod --serve --pwa",
-    "start.prod.desktop": "NODE_OPTIONS=--no-warnings ts-node -r dotenv/config fuse build.prod --prod --serve --electron --pwa",
-    "build.prod": "ts-node fuse build.prod --prod --pwa",
-    "build.prod.desktop": "ts-node fuse build.prod --prod --electron --pwa",
+
+
+    "build.dev": "ts-node fuse",
+    "build.prod": "ts-node fuse",
+    "start.dev": "ts-node fuse",
+    "start.prod": "ts-node fuse",
+    "start.built": "node dist/server_entry.js",
+
+
     "lint": "npm run lint.app & npm run lint.tools",
     "lint.app": "tslint -p src/tsconfig.json",
     "lint.tools": "tsc && tslint -p tsconfig.json",

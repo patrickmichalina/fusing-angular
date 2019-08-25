@@ -8,13 +8,19 @@ Designed to get a team up and running with a fast development toolkit for Angula
 
 ### Development Features
 - [x] A blazing fast bundler [FuseBox](http://fuse-box.org).
-- [x] A blazing fast test runner [Jest](https://facebook.github.io/jest).
 - [x] Hot Module Reloading (HMR) for faster browser reloads during client development.
 - [x] Production ready builds.
 - [x] Angular specific TSLint rules.
 - [ ] [Heroku](https://www.heroku.com), Docker, and Serverless (GC, AWS) Deployment Examples.
 
+### Testing Features
+- [x] A blazing fast test runner [Jest](https://facebook.github.io/jest).
+- [ ] Angular testing via `jest`
+- [ ] Server (api/rendering) testing via `supertest` and `jest`
+- [ ] Electron testing via `spectron`
+
 ### App Features
+- [x] Platform specific Angular modules.
 - [x] Multi Language support.
 - [ ] Angular PWA support.
 
