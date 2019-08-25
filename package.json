@@ -21,7 +21,7 @@
     "build.prod": "ts-node fuse build.prod --prod --pwa",
     "build.prod.desktop": "ts-node fuse build.prod --prod --electron --pwa",
     "heroku-postbuild": "tslint -p tsconfig.json && npm run test.cov && ts-node fuse build.prod --prod --pwa",
-    "lint": "tsc && tslint -p tsconfig.json",
+    "lint": "tslint -p tsconfig.json && tslint -p src/tsconfig.json",
     "release.mac": "npm run build.prod.desktop && BUILD_BYTECODE=true electron . && ts-node tools/scripts/electron-deps.ts && electron-builder --mac && ts-node tools/scripts/electron-deps-revert.ts "
   },
   "engines": {
@@ -73,7 +73,7 @@
     "electron": "^6.0.4",
     "electron-builder": "^21.2.0",
     "electron-updater": "^4.1.2",
-    "fuse-box": "^3.7.1",
+    "fuse-box": "4.0.0-alpha.80",
     "jest": "^24.9.0",
     "jest-preset-angular": "^7.1.1",
     "jest-tap-reporter": "^1.9.0",

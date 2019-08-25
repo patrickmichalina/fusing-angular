@@ -3,20 +3,27 @@
     "target": "es5",
     "module": "commonjs",
     "lib": [
-      "es6"
+      "es6",
+      "dom"
     ],
+    "rootDir": ".",
+    "outDir": "../ngc",
     "types": ["node", "jest"],
     "declaration": true,
     "removeComments": true,
     "stripInternal": true,
-    "alwaysStrict": true,
+    "alwaysStrict": false,
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "resolveJsonModule": true,
     "incremental": true
   },
-  "include": ["tools"]
+  "angularCompilerOptions": {
+    "enableIvy": true,
+    "fullTemplateTypeCheck": true,
+    "enableResourceInlining": true,
+    "preserveWhitespaces": false
+  }
 }
