@@ -6,6 +6,13 @@ Designed to get a team up and running with a fast development toolkit for Angula
 
 **Rewrite underway to support the latest, greatest, fastest build system.**
 
+### Angular Features
+- [x] Angular 9 w/ Ivy Renderer
+- [x] Always compiled AOT, not optional at this time.
+- [x] Platform specific Angular modules.
+- [x] Multi Language support.
+- [ ] Angular PWA support.
+
 ### Development Features
 - [x] A blazing fast bundler [FuseBox](http://fuse-box.org).
 - [x] Hot Module Reloading (HMR) for faster browser reloads during client development.
@@ -18,11 +25,6 @@ Designed to get a team up and running with a fast development toolkit for Angula
 - [ ] Angular testing via `jest`
 - [ ] Server (api/rendering) testing via `supertest` and `jest`
 - [ ] Electron testing via `spectron`
-
-### App Features
-- [x] Platform specific Angular modules.
-- [x] Multi Language support.
-- [ ] Angular PWA support.
 
 ### Performance Features
 - [x] [Brotli compression](https://github.com/google/brotli) with [gzip](http://www.gzip.org) fallback.
@@ -38,6 +40,10 @@ Designed to get a team up and running with a fast development toolkit for Angula
 ### Electron Features
 - [x] App compiled to V8 bytecode via [bytenode](https://github.com/OsamaAbbas/bytenode) so that you can protect your source code.
 - [ ] Configured to ouput windows, mac, and linux builds.
+
+### Caveats
+- No CSS preprocessor. Just use plain CSS w/ css-variables.
+- AOT is a requirement at this time.
 
 ## Commands
 | Command  | Info |
