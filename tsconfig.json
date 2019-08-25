@@ -3,7 +3,8 @@
     "target": "es5",
     "module": "commonjs",
     "lib": [
-      "es6"
+      "es6",
+      "dom"
     ],
     "types": ["node", "jest"],
     "declaration": true,
@@ -19,5 +20,6 @@
     "incremental": true,
     "noEmit": true
   },
-  "include": ["tools", "fuse.ts"]
+  "include": ["tools"],
+  "files": ["fuse.ts"]
 }

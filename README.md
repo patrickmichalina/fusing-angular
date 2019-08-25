@@ -4,12 +4,11 @@
 ## Goals
 Designed to get a team up and running with a fast development toolkit for Angular Univerasl, Electron, and NativeScript applications.
 
-Rewrite underway to support the latest, greatest, fastest build system.
+**Rewrite underway to support the latest, greatest, fastest build system.**
 
-<!-- ### Development Features
-- [x] [FuseBox](http://fuse-box.org) as the TypeScript/JavaScript bundler.
-- [x] [Sparky](http://fuse-box.org/page/sparky) as the task runner.
-- [x] [Jest](https://facebook.github.io/jest) for testing.
+### Development Features
+- [x] A blazing fast bundler [FuseBox](http://fuse-box.org).
+- [x] A blazing fast test runner [Jest](https://facebook.github.io/jest).
 - [x] Hot Module Reloading (HMR) for faster browser reloads during client development.
 - [x] Production ready builds.
 - [x] Angular specific TSLint rules.
@@ -22,7 +21,7 @@ Rewrite underway to support the latest, greatest, fastest build system.
 ### Performance Features
 - [x] [Brotli compression](https://github.com/google/brotli) with [gzip](http://www.gzip.org) fallback.
 - [x] [Ahead-of-Time](https://angular.io/guide/aot-compiler) (AOT) compilation support.
-- [ ] [Lazy Loaded](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules. (Not working with AOT at the moment)
+- [ ] [Lazy Loaded](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules.
 
 ### Universal (SSR) Features
 - [x] Flicker-free Angular Universal server built on Express.
@@ -37,7 +36,7 @@ Rewrite underway to support the latest, greatest, fastest build system.
 ## Commands
 | Command  | Info |
 | ------------- | ------------- |
-| test  | Runs all `.spec.ts` files through [Jest](https://facebook.github.io/jest)  |
+<!-- | test  | Runs all `.spec.ts` files through [Jest](https://facebook.github.io/jest)  |
 | test.cov  | Runs all `.spec.ts` files through [Jest](https://facebook.github.io/jest) w/ coverage reporting.  |
 | test.watch  | Continous testing of all `.spec.ts` files through [Jest](https://facebook.github.io/jest)  |
 | start  | Starts the Angular Universal server for development with HMR enabled.  |
@@ -48,7 +47,7 @@ Rewrite underway to support the latest, greatest, fastest build system.
 | start.prod.desktop  | Starts Universal and electron with production level optimizations.  |
 | build.prod  | Build server/browser production files  |
 | build.prod.desktop  | Build server/browser/electron production files  |
-| lint  | Checks your codebase for lint failures |
+| lint  | Checks your codebase for lint failures | -->
 
 ## Application Configuration
 
@@ -56,7 +55,5 @@ Rewrite underway to support the latest, greatest, fastest build system.
 TODO
 
 ## Environment Variables
-TODO -->
+TODO
 
-
-<!-- - [x] Full favicon icon generation for multiple devices derived from a single seed image -->
