@@ -1,21 +1,12 @@
 <h1 align="center" style="border-bottom: none;">fusing-angular</h1>
 <h3 align="center">Provides an extremely fast seed project for the development of Angular Universal (SSR) projects.</h3>
-<!-- <p align="center">
-  <a href="https://greenkeeper.io">
-    <img alt="greenkeeper" src="https://badges.greenkeeper.io/semantic-release/semantic-release.svg">
-  </a>
-  <a href="https://david-dm.org/patrickmichalina/onvif-probe-rx">
-    <img alt="greenkeeper" src="https://david-dm.org/patrickmichalina/onvif-probe-rx/status.svg">
-  </a>
-  <a href="https://david-dm.org/patrickmichalina/onvif-probe-rx?type=dev">
-    <img alt="greenkeeper" src="https://david-dm.org/patrickmichalina/onvif-probe-rx/dev-status.svg">
-  </a>
-</p> -->
 
 ## Goals
 Designed to get a team up and running with a fast development toolkit for Angular Univerasl, Electron, and NativeScript applications.
 
-### Development Features
+Rewrite underway to support the latest, greatest, fastest build system.
+
+<!-- ### Development Features
 - [x] [FuseBox](http://fuse-box.org) as the TypeScript/JavaScript bundler.
 - [x] [Sparky](http://fuse-box.org/page/sparky) as the task runner.
 - [x] [Jest](https://facebook.github.io/jest) for testing.
@@ -65,7 +56,7 @@ Designed to get a team up and running with a fast development toolkit for Angula
 TODO
 
 ## Environment Variables
-TODO
+TODO -->
 
 
 <!-- - [x] Full favicon icon generation for multiple devices derived from a single seed image -->

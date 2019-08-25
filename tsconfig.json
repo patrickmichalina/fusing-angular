@@ -2,38 +2,21 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "moduleResolution": "node",
-    "isolatedModules": false,
+    "lib": [
+      "es6"
+    ],
+    "declaration": true,
+    "removeComments": true,
+    "stripInternal": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "declaration": false,
-    "noImplicitAny": true,
-    "noImplicitUseStrict": false,
-    "strictNullChecks": true,
-    "noEmitHelpers": false,
-    "noLib": false,
-    "noEmit": true,
-    "noUnusedLocals": true,
-    "allowSyntheticDefaultImports": false,
-    "sourceMap": true,
     "resolveJsonModule": true,
-    "lib": [
-      "es2016",
-      "dom"
-    ],
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "types": ["jest", "node"]
+    "types": ["node"],
+    "incremental": true
   },
-  "include": [
-    "fuse.ts",
-    "src",
-    "tools"
-  ],
-  "exclude": [
-    "src/browser/main.aot.ts",
-    "src/browser/.ngc/**/**",
-    "src/electron/angular/main.aot.ts",
-    "src/electron/angular/.ngc/**/**"
-  ]
+  "include": ["tools"]
 }

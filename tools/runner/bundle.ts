@@ -1,14 +1,8 @@
 import { Options } from "./interfaces"
 import { FuseBox, QuantumPlugin, WebIndexPlugin, EnvPlugin, ReplacePlugin, JSONPlugin } from "fuse-box"
-import { NgCompilerPlugin } from "../plugins/ng.compiler.plugin"
-import { NgPolyfillPlugin } from "../plugins/ng.polyfill.plugin"
-import { NgAotFactoryPlugin } from "../plugins/ng.aot-factory.plugin"
-import { NgProdPlugin } from "../plugins/ng.prod.plugin"
 import { spawn, ChildProcessWithoutNullStreams } from "child_process"
-import { NgTemplatePlugin } from "../plugins/ng.template.plugin"
-import { NgAotServerPlugin } from "../plugins/ng.aot-server.plugin"
-import * as pkg from '../../package.json'
 import { Subject, zip } from "rxjs"
+import * as pkg from '../../package.json'
 
 export const fuseAngular = (opts: Options) => {
   const shared = {
@@ -52,11 +46,6 @@ export const fuseAngular = (opts: Options) => {
     ignoreModules: opts.browser.bundle.ignoredModules,
     output: `${opts.outputDirectory}/${opts.browser.bundle.outputPath}/$name.js`,
     plugins: [
-      NgProdPlugin({ enabled: opts.optimizations.enabled }),
-      NgPolyfillPlugin({ isAot: opts.enableAotCompilaton }),
-      NgTemplatePlugin({ enabled: !opts.enableAotCompilaton }),
-      NgAotFactoryPlugin({ enabled: opts.enableAotCompilaton }),
-      NgCompilerPlugin({ enabled: opts.enableAotCompilaton }),
       opts.optimizations.enabled && QuantumPlugin({
         uglify: opts.optimizations.minify,
         treeshake: opts.optimizations.treeshake,
@@ -76,11 +65,6 @@ export const fuseAngular = (opts: Options) => {
     ignoreModules: opts.browser.bundle.ignoredModules,
     output: `${opts.outputDirectory}/${'electron'}/public/js/$name.js`,
     plugins: [
-      NgProdPlugin({ enabled: opts.optimizations.enabled }),
-      NgPolyfillPlugin({ isAot: opts.enableAotCompilaton }),
-      NgTemplatePlugin({ enabled: !opts.enableAotCompilaton }),
-      NgAotFactoryPlugin({ enabled: opts.enableAotCompilaton }),
-      NgCompilerPlugin({ enabled: opts.enableAotCompilaton, tsconfig: 'tsconfig.electron.aot.json' }),
       opts.optimizations.enabled && QuantumPlugin({
         uglify: opts.optimizations.minify,
         treeshake: opts.optimizations.treeshake,
@@ -99,9 +83,6 @@ export const fuseAngular = (opts: Options) => {
     ignoreModules: opts.universal.bundle.ignoredModules,
     plugins: [
       JSONPlugin(),
-      NgAotServerPlugin({ useAot: opts.enableAotCompilaton, file: /app.ts/g }),
-      NgPolyfillPlugin({ isServer: true, fileTest: /server.ts|server.js/ }),
-      NgTemplatePlugin({ enabled: !opts.enableAotCompilaton }),
       opts.optimizations.enabled && QuantumPlugin({
         replaceProcessEnv: false,
         uglify: opts.optimizations.minify,

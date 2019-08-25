@@ -1,1 +1,1 @@
-web: NODE_OPTIONS=--no-warnings node dist/server.js
+web: node dist/server_entry.js
