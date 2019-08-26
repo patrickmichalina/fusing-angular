@@ -5,8 +5,8 @@
       "name": "appshell",
       "resources": {
         "files": [
-          "/**/*.js",
-          "/**/*.css",
+          "/**/assets/*.js",
+          "/**/assets/*.css",
           "/ngsw-worker.js"
         ]
       }

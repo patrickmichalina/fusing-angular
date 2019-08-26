@@ -3,9 +3,10 @@ import { fusebox, sparky } from 'fuse-box'
 import { ngc, ngcWatch } from './tools/scripts/ngc.spawn'
 import { IMaybe, maybe } from 'typescript-monads'
 import { ServerLauncher } from 'fuse-box/user-handler/ServerLauncher'
-import { ChildProcess } from 'child_process'
+import { ChildProcess, spawnSync } from 'child_process'
 import { compressStatic } from './tools/scripts/compress'
 import { minify } from 'terser'
+
 
 class BuildContext {
   minify = argv.minify ? true : false
@@ -40,10 +41,10 @@ class BuildContext {
     browser: fusebox({
       watch: this.watch,
       target: 'browser',
-      output: 'dist/wwwroot/js',
+      output: 'dist/wwwroot/assets/js',
       logging: { level: 'disabled' },
       entry: this.prod ? 'ngc/browser/main.prod.js' : 'ngc/browser/main.js',
-      webIndex: { template: 'src/browser/index.html', distFileName: '../index.html', publicPath: 'assets/js' },
+      webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
       cache: { enabled: true, root: '.fusebox/browser' },
       devServer: {
         hmrServer: { port: 4200 },
@@ -70,7 +71,7 @@ const { task, exec, rm, src } = sparky(BuildContext)
 
 task('assets.copy', _ctx =>
   src('./src/assets/**/*.*')
-    .dest('./dist/wwwroot', 'assets')
+    .dest('./dist/wwwroot/assets', 'assets')
     .exec())
 
 task('assets.compress', ctx => {
@@ -82,7 +83,6 @@ task('assets.compress', ctx => {
 
 task('assets', ctx => Promise.all([
   exec('assets.copy'),
-  !ctx.pwa ? Promise.resolve() : exec('assets.pwa.worker'),
   !ctx.pwa ? Promise.resolve() : exec('assets.pwa.ngsw')
 ]))
 
@@ -105,9 +105,9 @@ task('build.dev.server', ctx => ctx.fusebox.server.runDev(handler => {
     ctx.killServer()
     handler.onComplete(complete => {
       ctx.setServerRef(complete.server)
-      Promise.all([
-        exec('assets.copy')
-      ]).then(() => complete.server.handleEntry())
+      Promise.all([exec('assets.copy')])
+        .then(() => ctx.pwa ? exec('assets.pwa.ngsw.config') : Promise.resolve())
+        .then(() => complete.server.handleEntry())
     })
   }
 }))
@@ -115,16 +115,20 @@ task('build.dev.server', ctx => ctx.fusebox.server.runDev(handler => {
 task('build.prod', _ctx => exec('build.prod.server')
   .then(() => exec('build.prod.browser'))
   .then(() => exec('assets.compress')))
+
 task('build.prod.browser', ctx => ctx.fusebox.browser.runProd())
 task('build.prod.server', ctx => ctx.fusebox.server.runProd())
 
 
-task('assets.pwa.ngsw', ctx => {})
-
-task('assets.pwa.worker', ctx => src('./node_modules/@angular/service-worker/ngsw-worker.js')
-  .contentsOf(/ngsw-worker.js/, content => content) // MINIFY?
+task('assets.pwa.ngsw', ctx => src('./node_modules/@angular/service-worker/ngsw-worker.js')
+  .contentsOf(/ngsw-worker.js/, content => minify(content).code || content) // MINIFY?
   .dest('./dist/wwwroot', 'node_modules/@angular/service-worker')
   .exec())
+
+task('assets.pwa.ngsw.config', ctx => {
+  // TODO: convert to promise
+  spawnSync('node_modules/.bin/ngsw-config', ['dist/wwwroot', 'src/browser/ngsw.json'])
+})
 
 task('default', ctx => {
   rm('dist')

@@ -34,10 +34,11 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
     }
   }
 
-  app.get('/manifest.json', expressStaticGzip(publicDir, settings))
+  
   app.get('/ngsw-worker.js', expressStaticGzip(publicDir, settings))
   app.get('/ngsw.json', expressStaticGzip(publicDir, settings))
-  app.use('/assets', expressStaticGzip(publicDir, settings))
+  app.get('/manifest.json', expressStaticGzip(publicDir + '/assets', settings))
+  app.use('/assets', expressStaticGzip(publicDir + '/assets', settings))
 
   registerApi(app)
 
