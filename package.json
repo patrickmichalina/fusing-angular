@@ -13,16 +13,12 @@
     "test": "jest",
     "test.cov": "jest --coverage",
     "test.watch": "jest --watch",
-
-
     "build.dev": "ts-node fuse",
     "build.prod": "ts-node fuse --prod --verbose",
     "start": "ts-node fuse --watch --serve",
     "start.dev": "ts-node fuse --watch --serve",
     "start.prod": "ts-node fuse --watch --serve --prod --verbose",
     "start.built": "node dist/server_entry.js",
-
-
     "lint": "npm run lint.app & npm run lint.tools",
     "lint.app": "tslint -p src/tsconfig.json",
     "lint.tools": "tsc && tslint -p tsconfig.json",
@@ -48,6 +44,7 @@
     "@angular/forms": "^9.0.0-next.3",
     "@angular/language-service": "^9.0.0-next.3",
     "@angular/platform-browser": "^9.0.0-next.3",
+    "@angular/platform-browser-dynamic": "^8.2.3",
     "@angular/router": "^9.0.0-next.3",
     "@angular/service-worker": "^9.0.0-next.3",
     "@flosportsinc/ng-env-transfer-state": "^12.1.1",

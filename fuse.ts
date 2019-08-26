@@ -27,13 +27,19 @@ class BuildContext {
     server: fusebox({
       logging: { level: 'disabled' },
       target: 'server',
-      entry: 'ngc/server/server.js'
+      entry: 'ngc/server/server.js',
+      watch: this.watch,
+      dependencies: {
+        ignorePackages: ['domino', 'express', 'compression', 'throng', 'express-static-gzip'],
+        ignoreAllExternal: false
+      }
     }),
     browser: fusebox({
       logging: { level: 'disabled' },
       target: 'browser',
       entry: 'ngc/browser/main.js',
       output: 'dist/wwwroot/js',
+      watch: this.watch,
       webIndex: { template: 'src/browser/index.html', distFileName: '../index.html', publicPath: 'assets/js' }
     }),
     electron: fusebox({
@@ -70,17 +76,15 @@ task('build', ctx => exec('ngc')
 
 task('build.dev', _ctx => exec('build.dev.server').then(() => exec('build.dev.browser')))
 task('build.dev.browser', ctx => { return ctx.fusebox.browser.runDev() })
-task('build.dev.server', ctx => {
-  return ctx.fusebox.server.runDev(handler => {
-    if (ctx.serve) {
-      ctx.killServer()
-      handler.onComplete(complete => {
-        ctx.setServerRef(complete.server)
-        exec('assets.copy').then(() => complete.server.handleEntry())
-      })
-    }
-  })
-})
+task('build.dev.server', ctx => ctx.fusebox.server.runDev(handler => {
+  if (ctx.serve) {
+    ctx.killServer()
+    handler.onComplete(complete => {
+      ctx.setServerRef(complete.server)
+      exec('assets.copy').then(() => complete.server.handleEntry())
+    })
+  }
+}))
 
 task('build.prod', _ctx => exec('build.prod.server')
   .then(() => exec('build.prod.browser'))
