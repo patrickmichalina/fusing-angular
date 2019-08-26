@@ -22,6 +22,7 @@
     "lint": "npm run lint.app & npm run lint.tools",
     "lint.app": "tslint -p src/tsconfig.json",
     "lint.tools": "tsc && tslint -p tsconfig.json",
+    "heroku-postbuild": "npm run lint && npm run test.cov && npm run build.prod",
     "release.mac": "npm run build.prod.desktop && BUILD_BYTECODE=true electron . && ts-node tools/scripts/electron-deps.ts && electron-builder --mac && ts-node tools/scripts/electron-deps-revert.ts "
   },
   "engines": {
