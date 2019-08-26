@@ -5,6 +5,7 @@ import { IMaybe, maybe } from 'typescript-monads'
 import { ServerLauncher } from 'fuse-box/user-handler/ServerLauncher'
 import { ChildProcess } from 'child_process'
 import { compressStatic } from './tools/scripts/compress'
+import { minify } from 'terser'
 
 class BuildContext {
   minify = argv.minify ? true : false
@@ -79,6 +80,12 @@ task('assets.compress', ctx => {
   })
 })
 
+task('assets', ctx => Promise.all([
+  exec('assets.copy'),
+  !ctx.pwa ? Promise.resolve() : exec('assets.pwa.worker'),
+  !ctx.pwa ? Promise.resolve() : exec('assets.pwa.ngsw')
+]))
+
 task('ngc', ctx => {
   return (ctx.watch ? ngcWatch().then(proc => ctx.ngcProcess = maybe(proc)) : ngc())
     .catch(err => {
@@ -88,7 +95,7 @@ task('ngc', ctx => {
 })
 
 task('build', ctx => exec('ngc')
-  .then(() => exec('assets.copy'))
+  .then(() => exec('assets'))
   .then(() => ctx.prod ? exec('build.prod') : exec('build.dev')))
 
 task('build.dev', _ctx => exec('build.dev.server').then(() => exec('build.dev.browser')))
@@ -98,7 +105,9 @@ task('build.dev.server', ctx => ctx.fusebox.server.runDev(handler => {
     ctx.killServer()
     handler.onComplete(complete => {
       ctx.setServerRef(complete.server)
-      exec('assets.copy').then(() => complete.server.handleEntry())
+      Promise.all([
+        exec('assets.copy')
+      ]).then(() => complete.server.handleEntry())
     })
   }
 }))
@@ -108,6 +117,14 @@ task('build.prod', _ctx => exec('build.prod.server')
   .then(() => exec('assets.compress')))
 task('build.prod.browser', ctx => ctx.fusebox.browser.runProd())
 task('build.prod.server', ctx => ctx.fusebox.server.runProd())
+
+
+task('assets.pwa.ngsw', ctx => {})
+
+task('assets.pwa.worker', ctx => src('./node_modules/@angular/service-worker/ngsw-worker.js')
+  .contentsOf(/ngsw-worker.js/, content => content) // MINIFY?
+  .dest('./dist/wwwroot', 'node_modules/@angular/service-worker')
+  .exec())
 
 task('default', ctx => {
   rm('dist')

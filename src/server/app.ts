@@ -21,18 +21,23 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
   app.set('views', publicDir)
   app.engine('html', ngExpressEngine({ bootstrap: AppServerModule }) as any)
 
-  app.use('/assets', expressStaticGzip(publicDir, {
+  const settings = {
     enableBrotli: true,
     fallthrough: false,
     orderPreference: ['br', 'gzip'] as ReadonlyArray<string>,
-    setHeaders: (res: express.Response) => {
+    setHeaders: (res: express.Response, _reqUrl: string) => {
       res.setHeader('Cache-Control',
         config.NODE_DEBUG
           ? 'no-store'
           : `public, max-age=31536000, s-maxage=31536000`
       )
     }
-  }))
+  }
+
+  app.get('/manifest.json', expressStaticGzip(publicDir, settings))
+  app.get('/ngsw-worker.js', expressStaticGzip(publicDir, settings))
+  app.get('/ngsw.json', expressStaticGzip(publicDir, settings))
+  app.use('/assets', expressStaticGzip(publicDir, settings))
 
   registerApi(app)
 

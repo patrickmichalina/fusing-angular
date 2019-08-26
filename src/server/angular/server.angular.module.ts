@@ -20,7 +20,7 @@ enableProdMode()
     UniversalCookieServerModule,
     FloNodeEnvTransferServerModule.config({
       selectKeys: ['HEROKU_RELEASE_VERSION', 'HEROKU_SLUG_COMMIT']
-    }),
+    })
   ],
   providers: [
     {
