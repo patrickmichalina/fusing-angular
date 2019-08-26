@@ -37,10 +37,10 @@ class BuildContext {
     browser: fusebox({
       logging: { level: 'disabled' },
       target: 'browser',
-      entry: 'ngc/browser/main.js',
+      entry: this.prod ? 'ngc/browser/main.prod.js' : 'ngc/browser/main.js',
       output: 'dist/wwwroot/js',
       watch: this.watch,
-      webIndex: { template: 'src/browser/index.html', distFileName: '../index.html', publicPath: 'assets/js' }
+      webIndex: { template: 'src/browser/index.html', distFileName: '../index.html', publicPath: 'assets/js' },
     }),
     electron: fusebox({
       target: 'electron'
