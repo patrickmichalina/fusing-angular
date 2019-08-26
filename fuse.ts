@@ -29,10 +29,12 @@ class BuildContext {
       target: 'server',
       entry: 'ngc/server/server.js',
       watch: this.watch,
+      devServer: false,
       dependencies: {
         ignorePackages: ['domino', 'throng'],
         ignoreAllExternal: false
-      }
+      },
+      cache: { enabled: true, root: '.fusebox/server' }
     }),
     browser: fusebox({
       watch: this.watch,
@@ -41,6 +43,21 @@ class BuildContext {
       logging: { level: 'disabled' },
       entry: this.prod ? 'ngc/browser/main.prod.js' : 'ngc/browser/main.js',
       webIndex: { template: 'src/browser/index.html', distFileName: '../index.html', publicPath: 'assets/js' },
+      cache: { enabled: true, root: '.fusebox/browser' },
+      devServer: {
+        hmrServer: { port: 4200 },
+        httpServer: { port: 4200 },
+        proxy: [
+          {
+            path: "/",
+            options: {
+              target: "http://localhost:4201",
+              changeOrigin: true,
+              followRedirects: true
+            }
+          }
+        ]
+      }
     }),
     electron: fusebox({
       target: 'electron'
