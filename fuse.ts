@@ -7,7 +7,6 @@ import { ChildProcess, spawnSync } from 'child_process'
 import { compressStatic } from './tools/scripts/compress'
 import { minify } from 'terser'
 
-
 class BuildContext {
   minify = argv.minify ? true : false
   lint = argv.lint ? true : false
@@ -46,7 +45,7 @@ class BuildContext {
       entry: this.prod ? 'ngc/browser/main.prod.js' : 'ngc/browser/main.js',
       webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
       cache: { enabled: true, root: '.fusebox/browser' },
-      devServer: {
+      devServer: !this.serve ? false : {
         hmrServer: { port: 4200 },
         httpServer: { port: 4200 },
         proxy: [
@@ -114,11 +113,11 @@ task('build.dev.server', ctx => ctx.fusebox.server.runDev(handler => {
 
 task('build.prod', _ctx => exec('build.prod.server')
   .then(() => exec('build.prod.browser'))
+  .then(() => exec('assets.pwa.ngsw.config'))
   .then(() => exec('assets.compress')))
 
 task('build.prod.browser', ctx => ctx.fusebox.browser.runProd())
 task('build.prod.server', ctx => ctx.fusebox.server.runProd())
-
 
 task('assets.pwa.ngsw', ctx => src('./node_modules/@angular/service-worker/ngsw-worker.js')
   .contentsOf(/ngsw-worker.js/, content => minify(content).code || content) // MINIFY?
