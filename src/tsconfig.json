@@ -8,7 +8,10 @@
     ],
     "rootDir": ".",
     "outDir": "../ngc",
-    "types": ["node", "jest"],
+    "types": [
+      "node",
+      "jest"
+    ],
     "declaration": true,
     "removeComments": true,
     "stripInternal": true,

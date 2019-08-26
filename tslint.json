@@ -1,5 +1,8 @@
 {
-  "extends": ["codelyzer", "tslint-immutable"],
+  "extends": [
+    "codelyzer",
+    "tslint-immutable"
+  ],
   "rules": {
     "i18n": false,
     "newline-per-chained-call": false,
@@ -15,7 +18,10 @@
     "typedef": false,
     "space-within-parens": false,
     "object-literal-key-quotes": false,
-    "semicolon": [true, "never"],
+    "semicolon": [
+      true,
+      "never"
+    ],
     "align": false,
     "no-console": false,
     "curly": false,
@@ -23,12 +29,21 @@
     "directive-selector": [
       true,
       "attribute",
-      ["app", "pm"],
+      [
+        "app",
+        "pm"
+      ],
       "camelCase"
     ],
     "component-selector": [
       true,
-      "element", ["pm",  "app", "test", "i18n"],
+      "element",
+      [
+        "pm",
+        "app",
+        "test",
+        "i18n"
+      ],
       "kebab-case"
     ],
     "use-view-encapsulation": false,

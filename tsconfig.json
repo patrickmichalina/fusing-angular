@@ -6,7 +6,10 @@
       "es6",
       "dom"
     ],
-    "types": ["node", "jest"],
+    "types": [
+      "node",
+      "jest"
+    ],
     "declaration": true,
     "removeComments": true,
     "stripInternal": true,
@@ -20,6 +23,10 @@
     "incremental": true,
     "noEmit": true
   },
-  "include": ["tools"],
-  "files": ["fuse.ts"]
+  "include": [
+    "tools"
+  ],
+  "files": [
+    "fuse.ts"
+  ]
 }
