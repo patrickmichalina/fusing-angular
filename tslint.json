@@ -1,6 +1,5 @@
 {
   "extends": [
-    "codelyzer",
     "tslint-immutable"
   ],
   "rules": {
@@ -18,35 +17,14 @@
     "typedef": false,
     "space-within-parens": false,
     "object-literal-key-quotes": false,
-    "semicolon": [
-      true,
-      "never"
-    ],
     "align": false,
     "no-console": false,
     "curly": false,
     "newline-before-return": false,
-    "directive-selector": [
+    "array-type": false,
+    "semicolon": [
       true,
-      "attribute",
-      [
-        "app",
-        "pm"
-      ],
-      "camelCase"
-    ],
-    "component-selector": [
-      true,
-      "element",
-      [
-        "pm",
-        "app",
-        "test",
-        "i18n"
-      ],
-      "kebab-case"
-    ],
-    "use-view-encapsulation": false,
-    "array-type": false
+      "never"
+    ]
   }
 }
