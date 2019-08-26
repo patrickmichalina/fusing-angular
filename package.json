@@ -76,7 +76,7 @@
     "electron-updater": "^4.1.2",
     "express": "^4.17.1",
     "express-static-gzip": "^2.0.3",
-    "fuse-box": "4.0.0-alpha.80",
+    "fuse-box": "next",
     "jest": "^24.9.0",
     "jest-preset-angular": "^7.1.1",
     "jest-tap-reporter": "^1.9.0",
