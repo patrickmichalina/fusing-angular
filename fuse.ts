@@ -30,16 +30,16 @@ class BuildContext {
       entry: 'ngc/server/server.js',
       watch: this.watch,
       dependencies: {
-        ignorePackages: ['domino', 'express', 'compression', 'throng', 'express-static-gzip'],
+        ignorePackages: ['domino', 'throng'],
         ignoreAllExternal: false
       }
     }),
     browser: fusebox({
-      logging: { level: 'disabled' },
-      target: 'browser',
-      entry: this.prod ? 'ngc/browser/main.prod.js' : 'ngc/browser/main.js',
-      output: 'dist/wwwroot/js',
       watch: this.watch,
+      target: 'browser',
+      output: 'dist/wwwroot/js',
+      logging: { level: 'disabled' },
+      entry: this.prod ? 'ngc/browser/main.prod.js' : 'ngc/browser/main.js',
       webIndex: { template: 'src/browser/index.html', distFileName: '../index.html', publicPath: 'assets/js' },
     }),
     electron: fusebox({

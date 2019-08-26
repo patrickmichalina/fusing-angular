@@ -29,9 +29,7 @@
   },
   "dependencies": {
     "@angular/platform-server": "^9.0.0-next.3",
-    "compression": "git://github.com/patrickmichalina/compression.git",
-    "express": "^4.17.1",
-    "express-static-gzip": "^2.0.3"
+    "throng": "^4.0.0"
   },
   "electron-natives": [],
   "devDependencies": {
@@ -65,6 +63,7 @@
     "bytenode": "^1.1.1",
     "clean-css": "^4.2.1",
     "codelyzer": "^5.1.0",
+    "compression": "git://github.com/patrickmichalina/compression.git",
     "consolidate": "^0.15.1",
     "cookie-parser": "1.4.4",
     "core-js": "^3.2.1",
@@ -72,6 +71,8 @@
     "electron": "^6.0.4",
     "electron-builder": "^21.2.0",
     "electron-updater": "^4.1.2",
+    "express": "^4.17.1",
+    "express-static-gzip": "^2.0.3",
     "fuse-box": "4.0.0-alpha.80",
     "jest": "^24.9.0",
     "jest-preset-angular": "^7.1.1",
@@ -80,7 +81,6 @@
     "rxjs": "^6.5.2",
     "supertest": "^4.0.2",
     "terser": "^4.2.1",
-    "throng": "^4.0.0",
     "ts-node": "^8.3.0",
     "tslint": "^5.19.0",
     "tslint-immutable": "^6.0.1",
