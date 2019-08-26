@@ -7,13 +7,16 @@ import { ChildProcess, spawnSync } from 'child_process'
 import { compressStatic } from './tools/scripts/compress'
 import { minify } from 'terser'
 
+const argToBool = (arg: string) => argv[arg] ? true : false
+
 class BuildContext {
-  minify = argv.minify ? true : false
-  lint = argv.lint ? true : false
-  prod = argv.prod ? true : false
-  serve = argv.serve ? true : false
-  watch = argv.watch ? true : false
-  pwa = argv.pwa ? true : false
+  minify = argToBool('minify')
+  lint = argToBool('lint')
+  aot = argToBool('aot')
+  prod = argToBool('prod')
+  serve = argToBool('serve')
+  watch = argToBool('watch')
+  pwa = argToBool('pwa')
   ngcProcess: IMaybe<ChildProcess> = maybe()
   serverRef: IMaybe<ServerLauncher> = maybe()
   setServerRef(val?: ServerLauncher) {
@@ -28,13 +31,12 @@ class BuildContext {
     server: fusebox({
       logging: { level: 'disabled' },
       target: 'server',
-      entry: 'ngc/server/server.js',
+      entry: this.aot ? 'ngc/server/server.js' : 'src/server/server.ts',
       watch: this.watch,
       devServer: false,
-      dependencies: {
-        ignorePackages: ['domino', 'throng'],
-        ignoreAllExternal: false
-      },
+      dependencies: this.prod
+        ? { ignorePackages: ['domino', 'throng'], ignoreAllExternal: false }
+        : {},
       cache: { enabled: true, root: '.fusebox/server' }
     }),
     browser: fusebox({
@@ -42,7 +44,9 @@ class BuildContext {
       target: 'browser',
       output: 'dist/wwwroot/assets/js',
       logging: { level: 'disabled' },
-      entry: this.prod ? 'ngc/browser/main.prod.js' : 'ngc/browser/main.js',
+      entry: this.aot
+        ? this.prod ? 'ngc/browser/main.prod.js' : 'ngc/browser/main.js'
+        : this.prod ? 'src/browser/main.prod.ts' : 'src/browser/main.ts',
       webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
       cache: { enabled: true, root: '.fusebox/browser' },
       devServer: !this.serve ? false : {
@@ -93,7 +97,7 @@ task('ngc', ctx => {
     })
 })
 
-task('build', ctx => exec('ngc')
+task('build', ctx => (ctx.aot ? exec('ngc') : Promise.resolve())
   .then(() => exec('assets'))
   .then(() => ctx.prod ? exec('build.prod') : exec('build.dev')))
 
