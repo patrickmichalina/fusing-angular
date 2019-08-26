@@ -6,7 +6,7 @@ export const HTTP_TEST_APP =
     .run({
       CLUSTERED_WORKERS: 1,
       NODE_DEBUG: true,
-      PORT: 4201,
+      PORT: 4202,
       DIST_FOLDER: 'dist',
       WWW_ROOT: 'dist/wwwroot'
     })
