@@ -6,6 +6,7 @@ import { skip, pluck } from 'rxjs/operators'
 import { EnvironmentService } from './shared/environment.service'
 import { COOKIES } from '../server/angular/universal-cookie/token'
 import { ElectronService } from './shared/electron.service'
+import { exampleDecorator } from './shared/decorators/example.decorator'
 
 @Component({
   selector: 'pm-app',
@@ -35,6 +36,7 @@ export class AppComponent {
   public en = { lang: 'en' }
   public jp = { lang: 'jp' }
 
+  @exampleDecorator()
   ngOnInit() {
     this.env.maybeGet('APP_VERSION').tapSome(ver => {
       this._rd.setAttribute((this._doc as HTMLDocument).body, 'data-version', ver)
