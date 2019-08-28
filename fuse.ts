@@ -121,6 +121,7 @@ task('ngc', ctx => {
     .catch(err => {
       console.log(err.toString())
       process.exit(-1)
+      
     })
 })
 
@@ -156,11 +157,8 @@ task('build.prod', ctx => exec('build.prod.server')
 
 task('build.prod.browser', ctx => ctx.fusebox.browser.runProd())
 task('build.prod.server', ctx => ctx.fusebox.server.runProd())
-task('build.prod.electron', ctx => ctx.fusebox.electron.renderer.runProd().then(() => ctx.fusebox.electron.main.runProd({
-  uglify: true,
-  handler: handler => handler.onComplete(b => {
-    b.electron.handleMainProcess()
-  })
+task('build.prod.electron', ctx => ctx.fusebox.electron.renderer.runProd({ uglify: true }).then(() => ctx.fusebox.electron.main.runProd({
+  uglify: false
 })))
 
 task('assets.pwa.ngsw', ctx => src('./node_modules/@angular/service-worker/ngsw-worker.js')
