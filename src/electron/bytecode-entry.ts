@@ -1,9 +1,9 @@
-// import { setFlagsFromString } from 'v8'
+import { setFlagsFromString } from 'v8'
 import { existsSync, unlinkSync, readdir } from 'fs'
 import { join } from 'path'
 import { app } from 'electron'
 
-// setFlagsFromString('--no-lazy')
+setFlagsFromString('--no-lazy')
 
 readdir(app.getAppPath(), (err, files) => {
   const filename = (files[0].split('/').pop() || '')
