@@ -1,4 +1,4 @@
-import { NgModule, PLATFORM_ID } from '@angular/core'
+import { NgModule } from '@angular/core'
 import { FloNodeEnvTransferBrowserModule } from '@flosportsinc/ng-env-transfer-state/browser'
 import { AppModule } from '../../browser/app.module'
 import { AppComponent } from '../../browser/app.component'
@@ -36,7 +36,6 @@ export function maybeGetElectronVars() {
   ],
   providers: [
     HttpElectronInterceptor,
-    { provide: PLATFORM_ID, useValue: 'electron' },
     { provide: ENV_CONFIG_DEFAULT, useFactory: maybeGetElectronVars },
     { provide: HTTP_INTERCEPTORS, useExisting: HttpElectronInterceptor, multi: true }
   ],
