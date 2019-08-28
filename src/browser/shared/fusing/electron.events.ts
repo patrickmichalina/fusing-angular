@@ -4,6 +4,7 @@ export type IElectronIPCMessageTuple = [keyof IElectronIPCMessage, IElectronIPCM
 // extend these interfaces to strongly type your event channels 
 export interface IAangularIPCMessage {
   readonly 'app-loaded': boolean
+  readonly 'log': { type: string, msg: any }
 }
 
 export interface IElectronIPCMessage {

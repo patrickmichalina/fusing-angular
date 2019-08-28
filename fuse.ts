@@ -149,13 +149,19 @@ task('build.dev.server', ctx => ctx.fusebox.server.runDev(handler => {
   }
 }))
 
-task('build.prod', _ctx => exec('build.prod.server')
-  .then(() => exec('build.prod.browser'))
+task('build.prod', ctx => exec('build.prod.server')
+  .then(() => Promise.all([exec('build.prod.browser'), ctx.electron ? exec('build.prod.electron') : Promise.resolve()]))
   .then(() => exec('assets.pwa.ngsw.config'))
   .then(() => exec('assets.compress')))
 
 task('build.prod.browser', ctx => ctx.fusebox.browser.runProd())
 task('build.prod.server', ctx => ctx.fusebox.server.runProd())
+task('build.prod.electron', ctx => ctx.fusebox.electron.renderer.runProd().then(() => ctx.fusebox.electron.main.runProd({
+  uglify: true,
+  handler: handler => handler.onComplete(b => {
+    b.electron.handleMainProcess()
+  })
+})))
 
 task('assets.pwa.ngsw', ctx => src('./node_modules/@angular/service-worker/ngsw-worker.js')
   .contentsOf(/ngsw-worker.js/, content => minify(content).code || content) // MINIFY?

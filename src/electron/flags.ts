@@ -1,6 +1,7 @@
-import { app } from 'electron'
+import { reader } from 'typescript-monads'
+import { IElectronConfig } from './config'
 
-export default function setChromiumFlags() {
-  // example: to let videos autoplay without initial input
-  app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')
-}
+export const setChromiumFlags = () => reader<IElectronConfig, void>(cfg => {
+  const log = cfg.LOGGER.child({ ns: 'setChromiumFlags()' })
+  log.trace('Entered function "setChromiumFlags()"')
+})

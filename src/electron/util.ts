@@ -1,10 +1,11 @@
-import { maybe } from "typescript-monads"
 import { IAangularIPCMessage, IAangularIPCMessageTuple, IElectronIPCMessage } from "../browser/shared/fusing/electron.events"
 import { Observable } from "rxjs"
 import { map, filter } from "rxjs/operators"
-import { BrowserWindow } from "electron"
+import { BrowserWindow, app } from "electron"
+import { resolve } from "path"
 
-export const isElectronDev = () => maybe(process.mainModule).filter(a => a.filename.includes('app.asar')).isNone()
+export const getExecutionBasePath = resolve(app.getAppPath().replace('app.asar', 'app.asar.unpacked'))
+export const getExecutionPath = (str: string) => resolve(getExecutionBasePath, str)
 
 export const filterIPCMessages = <TMessageType extends keyof IAangularIPCMessage, TMessage extends IAangularIPCMessage[TMessageType]>(type: TMessageType) =>
   (source: Observable<IAangularIPCMessageTuple>) =>
