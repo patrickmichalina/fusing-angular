@@ -21,7 +21,7 @@ const LANGUAGE_MENU_ID = 'lang-menu'
 
 export default function getUsableLanguageMenu() {
   return from(promises
-    .readdir(join(app.getAppPath(), 'dist/electron/public/i18n'))
+    .readdir(join(app.getAppPath(), '/wwwroot/assets/i18n'))
     .then(convertTranslatonFilePath(supportedLanguages))
     .then(mapMenuItem)
     .then(mapMenu))

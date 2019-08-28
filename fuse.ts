@@ -6,6 +6,7 @@ import { ServerLauncher } from 'fuse-box/user-handler/ServerLauncher'
 import { ChildProcess, spawnSync } from 'child_process'
 import { compressStatic } from './tools/scripts/compress'
 import { minify } from 'terser'
+import { ILoggerProps } from 'fuse-box/logging/logging'
 
 const argToBool = (arg: string) => argv[arg] ? true : false
 
@@ -17,6 +18,7 @@ class BuildContext {
   serve = argToBool('serve')
   watch = argToBool('watch')
   pwa = argToBool('pwa')
+  electron = argToBool('electron')
   ngcProcess: IMaybe<ChildProcess> = maybe()
   serverRef: IMaybe<ServerLauncher> = maybe()
   setServerRef(val?: ServerLauncher) {
@@ -27,9 +29,11 @@ class BuildContext {
     ref.kill()
     this.setServerRef()
   })
+  shared = {
+    logging: { level: 'succinct' } as ILoggerProps
+  }
   fusebox = {
     server: fusebox({
-      logging: { level: 'disabled' },
       target: 'server',
       entry: this.aot ? 'ngc/server/server.js' : 'src/server/server.ts',
       watch: this.watch,
@@ -37,13 +41,13 @@ class BuildContext {
       dependencies: this.prod
         ? { ignorePackages: ['domino', 'throng'], ignoreAllExternal: false }
         : {},
-      cache: { enabled: true, root: '.fusebox/server' }
+      cache: { enabled: true, root: '.fusebox/server' },
+      ...this.shared
     }),
     browser: fusebox({
       watch: this.watch,
       target: 'browser',
       output: 'dist/wwwroot/assets/js',
-      logging: { level: 'disabled' },
       entry: this.aot
         ? this.prod ? 'ngc/browser/main.prod.js' : 'ngc/browser/main.js'
         : this.prod ? 'src/browser/main.prod.ts' : 'src/browser/main.ts',
@@ -62,20 +66,43 @@ class BuildContext {
             }
           }
         ]
-      }
+      },
+      ...this.shared
     }),
-    electron: fusebox({
-      target: 'electron'
-    })
+    electron: {
+      renderer: fusebox({
+        watch: this.watch,
+        target: 'browser',
+        output: 'dist/desktop/wwwroot/assets/js',
+        entry: this.aot
+          ? this.prod ? 'ngc/electron/angular/main.prod.js' : 'ngc/electron/angular/main.js'
+          : this.prod ? 'src/electron/angular/main.prod.ts' : 'src/electron/angular/main.ts',
+        webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
+        cache: { enabled: true, root: '.fusebox/electron/renderer' },
+        ...this.shared
+      }),
+      main: fusebox({
+        watch: this.watch,
+        target: 'electron',
+        output: 'dist/desktop',
+        entry: 'src/electron/app.ts',
+        useSingleBundle: true,
+        // dependencies: {
+        //   ignoreAllExternal: true
+        // },
+        cache: { enabled: true, root: '.fusebox/electron/main' },
+        ...this.shared
+      })
+    }
   }
 }
 
 const { task, exec, rm, src } = sparky(BuildContext)
 
-task('assets.copy', _ctx =>
-  src('./src/assets/**/*.*')
-    .dest('./dist/wwwroot/assets', 'assets')
-    .exec())
+task('assets.copy', ctx => Promise.all([
+  src('./src/assets/**/*.*').dest('./dist/wwwroot/assets', 'assets').exec(),
+  ctx.electron ? src('./src/assets/**/*.*').dest('./dist/desktop/wwwroot/assets', 'assets').exec() : Promise.resolve<string[]>([])
+]))
 
 task('assets.compress', ctx => {
   return compressStatic(['dist/wwwroot']).catch(err => {
@@ -101,7 +128,12 @@ task('build', ctx => (ctx.aot ? exec('ngc') : Promise.resolve())
   .then(() => exec('assets'))
   .then(() => ctx.prod ? exec('build.prod') : exec('build.dev')))
 
-task('build.dev', _ctx => exec('build.dev.server').then(() => exec('build.dev.browser')))
+task('build.dev', ctx => exec('build.dev.server').then(() => Promise.all([
+  exec('build.dev.browser'), 
+  ctx.electron ? exec('build.dev.electron') : Promise.resolve()])))
+task('build.dev.electron', ctx => ctx.fusebox.electron.renderer.runDev().then(() => ctx.fusebox.electron.main.runDev(h => {
+  h.onComplete(b => b.electron.handleMainProcess())
+})))
 task('build.dev.browser', ctx => { return ctx.fusebox.browser.runDev() })
 task('build.dev.server', ctx => ctx.fusebox.server.runDev(handler => {
   if (ctx.serve) {

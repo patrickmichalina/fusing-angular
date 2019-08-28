@@ -1,12 +1,12 @@
-import { setFlagsFromString } from 'v8'
+// import { setFlagsFromString } from 'v8'
 import { existsSync, unlinkSync } from 'fs'
 import { join } from 'path'
 import { app } from 'electron'
 
-setFlagsFromString('--no-lazy')
+// setFlagsFromString('--no-lazy')
 
-const bytecodePath = join(app.getAppPath(), 'dist/electron/app.jsc')
-const srcPath = join(app.getAppPath(), 'dist/electron/app.js')
+const bytecodePath = join(app.getAppPath(), 'dist/desktop/6fca4d71_app.jsc')
+const srcPath = join(app.getAppPath(), 'dist/desktop/6fca4d71_app')
 const bytecode = require('bytenode')
 
 if (existsSync(srcPath)) {
