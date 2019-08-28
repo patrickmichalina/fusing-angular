@@ -12,7 +12,7 @@ import { ElectronRoutingModule } from './app-routing.module'
 import { EnvironmentService } from '../../browser/shared/environment.service'
 
 export function createTranslateLoader(http: HttpClient, es: EnvironmentService) {
-  return new TranslateHttpLoader(http, './i18n/', `.json?v=${es.config.APP_VERSION}`)
+  return new TranslateHttpLoader(http, './assets/i18n/', `.json?v=${es.config.APP_VERSION}`)
 }
 
 export function maybeGetElectronVars() {
