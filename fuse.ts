@@ -84,10 +84,11 @@ class BuildContext {
       main: fusebox({
         watch: this.watch,
         target: 'electron',
-        output: 'dist/desktop',
+        output: './dist/desktop/$name',
         entry: 'src/electron/app.ts',
         useSingleBundle: true,
         // dependencies: {
+        //   // ignorePackages: ['electron']
         //   ignoreAllExternal: true
         // },
         cache: { enabled: true, root: '.fusebox/electron/main' },
@@ -132,7 +133,9 @@ task('build.dev', ctx => exec('build.dev.server').then(() => Promise.all([
   exec('build.dev.browser'), 
   ctx.electron ? exec('build.dev.electron') : Promise.resolve()])))
 task('build.dev.electron', ctx => ctx.fusebox.electron.renderer.runDev().then(() => ctx.fusebox.electron.main.runDev(h => {
-  h.onComplete(b => b.electron.handleMainProcess())
+  h.onComplete(b => {
+    b.electron.handleMainProcess()
+  })
 })))
 task('build.dev.browser', ctx => { return ctx.fusebox.browser.runDev() })
 task('build.dev.server', ctx => ctx.fusebox.server.runDev(handler => {
