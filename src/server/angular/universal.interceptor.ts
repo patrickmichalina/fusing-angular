@@ -1,8 +1,7 @@
-import { Observable, of } from 'rxjs'
+import { Observable } from 'rxjs'
 import { Injectable, Inject } from '@angular/core'
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpEventType } from '@angular/common/http'
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http'
 import { REQUEST } from '@nguniversal/express-engine/tokens'
-import { catchError, tap, distinctUntilChanged } from 'rxjs/operators'
 
 @Injectable()
 export class HttpUniversalInterceptor implements HttpInterceptor {

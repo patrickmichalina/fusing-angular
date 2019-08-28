@@ -87,10 +87,9 @@ class BuildContext {
         output: './dist/desktop/$name',
         entry: 'src/electron/app.ts',
         useSingleBundle: true,
-        // dependencies: {
-        //   // ignorePackages: ['electron']
-        //   ignoreAllExternal: true
-        // },
+        dependencies: {
+          ignoreAllExternal: true
+        },
         cache: { enabled: true, root: '.fusebox/electron/main' },
         ...this.shared
       })
@@ -130,7 +129,7 @@ task('build', ctx => (ctx.aot ? exec('ngc') : Promise.resolve())
   .then(() => ctx.prod ? exec('build.prod') : exec('build.dev')))
 
 task('build.dev', ctx => exec('build.dev.server').then(() => Promise.all([
-  exec('build.dev.browser'), 
+  exec('build.dev.browser'),
   ctx.electron ? exec('build.dev.electron') : Promise.resolve()])))
 task('build.dev.electron', ctx => ctx.fusebox.electron.renderer.runDev().then(() => ctx.fusebox.electron.main.runDev(h => {
   h.onComplete(b => {
