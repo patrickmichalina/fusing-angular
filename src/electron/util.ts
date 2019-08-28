@@ -1,5 +1,5 @@
 import { maybe } from "typescript-monads"
-import { IAangularIPCMessage, IAangularIPCMessageTuple, IElectronIPCMessage } from "../browser/shared/electron.events"
+import { IAangularIPCMessage, IAangularIPCMessageTuple, IElectronIPCMessage } from "../browser/shared/fusing/electron.events"
 import { Observable } from "rxjs"
 import { map, filter } from "rxjs/operators"
 import { BrowserWindow } from "electron"

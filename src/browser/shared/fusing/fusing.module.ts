@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core'
 import { FloNodeEnvTransferModule } from '@flosportsinc/ng-env-transfer-state'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { HttpClient } from '@angular/common/http'
-import { EnvironmentService } from './environment.service'
 import { Observable, of } from 'rxjs'
 import { catchError } from 'rxjs/operators'
-import { UniversalCookieModule } from '../../server/angular/universal-cookie/universal-cookie.module'
+import { UniversalCookieModule } from '../../../server/angular/universal-cookie/universal-cookie.module'
 import { PlatformService } from './platform.service'
 import { ElectronService } from './electron.service'
+import { EnvironmentService } from './environment.service'
 
 export class TranslateHttpLoader implements TranslateLoader {
   constructor(private http: HttpClient, private es: EnvironmentService) { }

@@ -3,7 +3,7 @@ import { take, share, filter, map, flatMap, shareReplay } from 'rxjs/operators'
 import { app, BrowserWindow, ipcMain } from 'electron'
 import { createWindow } from './window'
 import { filterIPCMessages } from './util'
-import { IAangularIPCMessageTuple } from '../browser/shared/electron.events'
+import { IAangularIPCMessageTuple } from '../browser/shared/fusing/electron.events'
 import { menu$ } from './menus/shared'
 import setChromiumFlags from './flags'
 

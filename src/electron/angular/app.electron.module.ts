@@ -9,7 +9,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { HttpClient } from '@angular/common/http'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { ElectronRoutingModule } from './app-routing.module'
-import { EnvironmentService } from '../../browser/shared/environment.service'
+import { EnvironmentService } from '../../browser/shared/fusing/environment.service'
 
 export function createTranslateLoader(http: HttpClient, es: EnvironmentService) {
   return new TranslateHttpLoader(http, './assets/i18n/', `.json?v=${es.config.APP_VERSION}`)
