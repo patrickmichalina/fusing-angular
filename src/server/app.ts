@@ -14,6 +14,9 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
   const app = express()
   const publicDir = join(config.DIST_FOLDER, config.WWW_ROOT)
   const expressStaticGzip = require('express-static-gzip')
+  const pino = require('express-pino-logger')
+
+  if (config.HTTP_LOGS_ENALED) app.use(pino())
 
   app.use(cookies())
   app.disable('x-powered-by')
