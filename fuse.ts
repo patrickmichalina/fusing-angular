@@ -31,13 +31,14 @@ class BuildContext {
     this.setServerRef()
   })
   shared = {
+    watch: this.watch,
+    turboMode: true,
     logging: { level: 'succinct' } as ILoggerProps
   }
   fusebox = {
     server: fusebox({
       target: 'server',
       entry: this.aot ? 'ngc/server/server.js' : 'src/server/server.ts',
-      watch: this.watch,
       devServer: false,
       dependencies: this.prod
         ? { ignorePackages: ['domino', 'throng', 'pino'], ignoreAllExternal: false }
@@ -46,7 +47,6 @@ class BuildContext {
       ...this.shared
     }),
     browser: fusebox({
-      watch: this.watch,
       target: 'browser',
       output: 'dist/wwwroot/assets/js',
       entry: this.aot
@@ -72,7 +72,6 @@ class BuildContext {
     }),
     electron: {
       renderer: fusebox({
-        watch: this.watch,
         target: 'browser',
         output: 'dist/desktop/wwwroot/assets/js',
         entry: this.aot
@@ -81,17 +80,14 @@ class BuildContext {
         webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
         cache: { enabled: true, root: '.fusebox/electron/renderer' },
         devServer: false,
-        hmr: false,
         ...this.shared
       }),
       main: fusebox({
-        watch: this.watch,
         target: 'electron',
         entry: 'src/electron/app.ts',
         output: 'dist/desktop',
         useSingleBundle: true,
         devServer: false,
-        hmr: false,
         dependencies: {
           ignoreAllExternal: false,
           ignorePackages: ['pino']
