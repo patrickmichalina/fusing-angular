@@ -8,6 +8,7 @@ import { compressStatic } from './tools/scripts/compress'
 import { minify } from 'terser'
 import { ILoggerProps } from 'fuse-box/logging/logging'
 import { UserHandler } from 'fuse-box/user-handler/UserHandler'
+import { ngTemplatePlugin } from './tools/plugins/ng-template'
 
 const argToBool = (arg: string) => argv[arg] ? true : false
 
@@ -33,7 +34,7 @@ class BuildContext {
   shared = {
     watch: this.watch,
     turboMode: true,
-    logging: { level: 'succinct' } as ILoggerProps
+    logging: { level: 'disabled' } as ILoggerProps
   }
   fusebox = {
     server: fusebox({
@@ -44,13 +45,15 @@ class BuildContext {
         ? { ignorePackages: ['domino', 'throng', 'pino'], ignoreAllExternal: false }
         : {},
       cache: { enabled: true, root: '.fusebox/server' },
+      plugins: this.aot ? [] : [ngTemplatePlugin()],
       ...this.shared
     }),
     browser: fusebox({
+      plugins: this.aot ? [] : [ngTemplatePlugin()],
       target: 'browser',
       output: 'dist/wwwroot/assets/js',
       entry: this.aot
-        ? this.prod ? 'ngc/browser/main.prod.js' : 'ngc/browser/main.js'
+        ? this.prod ? 'ngc/browser/main.aot.prod.js' : 'ngc/browser/main.aot.js'
         : this.prod ? 'src/browser/main.prod.ts' : 'src/browser/main.ts',
       webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
       cache: { enabled: true, root: '.fusebox/browser' },
@@ -75,7 +78,7 @@ class BuildContext {
         target: 'browser',
         output: 'dist/desktop/wwwroot/assets/js',
         entry: this.aot
-          ? this.prod ? 'ngc/electron/angular/main.prod.js' : 'ngc/electron/angular/main.js'
+          ? this.prod ? 'ngc/electron/angular/main.aot.prod.js' : 'ngc/electron/angular/main.aot.js'
           : this.prod ? 'src/electron/angular/main.prod.ts' : 'src/electron/angular/main.ts',
         webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
         cache: { enabled: true, root: '.fusebox/electron/renderer' },
@@ -101,7 +104,9 @@ class BuildContext {
         this.killServer()
         handler.onComplete(complete => {
           this.setServerRef(complete.server)
-          complete.server.handleEntry()
+          exec('assets.pwa.ngsw.config').then(() => {
+            complete.server.handleEntry()
+          })
         })
       }
     }
@@ -141,7 +146,10 @@ task('build', ctx => (ctx.aot ? exec('ngc') : Promise.resolve())
 
 task('build.dev', ctx => exec('build.dev.server').then(() => Promise.all([
   exec('build.dev.browser'),
-  ctx.electron ? exec('build.dev.electron') : Promise.resolve()])))
+  ctx.electron ? exec('build.dev.electron') : Promise.resolve()])
+    .then(() => exec('assets.pwa.ngsw.config'))
+  
+  ))
 task('build.dev.electron', ctx => ctx.fusebox.electron.renderer.runDev().then(() => ctx.fusebox.electron.main.runDev(h => {
   if (ctx.serve) {
     h.onComplete(b => {
