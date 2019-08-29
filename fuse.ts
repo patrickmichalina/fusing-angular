@@ -11,7 +11,6 @@ import { UserHandler } from 'fuse-box/user-handler/UserHandler'
 
 const argToBool = (arg: string) => argv[arg] ? true : false
 
-
 class BuildContext {
   minify = argToBool('minify')
   lint = argToBool('lint')
@@ -148,9 +147,11 @@ task('build.dev', ctx => exec('build.dev.server').then(() => Promise.all([
   exec('build.dev.browser'),
   ctx.electron ? exec('build.dev.electron') : Promise.resolve()])))
 task('build.dev.electron', ctx => ctx.fusebox.electron.renderer.runDev().then(() => ctx.fusebox.electron.main.runDev(h => {
-  h.onComplete(b => {
-    b.electron.handleMainProcess()
-  })
+  if (ctx.serve) {
+    h.onComplete(b => {
+      b.electron.handleMainProcess()
+    })
+  }
 })))
 task('build.dev.browser', ctx => { return ctx.fusebox.browser.runDev() })
 task('build.dev.server', ctx => ctx.fusebox.server.runDev(ctx.fusebox.serveHandler))
@@ -165,7 +166,14 @@ task('build.prod.server', ctx => ctx.fusebox.server.runProd({
   handler: ctx.fusebox.serveHandler
 }))
 task('build.prod.electron', ctx => ctx.fusebox.electron.renderer.runProd({ uglify: true }).then(() => ctx.fusebox.electron.main.runProd({
-  uglify: false
+  uglify: false,
+  handler: handler => {
+    if (ctx.serve) {
+      handler.onComplete(b => {
+        b.electron.handleMainProcess()
+      })
+    }
+  }
 })))
 
 task('assets.pwa.ngsw', ctx => src('./node_modules/@angular/service-worker/ngsw-worker.js')
