@@ -20,14 +20,14 @@
     "noImplicitThis": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "incremental": true
+    "emitDecoratorMetadata": true
   },
   "angularCompilerOptions": {
     "enableIvy": true,
     "fullTemplateTypeCheck": true,
     "enableResourceInlining": true,
-    "preserveWhitespaces": false
+    "preserveWhitespaces": false,
+    "disableTypeScriptVersionCheck": true
   },
   "exclude": ["/**/*.spec.ts"]
 }

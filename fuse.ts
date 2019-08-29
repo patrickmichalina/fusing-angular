@@ -39,7 +39,7 @@ class BuildContext {
       watch: this.watch,
       devServer: false,
       dependencies: this.prod
-        ? { ignorePackages: ['domino', 'throng'], ignoreAllExternal: false }
+        ? { ignorePackages: ['domino', 'throng', 'pino'], ignoreAllExternal: false }
         : {},
       cache: { enabled: true, root: '.fusebox/server' },
       ...this.shared
@@ -85,9 +85,11 @@ class BuildContext {
         watch: this.watch,
         target: 'electron',
         entry: 'src/electron/app.ts',
+        output: 'dist/desktop',
         useSingleBundle: true,
         dependencies: {
-          ignoreAllExternal: true
+          ignoreAllExternal: false,
+          ignorePackages: ['pino']
         },
         cache: { enabled: true, root: '.fusebox/electron/main' },
         ...this.shared
@@ -120,7 +122,6 @@ task('ngc', ctx => {
     .catch(err => {
       console.log(err.toString())
       process.exit(-1)
-      
     })
 })
 
