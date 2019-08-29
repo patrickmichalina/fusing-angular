@@ -1,11 +1,10 @@
 import 'zone.js/dist/zone'
-import 'core-js/proposals/reflect-metadata'
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
+import { platformBrowser } from '@angular/platform-browser'
 import { AppElectronModule } from './app.electron.module'
 import { enableProdMode } from '@angular/core'
 
 enableProdMode()
 
-platformBrowserDynamic()
+platformBrowser()
   .bootstrapModule(AppElectronModule)
   .catch(console.error)

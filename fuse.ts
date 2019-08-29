@@ -75,6 +75,7 @@ class BuildContext {
     }),
     electron: {
       renderer: fusebox({
+        plugins: this.aot ? [] : [ngTemplatePlugin()],
         target: 'browser',
         output: 'dist/desktop/wwwroot/assets/js',
         entry: this.aot
