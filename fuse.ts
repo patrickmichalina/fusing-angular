@@ -7,8 +7,10 @@ import { ChildProcess, spawnSync } from 'child_process'
 import { compressStatic } from './tools/scripts/compress'
 import { minify } from 'terser'
 import { ILoggerProps } from 'fuse-box/logging/logging'
+import { UserHandler } from 'fuse-box/user-handler/UserHandler'
 
 const argToBool = (arg: string) => argv[arg] ? true : false
+
 
 class BuildContext {
   minify = argToBool('minify')
@@ -79,6 +81,8 @@ class BuildContext {
           : this.prod ? 'src/electron/angular/main.prod.ts' : 'src/electron/angular/main.ts',
         webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
         cache: { enabled: true, root: '.fusebox/electron/renderer' },
+        devServer: false,
+        hmr: false,
         ...this.shared
       }),
       main: fusebox({
@@ -87,6 +91,8 @@ class BuildContext {
         entry: 'src/electron/app.ts',
         output: 'dist/desktop',
         useSingleBundle: true,
+        devServer: false,
+        hmr: false,
         dependencies: {
           ignoreAllExternal: false,
           ignorePackages: ['pino']
@@ -94,6 +100,15 @@ class BuildContext {
         cache: { enabled: true, root: '.fusebox/electron/main' },
         ...this.shared
       })
+    },
+    serveHandler: (handler: UserHandler) => {
+      if (this.serve) {
+        this.killServer()
+        handler.onComplete(complete => {
+          this.setServerRef(complete.server)
+          complete.server.handleEntry()
+        })
+      }
     }
   }
 }
@@ -138,17 +153,7 @@ task('build.dev.electron', ctx => ctx.fusebox.electron.renderer.runDev().then(()
   })
 })))
 task('build.dev.browser', ctx => { return ctx.fusebox.browser.runDev() })
-task('build.dev.server', ctx => ctx.fusebox.server.runDev(handler => {
-  if (ctx.serve) {
-    ctx.killServer()
-    handler.onComplete(complete => {
-      ctx.setServerRef(complete.server)
-      Promise.all([exec('assets.copy')])
-        .then(() => ctx.pwa ? exec('assets.pwa.ngsw.config') : Promise.resolve())
-        .then(() => complete.server.handleEntry())
-    })
-  }
-}))
+task('build.dev.server', ctx => ctx.fusebox.server.runDev(ctx.fusebox.serveHandler))
 
 task('build.prod', ctx => exec('build.prod.server')
   .then(() => Promise.all([exec('build.prod.browser'), ctx.electron ? exec('build.prod.electron') : Promise.resolve()]))
@@ -156,7 +161,9 @@ task('build.prod', ctx => exec('build.prod.server')
   .then(() => exec('assets.compress')))
 
 task('build.prod.browser', ctx => ctx.fusebox.browser.runProd())
-task('build.prod.server', ctx => ctx.fusebox.server.runProd())
+task('build.prod.server', ctx => ctx.fusebox.server.runProd({
+  handler: ctx.fusebox.serveHandler
+}))
 task('build.prod.electron', ctx => ctx.fusebox.electron.renderer.runProd({ uglify: true }).then(() => ctx.fusebox.electron.main.runProd({
   uglify: false
 })))
