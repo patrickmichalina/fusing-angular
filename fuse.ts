@@ -84,7 +84,6 @@ class BuildContext {
       main: fusebox({
         watch: this.watch,
         target: 'electron',
-        output: './dist/desktop/$name',
         entry: 'src/electron/app.ts',
         useSingleBundle: true,
         dependencies: {

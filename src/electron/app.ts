@@ -9,22 +9,23 @@ import { initCrashReporter } from './crash-reporter'
 import { IAangularIPCMessageTuple } from '../browser/shared/fusing/electron.events'
 import { enforceAppInstallLocation } from './check-app-location'
 import { ELECTRON_CONFIG, IElectronConfig } from './config'
-import { app as electron, BrowserWindow, ipcMain, dialog, clipboard } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, clipboard } from 'electron'
 import { initAutoUpdater } from './updater'
+import { ElectronEvent } from './interfaces'
 import * as cleanStack from 'clean-stack'
 
-const app = () => reader<IElectronConfig, void>(cfg => {
+const initApp = () => reader<IElectronConfig, void>(cfg => {
   const log = cfg.LOGGER.child({ ns: 'app()' })
   log.trace('Entered function')
 
   const windowSource = new Subject<BrowserWindow>()
   const window$ = windowSource.asObservable().pipe(shareReplay(1))
-  const appReady$ = fromEvent(electron, 'ready').pipe(shareReplay(1))
-  const browserWindowCrashed$ = fromEvent<Electron.Event>(electron, 'renderer-process-crashed').pipe(share())
-  const appActivate$ = fromEvent(electron, 'activate').pipe(share())
-  const beforeQuit$ = fromEvent(electron, 'before-quit').pipe(share())
-  const appQuit$ = fromEvent(electron, 'quit').pipe(share())
-  const appAllWindowsClosed$ = fromEvent(electron, 'window-all-closed').pipe(share())
+  const appReady$ = fromEvent(app, 'ready').pipe(shareReplay(1))
+  const browserWindowCrashed$ = fromEvent<ElectronEvent>(app, 'renderer-process-crashed').pipe(share())
+  const appActivate$ = fromEvent(app, 'activate').pipe(share())
+  const beforeQuit$ = fromEvent(app, 'before-quit').pipe(share())
+  const appQuit$ = fromEvent(app, 'quit').pipe(share())
+  const appAllWindowsClosed$ = fromEvent(app, 'window-all-closed').pipe(share())
   const appAngularEvents$ = fromEvent(ipcMain, 'angular-messages').pipe(
     map((a: any[]) => [a[1], a[2]] as IAangularIPCMessageTuple),
     shareReplay(1)
@@ -57,9 +58,9 @@ const app = () => reader<IElectronConfig, void>(cfg => {
     if (res.isOk()) {
       createWindow()
     } else if (res.unwrapFail().isLeft()) {
-      electron.quit()
+      app.quit()
     } else {
-      electron.moveToApplicationsFolder()
+      app.moveToApplicationsFolder()
     }
   })
 
@@ -71,7 +72,7 @@ const app = () => reader<IElectronConfig, void>(cfg => {
   })
 
   appAllWindowsClosed$.pipe(filter(() => !cfg.IS_PLATFORM_OSX)).subscribe(() => {
-    electron.quit()
+    app.quit()
   })
 
   appActivate$.pipe(mergeMapTo(window$), filterBoolean, takeUntilAppQuit).subscribe(win => {
@@ -103,23 +104,23 @@ const app = () => reader<IElectronConfig, void>(cfg => {
     })
   })
 
-  const windowClosed$ = window$.pipe(filterBoolean, flatMap(w => fromEvent<Electron.Event>(w, 'close')), shareReplay(1))
+  const windowClosed$ = window$.pipe(filterBoolean, flatMap(w => fromEvent<ElectronEvent>(w, 'close')), shareReplay(1))
   const windowClosedOSX$ = windowClosed$.pipe(filterPlatformOSX)
 
   windowClosedOSX$
     .pipe(takeUntil(beforeQuit$))
     .subscribe(e => {
       e.preventDefault();
-      (e as Electron.Event & { sender: BrowserWindow }).sender.hide()
+      (e as ElectronEvent & { sender: BrowserWindow }).sender.hide()
     })
 
   browserWindowCrashed$.subscribe(err => {
     log.fatal(err)
-    electron.quit()
+    app.quit()
   })
 })
 
 setChromiumFlags()
   .flatMap(initCrashReporter)
-  .flatMap(app)
+  .flatMap(initApp)
   .run(ELECTRON_CONFIG)

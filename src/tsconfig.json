@@ -12,7 +12,7 @@
       "node",
       "jest"
     ],
-    "declaration": true,
+    "declaration": false,
     "removeComments": true,
     "stripInternal": true,
     "alwaysStrict": false,
@@ -28,5 +28,6 @@
     "fullTemplateTypeCheck": true,
     "enableResourceInlining": true,
     "preserveWhitespaces": false
-  }
+  },
+  "exclude": ["/**/*.spec.ts"]
 }
