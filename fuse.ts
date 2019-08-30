@@ -9,6 +9,7 @@ import { minify } from 'terser'
 import { ILoggerProps } from 'fuse-box/logging/logging'
 import { UserHandler } from 'fuse-box/user-handler/UserHandler'
 import { ngTemplatePlugin } from './tools/plugins/ng-template'
+import * as packageJson from './package.json'
 
 const argToBool = (arg: string) => argv[arg] ? true : false
 
@@ -57,6 +58,7 @@ class BuildContext {
         : this.prod ? 'src/browser/main.prod.ts' : 'src/browser/main.ts',
       webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
       cache: { enabled: true, root: '.fusebox/browser' },
+      dependencies: { ignorePackages: packageJson.fuse.browser },
       devServer: !this.serve ? false : {
         hmrServer: { port: 4200 },
         httpServer: { port: 4200 },
@@ -83,6 +85,7 @@ class BuildContext {
           : this.prod ? 'src/electron/angular/main.prod.ts' : 'src/electron/angular/main.ts',
         webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
         cache: { enabled: true, root: '.fusebox/electron/renderer' },
+        dependencies: { ignorePackages: packageJson.fuse.browser },
         devServer: false,
         ...this.shared
       }),
@@ -94,7 +97,7 @@ class BuildContext {
         devServer: false,
         dependencies: {
           ignoreAllExternal: false,
-          ignorePackages: ['pino']
+          ignorePackages: packageJson.fuse.electron
         },
         cache: { enabled: true, root: '.fusebox/electron/main' },
         ...this.shared
@@ -105,8 +108,9 @@ class BuildContext {
         this.killServer()
         handler.onComplete(complete => {
           this.setServerRef(complete.server)
+          const scriptArgs = this.watch ? ['--port=4201'] : []
           exec('assets.pwa.ngsw.config').then(() => {
-            complete.server.handleEntry()
+            complete.server.handleEntry({ nodeArgs: [], scriptArgs })
           })
         })
       }
@@ -148,9 +152,9 @@ task('build', ctx => (ctx.aot ? exec('ngc') : Promise.resolve())
 task('build.dev', ctx => exec('build.dev.server').then(() => Promise.all([
   exec('build.dev.browser'),
   ctx.electron ? exec('build.dev.electron') : Promise.resolve()])
-    .then(() => exec('assets.pwa.ngsw.config'))
-  
-  ))
+  .then(() => exec('assets.pwa.ngsw.config'))
+
+))
 task('build.dev.electron', ctx => ctx.fusebox.electron.renderer.runDev().then(() => ctx.fusebox.electron.main.runDev(h => {
   if (ctx.serve) {
     h.onComplete(b => {

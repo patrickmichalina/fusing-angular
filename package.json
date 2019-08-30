@@ -33,8 +33,8 @@
   },
   "fuse": {
     "browser": [],
-    "server": [],
-    "electron": []
+    "server": ["domino", "throng", "pino"],
+    "electron": ["pino"]
   },
   "electron-dependencies": [],
   "dependencies": {
