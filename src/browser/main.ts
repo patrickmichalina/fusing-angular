@@ -3,6 +3,8 @@ import 'core-js/proposals/reflect-metadata'
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
 import { AppBrowserModule } from './app.browser.module'
 
-platformBrowserDynamic()
+document.addEventListener('DOMContentLoaded', () => {
+  platformBrowserDynamic()
   .bootstrapModule(AppBrowserModule)
   .catch(console.error)
+})

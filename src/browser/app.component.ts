@@ -2,12 +2,11 @@ import { Component, ChangeDetectionStrategy, Inject, Renderer2 } from '@angular/
 import { DOCUMENT } from '@angular/common'
 import { TranslateService } from '@ngx-translate/core'
 import { ActivatedRoute } from '@angular/router'
-import { skip, pluck, startWith, map } from 'rxjs/operators'
+import { skip, pluck, map } from 'rxjs/operators'
 import { COOKIES } from '../server/angular/universal-cookie/token'
 import { exampleDecorator } from './shared/decorators/example.decorator'
 import { EnvironmentService } from './shared/fusing/environment.service'
 import { ElectronService } from './shared/fusing/electron.service'
-import { merge } from 'rxjs';
 
 @Component({
   selector: 'pm-app',
@@ -20,7 +19,7 @@ export class AppComponent {
     private env: EnvironmentService, @Inject(COOKIES) cookies: any, es: ElectronService, @Inject(DOCUMENT) doc: any,
     rdr: Renderer2) {
 
-    ts.onLangChange.pipe(map(a => a.lang)).subscribe(lang => {
+      ts.onLangChange.pipe(map(a => a.lang)).subscribe(lang => {
       rdr.setAttribute(doc.documentElement, 'lang', lang)
     })
     es.sendMsgToElectron('app-loaded', true)

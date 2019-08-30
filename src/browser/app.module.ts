@@ -10,9 +10,9 @@ import { PreserveQueryParamsDirective, RouterLinkLangDirective } from './param-r
   declarations: [AppComponent, PreserveQueryParamsDirective, RouterLinkLangDirective],
   imports: [
     SharedModule,
-    BrowserModule.withServerTransition({ appId: 'pm-app' }),
     AppRoutingModule,
-    NotFoundModule
+    NotFoundModule,
+    BrowserModule.withServerTransition({ appId: 'pm-app' }),
   ]
 })
 export class AppModule { }

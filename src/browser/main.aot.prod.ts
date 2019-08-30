@@ -5,6 +5,8 @@ import { enableProdMode } from '@angular/core'
 
 enableProdMode()
 
-platformBrowser()
+document.addEventListener('DOMContentLoaded', () => {
+  platformBrowser()
   .bootstrapModule(AppBrowserModule)
   .catch(console.error)
+})

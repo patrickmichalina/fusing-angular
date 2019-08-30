@@ -6,6 +6,8 @@ import { enableProdMode } from '@angular/core'
 
 enableProdMode()
 
-platformBrowserDynamic()
-  .bootstrapModule(AppElectronModule)
-  .catch(console.error)
+document.addEventListener('DOMContentLoaded', () => {
+  platformBrowserDynamic()
+    .bootstrapModule(AppElectronModule)
+    .catch(console.error)
+})
