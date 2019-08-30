@@ -43,7 +43,7 @@ class BuildContext {
       entry: this.aot ? 'ngc/server/server.js' : 'src/server/server.ts',
       devServer: false,
       dependencies: this.prod
-        ? { ignorePackages: ['domino', 'throng', 'pino'], ignoreAllExternal: false }
+        ? { ignorePackages: packageJson.fuse.server, ignoreAllExternal: false }
         : {},
       cache: { enabled: true, root: '.fusebox/server' },
       plugins: this.aot ? [] : [ngTemplatePlugin()],
@@ -59,10 +59,11 @@ class BuildContext {
       webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
       cache: { enabled: true, root: '.fusebox/browser' },
       dependencies: { ignorePackages: packageJson.fuse.browser },
+      hmr: this.watch,
       devServer: !this.serve ? false : {
-        hmrServer: { port: 4200 },
-        httpServer: { port: 4200 },
-        proxy: [
+        hmrServer: this.watch ? { port: 4200 } : false,
+        httpServer: this.watch ? { port: 4200 } : false,
+        proxy: !this.watch ? [] : [
           {
             path: "/",
             options: {
@@ -108,10 +109,12 @@ class BuildContext {
         this.killServer()
         handler.onComplete(complete => {
           this.setServerRef(complete.server)
-          const scriptArgs = this.watch ? ['--port=4201'] : []
-          exec('assets.pwa.ngsw.config').then(() => {
-            complete.server.handleEntry({ nodeArgs: [], scriptArgs })
-          })
+          if (!this.prod) {
+            const scriptArgs = this.watch ? ['--port=4201'] : []
+            exec('assets.pwa.ngsw.config').then(() => {
+              complete.server.handleEntry({ nodeArgs: [], scriptArgs })
+            })
+          }
         })
       }
     }
@@ -125,8 +128,8 @@ task('assets.copy', ctx => Promise.all([
   ctx.electron ? src('./src/assets/**/*.*').dest('./dist/desktop/wwwroot/assets', 'assets').exec() : Promise.resolve<string[]>([])
 ]))
 
-task('assets.compress', ctx => {
-  return compressStatic(['dist/wwwroot']).catch(err => {
+task('assets.compress', async ctx => {
+  return await compressStatic(['dist/wwwroot']).catch(err => {
     console.log(err)
     process.exit(-1)
   })
@@ -168,7 +171,13 @@ task('build.dev.server', ctx => ctx.fusebox.server.runDev(ctx.fusebox.serveHandl
 task('build.prod', ctx => exec('build.prod.server')
   .then(() => Promise.all([exec('build.prod.browser'), ctx.electron ? exec('build.prod.electron') : Promise.resolve()]))
   .then(() => exec('assets.pwa.ngsw.config'))
-  .then(() => exec('assets.compress')))
+  .then(() => exec('assets.compress'))
+  .then(() => {
+    if (ctx.serve && ctx.prod) {
+      // assets.compress Promise is not working!
+      ctx.serverRef.tapSome(a => a.handleEntry())
+    }
+  }))
 
 task('build.prod.browser', ctx => ctx.fusebox.browser.runProd())
 task('build.prod.server', ctx => ctx.fusebox.server.runProd({
@@ -185,12 +194,12 @@ task('build.prod.electron', ctx => ctx.fusebox.electron.renderer.runProd({ uglif
   }
 })))
 
-task('assets.pwa.ngsw', ctx => src('./node_modules/@angular/service-worker/ngsw-worker.js')
+task('assets.pwa.ngsw', _ctx => src('./node_modules/@angular/service-worker/ngsw-worker.js')
   .contentsOf(/ngsw-worker.js/, content => minify(content).code || content) // MINIFY?
   .dest('./dist/wwwroot', 'node_modules/@angular/service-worker')
   .exec())
 
-task('assets.pwa.ngsw.config', ctx => {
+task('assets.pwa.ngsw.config', _ctx => {
   // TODO: convert to promise
   spawnSync('node_modules/.bin/ngsw-config', ['dist/wwwroot', 'src/browser/ngsw.json'])
 })
