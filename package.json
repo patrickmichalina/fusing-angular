@@ -31,13 +31,18 @@
   "engines": {
     "node": "= 12.8.1"
   },
+  "fuse": {
+    "browser": [],
+    "server": [],
+    "electron": []
+  },
+  "electron-dependencies": [],
   "dependencies": {
     "@angular/platform-server": "^9.0.0-next.4",
     "pino": "^5.13.2",
     "source-map-support": "^0.5.13",
     "throng": "^4.0.0"
   },
-  "electron-dependencies": [],
   "devDependencies": {
     "@angular-devkit/build-optimizer": "^0.803.2",
     "@angular/animations": "^9.0.0-next.4",
