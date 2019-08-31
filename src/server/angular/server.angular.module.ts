@@ -7,7 +7,6 @@ import { FloNodeEnvTransferServerModule, } from '@flosportsinc/ng-env-transfer-s
 import { FloHttpCacheTagExpressServerModule } from '@flosportsinc/ng-http-cache-tags'
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { HttpUniversalInterceptor } from './universal.interceptor'
-import { UniversalCookieServerModule } from './universal-cookie/universal-cookie.server.module'
 
 enableProdMode()
 
@@ -17,7 +16,6 @@ enableProdMode()
     ServerModule,
     ServerTransferStateModule,
     FloHttpCacheTagExpressServerModule,
-    UniversalCookieServerModule,
     FloNodeEnvTransferServerModule.config({
       selectKeys: ['HEROKU_RELEASE_VERSION', 'HEROKU_SLUG_COMMIT']
     })

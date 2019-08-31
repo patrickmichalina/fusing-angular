@@ -1,5 +1,5 @@
 import { argv } from 'yargs'
-import { fusebox, sparky } from 'fuse-box'
+import { fusebox, sparky, pluginReplace } from 'fuse-box'
 import { ngc, ngcWatch } from './tools/scripts/ngc.spawn'
 import { IMaybe, maybe } from 'typescript-monads'
 import { ServerLauncher } from 'fuse-box/user-handler/ServerLauncher'
@@ -36,9 +36,10 @@ class BuildContext {
     watch: this.watch,
     turboMode: true,
     logging: { level: 'disabled' } as ILoggerProps,
-    env: {
-      APP_VERSION: packageJson.version
-    }
+    plugins: [pluginReplace({
+      "__APPVERSION__": packageJson.version,
+      "__NODE_DEBUG__": `${process.env.NODE_DEBUG}`
+    })]
   }
   fusebox = {
     server: fusebox({
@@ -49,11 +50,10 @@ class BuildContext {
         ? { ignorePackages: packageJson.fuse.server, ignoreAllExternal: false }
         : {},
       cache: { enabled: true, root: '.fusebox/server' },
-      plugins: this.aot ? [] : [ngTemplatePlugin()],
-      ...this.shared
+      ...this.shared,
+      plugins: [...this.aot ? [] : [ngTemplatePlugin()], ...this.shared.plugins]
     }),
     browser: fusebox({
-      plugins: this.aot ? [] : [ngTemplatePlugin()],
       target: 'browser',
       output: 'dist/wwwroot/assets/js',
       entry: this.aot
@@ -77,11 +77,11 @@ class BuildContext {
           }
         ]
       },
-      ...this.shared
+      ...this.shared,
+      plugins: [...this.aot ? [] : [ngTemplatePlugin()], ...this.shared.plugins]
     }),
     electron: {
       renderer: fusebox({
-        plugins: this.aot ? [] : [ngTemplatePlugin()],
         target: 'browser',
         output: 'dist/desktop/wwwroot/assets/js',
         entry: this.aot
@@ -91,7 +91,8 @@ class BuildContext {
         cache: { enabled: true, root: '.fusebox/electron/renderer' },
         dependencies: { ignorePackages: packageJson.fuse.browser },
         devServer: false,
-        ...this.shared
+        ...this.shared,
+        plugins: [...this.aot ? [] : [ngTemplatePlugin()], ...this.shared.plugins]
       }),
       main: fusebox({
         target: 'electron',
@@ -187,7 +188,6 @@ task('build.prod.server', ctx => ctx.fusebox.server.runProd({
   handler: ctx.fusebox.serveHandler
 }))
 task('build.prod.electron', ctx => ctx.fusebox.electron.renderer.runProd({ uglify: true }).then(() => ctx.fusebox.electron.main.runProd({
-  uglify: false,
   handler: handler => {
     if (ctx.serve) {
       handler.onComplete(b => {

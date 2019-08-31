@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core'
-import { FloNodeEnvTransferModule } from '@flosportsinc/ng-env-transfer-state'
+import { FloNodeEnvTransferModule, NODE_ENV_USE_VALUES } from '@flosportsinc/ng-env-transfer-state'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable, of } from 'rxjs'
 import { catchError } from 'rxjs/operators'
-import { UniversalCookieModule } from '../../../server/angular/universal-cookie/universal-cookie.module'
 import { PlatformService } from './platform.service'
 import { ElectronService } from './electron.service'
 import { EnvironmentService } from './environment.service'
@@ -17,15 +16,14 @@ export class TranslateHttpLoader implements TranslateLoader {
   public getTranslation(lang: string): Observable<Object> {
     return this.http.get(`assets/i18n/${lang}.json?v=${this.es.config.APP_VERSION}`).pipe(
       catchError(_err => of({}),
-    ))
+      ))
   }
 }
 
 @NgModule({
   imports: [
-    UniversalCookieModule,
     FloNodeEnvTransferModule.config({
-      useValues: (global as any).FuseBox.processEnv
+      useValues: { APP_VERSION: "__APPVERSION__" }
     }),
     TranslateModule.forRoot({
       loader: {
@@ -42,7 +40,6 @@ export class TranslateHttpLoader implements TranslateLoader {
   exports: [
     PreserveQueryParamsDirective,
     RouterLinkLangDirective,
-    UniversalCookieModule,
     FloNodeEnvTransferModule,
     TranslateModule
   ],
