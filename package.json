@@ -20,7 +20,7 @@
     "start": "ts-node -r dotenv/config fuse --watch --serve --pwa",
     "start.prod": "ts-node -r dotenv/config fuse --serve --prod --aot --pwa",
     "start.desktop": "ts-node -r dotenv/config fuse --watch --serve --pwa --electron",
-    "start.desktop.prod": "ts-node -r dotenv/config fuse --serve --prod --aot --pwa --electron --verbose",
+    "start.desktop.prod": "ts-node -r dotenv/config fuse --serve --prod --aot --pwa --electron",
     "start.built": "node dist/server_entry.js",
     "lint": "npm run lint.app & npm run lint.tools",
     "lint.app": "tslint -p src/tsconfig.json",
