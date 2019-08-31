@@ -4,10 +4,9 @@ import { AppRoutingModule } from './app-routing.module'
 import { NotFoundModule } from './not-found/not-found.module'
 import { BrowserModule } from '@angular/platform-browser'
 import { SharedModule } from './shared/shared.module'
-import { PreserveQueryParamsDirective, RouterLinkLangDirective } from './param-router-link.directive'
 
 @NgModule({
-  declarations: [AppComponent, PreserveQueryParamsDirective, RouterLinkLangDirective],
+  declarations: [AppComponent],
   imports: [
     SharedModule,
     AppRoutingModule,

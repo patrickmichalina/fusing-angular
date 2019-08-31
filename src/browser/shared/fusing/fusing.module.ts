@@ -9,6 +9,7 @@ import { PlatformService } from './platform.service'
 import { ElectronService } from './electron.service'
 import { EnvironmentService } from './environment.service'
 import { AppInitService } from './app-init.service'
+import { PreserveQueryParamsDirective, RouterLinkLangDirective } from './param-router-link.directive'
 
 export class TranslateHttpLoader implements TranslateLoader {
   constructor(private http: HttpClient, private es: EnvironmentService) { }
@@ -34,7 +35,13 @@ export class TranslateHttpLoader implements TranslateLoader {
       }
     })
   ],
+  declarations: [
+    PreserveQueryParamsDirective,
+    RouterLinkLangDirective
+  ],
   exports: [
+    PreserveQueryParamsDirective,
+    RouterLinkLangDirective,
     UniversalCookieModule,
     FloNodeEnvTransferModule,
     TranslateModule
