@@ -3,13 +3,11 @@ import { ServiceWorkerModule } from '@angular/service-worker'
 import { AppModule } from './app.module'
 import { AppComponent } from './app.component'
 import { FloNodeEnvTransferBrowserModule } from '@flosportsinc/ng-env-transfer-state/browser'
-import { UniversalCookieBrowserModule } from '../server/angular/universal-cookie/universal-cookie.browser.module'
 
 @NgModule({
   imports: [
     AppModule,
     FloNodeEnvTransferBrowserModule,
-    UniversalCookieBrowserModule,
     ServiceWorkerModule.register('./ngsw-worker.js', { enabled: true })
   ],
   bootstrap: [AppComponent]
