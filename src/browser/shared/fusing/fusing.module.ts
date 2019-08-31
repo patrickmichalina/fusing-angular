@@ -23,9 +23,7 @@ export class TranslateHttpLoader implements TranslateLoader {
   imports: [
     UniversalCookieModule,
     FloNodeEnvTransferModule.config({
-      useValues: {
-        APP_VERSION: "__APPVERSION__" // to sync server/web version to the electron version. Otherwise recommend using Node Environment variable.
-      }
+      useValues: (global as any).FuseBox.processEnv
     }),
     TranslateModule.forRoot({
       loader: {
@@ -33,7 +31,7 @@ export class TranslateHttpLoader implements TranslateLoader {
         useClass: TranslateHttpLoader,
         deps: [HttpClient, EnvironmentService]
       }
-    }),
+    })
   ],
   exports: [
     UniversalCookieModule,

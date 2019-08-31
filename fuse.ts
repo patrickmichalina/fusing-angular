@@ -35,7 +35,10 @@ class BuildContext {
   shared = {
     watch: this.watch,
     turboMode: true,
-    logging: { level: 'disabled' } as ILoggerProps
+    logging: { level: 'disabled' } as ILoggerProps,
+    env: {
+      APP_VERSION: packageJson.version
+    }
   }
   fusebox = {
     server: fusebox({
