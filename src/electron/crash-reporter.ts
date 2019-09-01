@@ -4,7 +4,7 @@ import { reader } from 'typescript-monads'
 
 export const initCrashReporter = () => reader<IElectronConfig, void>(cfg => {
   return crashReporter.start({
-    companyName: 'ViewGrid',
+    companyName: 'FusingAngular',
     submitURL: 'https://your-domain.com/url-to-submit',
     uploadToServer: false
   })
