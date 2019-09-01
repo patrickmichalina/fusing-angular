@@ -29,7 +29,7 @@
     "release.mac": "npm run build.prod.desktop && BUILD_BYTECODE=true electron . && ts-node -r dotenv/config tools/scripts/electron-deps.ts && electron-builder --mac && ts-node -r dotenv/config tools/scripts/electron-deps-revert.ts "
   },
   "engines": {
-    "node": "= 12.8.1"
+    "node": "= 12.9.1"
   },
   "fuse": {
     "browser": [],
