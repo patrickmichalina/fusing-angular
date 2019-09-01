@@ -39,6 +39,7 @@
       "pino"
     ],
     "electron": [
+      "electron",
       "pino"
     ]
   },
