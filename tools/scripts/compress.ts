@@ -41,8 +41,8 @@ const getPathsDeep =
   }
 
 export const compressStatic = (directories: string[] = [], extensions = ['js', 'txt', 'json', 'css', 'html', 'map']) => {
-  const gzip = getPathsDeep(directories).filter(a => extensions.includes(a.split('.').pop() || '')).filter(a => !new RegExp(/.gz|.br/).test(a)).map(file => compressFile(file, createGzip, 'gz'))
-  const brotli = getPathsDeep(directories).filter(a => extensions.includes(a.split('.').pop() || '')).filter(a => !new RegExp(/.br|.gz/).test(a)).map(file => compressFile(file, createBrotliCompress, 'br'))
+  getPathsDeep(directories).filter(a => extensions.includes(a.split('.').pop() || '')).filter(a => !new RegExp(/.gz|.br/).test(a)).map(file => compressFile(file, createGzip, 'gz'))
+  getPathsDeep(directories).filter(a => extensions.includes(a.split('.').pop() || '')).filter(a => !new RegExp(/.br|.gz/).test(a)).map(file => compressFile(file, createBrotliCompress, 'br'))
 
-  return Promise.all([...gzip, ...brotli])
+  return Promise.resolve()
 }

@@ -22,7 +22,7 @@ export const pluckElectronPackages = () => {
     ]))
     .then(file => Promise.resolve(JSON.parse(file[1])))
     .then(file => {
-      const keys = (file['electron-natives'] || []) as string[]
+      const keys = (file['electron-dependencies'] || []) as string[]
       file.dependencies = keys
         .filter(a => a.includes(a))
         .reduce((acc, curr) => ({

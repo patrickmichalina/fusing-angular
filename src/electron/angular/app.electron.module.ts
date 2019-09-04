@@ -1,4 +1,4 @@
-import { NgModule, PLATFORM_ID } from '@angular/core'
+import { NgModule } from '@angular/core'
 import { FloNodeEnvTransferBrowserModule } from '@flosportsinc/ng-env-transfer-state/browser'
 import { AppModule } from '../../browser/app.module'
 import { AppComponent } from '../../browser/app.component'
@@ -9,10 +9,12 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { HttpClient } from '@angular/common/http'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { ElectronRoutingModule } from './app-routing.module'
-import { EnvironmentService } from '../../browser/shared/environment.service'
+import { EnvironmentService } from '../../browser/shared/fusing/environment.service'
+import { ElectronService } from '../../browser/shared/fusing/electron.service'
+import { ElectronServerService } from './electron.service'
 
 export function createTranslateLoader(http: HttpClient, es: EnvironmentService) {
-  return new TranslateHttpLoader(http, './i18n/', `.json?v=${es.config.APP_VERSION}`)
+  return new TranslateHttpLoader(http, './assets/i18n/', `.json?v=${es.config.APP_VERSION}`)
 }
 
 export function maybeGetElectronVars() {
@@ -36,9 +38,9 @@ export function maybeGetElectronVars() {
   ],
   providers: [
     HttpElectronInterceptor,
-    { provide: PLATFORM_ID, useValue: 'electron' },
     { provide: ENV_CONFIG_DEFAULT, useFactory: maybeGetElectronVars },
-    { provide: HTTP_INTERCEPTORS, useExisting: HttpElectronInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useExisting: HttpElectronInterceptor, multi: true },
+    { provide: ElectronService, useClass: ElectronServerService }
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "rootDir": ".",
+    "outDir": "../ngc",
+    "types": [
+      "node",
+      "jest"
+    ],
+    "declaration": false,
+    "removeComments": true,
+    "stripInternal": true,
+    "alwaysStrict": false,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "angularCompilerOptions": {
+    "enableIvy": true,
+    "fullTemplateTypeCheck": true,
+    "enableResourceInlining": true,
+    "preserveWhitespaces": false,
+    "disableTypeScriptVersionCheck": true
+  },
+  "exclude": [
+    "assets",
+    "/**/*.spec.ts"
+  ]
+}

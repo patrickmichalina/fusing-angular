@@ -1,0 +1,29 @@
+{
+  "extends": [
+    "../tsconfig.json",
+    "codelyzer"
+  ],
+  "rules": {
+    "directive-selector": [
+      true,
+      "attribute",
+      [
+        "app",
+        "pm"
+      ],
+      "camelCase"
+    ],
+    "component-selector": [
+      true,
+      "element",
+      [
+        "pm",
+        "app",
+        "test",
+        "i18n"
+      ],
+      "kebab-case"
+    ],
+    "use-view-encapsulation": false
+  }
+}

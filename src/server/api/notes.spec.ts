@@ -1,4 +1,4 @@
-import { serverTestAgent } from "../../../tools/test/http-tests"
+import { serverTestAgent } from "../test-server"
 
 describe('/api/notes', () => {
   it('should', done => {

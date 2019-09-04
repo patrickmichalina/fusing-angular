@@ -1,34 +1,25 @@
 import { app, BrowserWindow } from 'electron'
-import { join } from 'path'
 import { promises } from 'fs'
 import { from } from 'rxjs'
-import { maybe } from 'typescript-monads'
+import { maybe, reader } from 'typescript-monads'
+import { IElectronConfig } from '../../config'
+import { StringDict } from '../../interfaces'
 import { sendAngularMessage } from '../../util'
-import { window$ } from '../../app'
-import { take, filter } from 'rxjs/operators'
+// import { take, filter } from 'rxjs/operators'
+// import { window$ } from '../../app'
 
-type StringDict = { readonly [key: string]: string }
 type Interem = { key: string, language: string }
-
-// to enable a menu to appear in the Electron app, add your key/value entry here
-// as long as the file exists in the /i18n folder it will work!
-const supportedLanguages: StringDict = {
-  'en': 'English',
-  'jp': 'Japanese'
-}
 
 const LANGUAGE_MENU_ID = 'lang-menu'
 
-export default function getUsableLanguageMenu() {
-  return from(promises
-    .readdir(join(app.getAppPath(), 'dist/electron/public/i18n'))
-    .then(convertTranslatonFilePath(supportedLanguages))
-    .then(mapMenuItem)
-    .then(mapMenu))
-}
+export const getUsableLanguageMenu = (win: BrowserWindow) => reader<IElectronConfig, any>(cfg => from(promises
+  .readdir(cfg.PATH_TO_TRANSLATIONS_FOLDER)
+  .then(convertTranslatonFilePath(cfg.SUPPORTED_LANGUAGES))
+  .then(mapMenuItem(win))
+  .then(mapMenu)))
 
 const mapMenu = (submenu: any[]) => ({ submenu, label: 'Language', id: LANGUAGE_MENU_ID })
-const mapMenuItem = (i: Interem[]) => i.map(b => {
+const mapMenuItem = (win: BrowserWindow) => (i: Interem[]) => i.map(b => {
   return {
     type: 'checkbox',
     id: b.key,
@@ -36,7 +27,7 @@ const mapMenuItem = (i: Interem[]) => i.map(b => {
     enabled: true,
     visible: true,
     checked: b.key === 'en' ? true : false,
-    click: setLangauge(b.key)
+    click: setLangauge(win, b.key)
   }
 })
 
@@ -48,16 +39,15 @@ const convertTranslatonFilePath =
         .filter((el, i, a) => i === a.indexOf(el))
         .map<Interem>(key => ({ key, language: langMap[key] }))
 
-const setLangauge = (lang: string) => () => {
+const setLangauge = (window: BrowserWindow, lang: string) => () => {
   maybe(app.applicationMenu)
     .flatMapAuto(a => a.items.find(a => a.id === LANGUAGE_MENU_ID))
-    .map(a => a.submenu.items)
+    .flatMapAuto(a => a.submenu)
+    .flatMapAuto(a => a.items)
     .tapSome(items => {
       items.forEach(i => i.checked = false)
       maybe(items.find(b => b.id === lang)).tapSome(b => {
-        window$.pipe(filter(Boolean), take(1)).subscribe((a: BrowserWindow) => {
-          sendAngularMessage(a, 'change-language', lang)
-        })
+        sendAngularMessage(window, 'change-language', lang)
         b.checked = true
       })
     })
