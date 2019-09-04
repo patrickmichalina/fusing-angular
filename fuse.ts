@@ -1,5 +1,5 @@
 import { argv } from 'yargs'
-import { fusebox, sparky, pluginReplace } from 'fuse-box'
+import { fusebox, sparky, pluginReplace, pluginAngular, pluginCSS, pluginLess } from 'fuse-box'
 import { ngc, ngcWatch } from './tools/scripts/ngc.spawn'
 import { IMaybe, maybe } from 'typescript-monads'
 import { ServerLauncher } from 'fuse-box/user-handler/ServerLauncher'
@@ -8,10 +8,15 @@ import { compressStatic } from './tools/scripts/compress'
 import { minify } from 'terser'
 import { ILoggerProps } from 'fuse-box/logging/logging'
 import { UserHandler } from 'fuse-box/user-handler/UserHandler'
-import { ngTemplatePlugin } from './tools/plugins/ng-template'
+// import { ngTemplatePlugin } from './tools/plugins/ng-template'
 import * as packageJson from './package.json'
 
 const argToBool = (arg: string) => argv[arg] ? true : false
+
+const angularPlugins = [
+  pluginAngular('*.component.ts'),
+  pluginCSS('*.component.css', { asText: true })
+]
 
 class BuildContext {
   minify = argToBool('minify')
@@ -51,7 +56,7 @@ class BuildContext {
         : {},
       cache: { enabled: true, root: '.fusebox/server' },
       ...this.shared,
-      plugins: [...this.aot ? [] : [ngTemplatePlugin()], ...this.shared.plugins]
+      plugins: [...this.aot ? [] : angularPlugins, ...this.shared.plugins]
     }),
     browser: fusebox({
       target: 'browser',
@@ -78,7 +83,7 @@ class BuildContext {
         ]
       },
       ...this.shared,
-      plugins: [...this.aot ? [] : [ngTemplatePlugin()], ...this.shared.plugins]
+      plugins: [...this.aot ? [] : angularPlugins, ...this.shared.plugins]
     }),
     electron: {
       renderer: fusebox({
@@ -92,7 +97,7 @@ class BuildContext {
         dependencies: { ignorePackages: packageJson.fuse.browser },
         devServer: false,
         ...this.shared,
-        plugins: [...this.aot ? [] : [ngTemplatePlugin()], ...this.shared.plugins]
+        plugins: [...this.aot ? [] : angularPlugins, ...this.shared.plugins]
       }),
       main: fusebox({
         target: 'electron',

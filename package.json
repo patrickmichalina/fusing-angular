@@ -95,7 +95,7 @@
     "express": "^4.17.1",
     "express-pino-logger": "^4.0.0",
     "express-static-gzip": "^2.0.5",
-    "fuse-box": "4.0.0-next.94",
+    "fuse-box": "4.0.0-next.100",
     "jest": "^24.9.0",
     "jest-preset-angular": "^7.1.1",
     "jest-tap-reporter": "^1.9.0",
