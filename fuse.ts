@@ -8,7 +8,6 @@ import { compressStatic } from './tools/scripts/compress'
 import { minify } from 'terser'
 import { ILoggerProps } from 'fuse-box/logging/logging'
 import { UserHandler } from 'fuse-box/user-handler/UserHandler'
-// import { ngTemplatePlugin } from './tools/plugins/ng-template'
 import * as packageJson from './package.json'
 
 const argToBool = (arg: string) => argv[arg] ? true : false

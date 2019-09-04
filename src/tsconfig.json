@@ -29,5 +29,8 @@
     "preserveWhitespaces": false,
     "disableTypeScriptVersionCheck": true
   },
-  "exclude": ["/**/*.spec.ts"]
+  "exclude": [
+    "assets",
+    "/**/*.spec.ts"
+  ]
 }

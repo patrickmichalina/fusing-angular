@@ -16,12 +16,14 @@ export const initLogger = (isDev = false) => {
 
   const fileOutStream = (title: string) => createWriteStream(`${logBasePath}/${app.name}.${title}.log`, { flags: 'a' })
 
+  const devlogs = isDev ? [
+    { level: 'trace', stream: pinoms.prettyStream() },
+    { level: 'trace', stream: fileOutStream('trace') }
+  ] : []
+
   const lg: Logger = pinoms({
     streams: [
-      ...(!isDev ? [] : [
-        { level: 'trace', stream: pinoms.prettyStream() },
-        { level: 'trace', stream: fileOutStream('trace') }
-      ]),
+      ...devlogs,
       { level: 'info', stream: fileOutStream('info') },
       { level: 'warn', stream: fileOutStream('warn') },
       { level: 'error', stream: fileOutStream('error') },
