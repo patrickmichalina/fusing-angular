@@ -1,28 +1,25 @@
 <h1 align="center" style="border-bottom: none;">fusing-angular</h1>
-<h3 align="center">Provides an extremely fast seed project for the development of Angular Universal (SSR) projects.</h3>
+<h3 align="center">Provides an extremely fast seed project for the development of Angular Universal (SSR) and Electron projects.</h3>
 
 ## Goals
 Designed to get a team up and running with a fast development toolkit for Angular Univerasl, Electron, and NativeScript applications.
 
-**Rewrite underway to support the latest, greatest, fastest build system.**
-
 ### Angular Features
 - [x] Angular 9 w/ Ivy Renderer
-- [x] Always compiled AOT, not optional at this time.
 - [x] Platform specific Angular modules.
 - [x] Multi Language support.
 - [ ] Angular PWA support.
 
 ### Development Features
 - [x] A blazing fast bundler [FuseBox](http://fuse-box.org).
-- [x] Hot Module Reloading (HMR) for faster browser reloads during client development.
+- [ ] Hot Module Reloading (HMR) for faster browser reloads during client development.
 - [x] Production ready builds.
 - [x] Angular specific TSLint rules.
 - [ ] [Heroku](https://www.heroku.com), Docker, and Serverless (GC, AWS) Deployment Examples.
 
 ### Testing Features
 - [x] A blazing fast test runner [Jest](https://facebook.github.io/jest).
-- [ ] Angular testing via `jest`
+- [x] Angular testing via `jest`
 - [ ] Server (api/rendering) testing via `supertest` and `jest`
 - [ ] Electron testing via `spectron`
 
@@ -38,34 +35,39 @@ Designed to get a team up and running with a fast development toolkit for Angula
 - [ ] Seamless server/client integration for of cookies, logging, and authentication.
 
 ### Electron Features
-- [x] App compiled to V8 bytecode via [bytenode](https://github.com/OsamaAbbas/bytenode) so that you can protect your source code.
+- [x] main process compiled to bytecode via [bytenode](https://github.com/OsamaAbbas/bytenode) to protect your source code.
 - [ ] Configured to ouput windows, mac, and linux builds.
 
 ### Caveats
 - No CSS preprocessor. Just use plain CSS w/ css-variables.
-- AOT is a requirement at this time.
 
 ## Commands
 | Command  | Info |
 | ------------- | ------------- |
-<!-- | test  | Runs all `.spec.ts` files through [Jest](https://facebook.github.io/jest)  |
+| test  | Runs all `.spec.ts` files through [Jest](https://facebook.github.io/jest)  |
 | test.cov  | Runs all `.spec.ts` files through [Jest](https://facebook.github.io/jest) w/ coverage reporting.  |
 | test.watch  | Continous testing of all `.spec.ts` files through [Jest](https://facebook.github.io/jest)  |
-| start  | Starts the Angular Universal server for development with HMR enabled.  |
-| start.deving | Starts the Angular Universal server for development with HMR enabled and runs unit tests continuously. |
-| start.spa  | Similiar to the Angular CLI experience - no server side rendering support.  |
-| start.desktop  | Electorn app watches for changes and rebuild accordinlgy.  |
-| start.prod  | Starts the Angular Universal server as if on a production environment.  |
-| start.prod.desktop  | Starts Universal and electron with production level optimizations.  |
-| build.prod  | Build server/browser production files  |
-| build.prod.desktop  | Build server/browser/electron production files  |
-| lint  | Checks your codebase for lint failures | -->
+| build | generate web application artifacts |
+| build.prod | generate web application artifacts w/ production optimizations |
+| build.desktop | generate web & desktop application artifacts |
+| build.desktop.prod | generate web & desktop application artifacts w/ production optimizations |
+| start | Starts the Angular Universal server for development and watches for changes. |
+| start.prod  | Starts the Angular Universal server w/ optimizations. |
+| start.desktop | Starts the desktop application for development and watches for changes.  |
+| start.desktop.prod  | Starts the desktop application w/ optimizations.  |
+| lint | Checks app an tools for lint failures |
+| lint.app | Checks /src for lint failures |
+| lint.tools | Checks /tools for lint failures |
+| release.mac | Production electron output for mac |
+| release.win | Production electron output for windows |
+| release.linux | Production electron output for linux |
+| release.all | Production electron output for all three platforms |
 
 ## Application Configuration
+TODO
 
 ## Conventions
 TODO
 
 ## Environment Variables
 TODO
-

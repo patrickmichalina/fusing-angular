@@ -40,7 +40,7 @@ class BuildContext {
     watch: this.watch,
     turboMode: true,
     logging: { level: 'disabled' } as ILoggerProps,
-    plugins: [pluginReplace({
+    plugins: [pluginReplace('fusing.module.ts', {
       "__APPVERSION__": packageJson.version,
       "__NODE_DEBUG__": `${process.env.NODE_DEBUG}`
     })]
@@ -53,7 +53,7 @@ class BuildContext {
       dependencies: this.prod
         ? { ignorePackages: packageJson.fuse.server, ignoreAllExternal: false }
         : {},
-      cache: { enabled: true, root: '.fusebox/server' },
+      cache: { enabled: true, FTL: true, root: '.fusebox/server' },
       ...this.shared,
       plugins: [...this.aot ? [] : angularPlugins, ...this.shared.plugins]
     }),
@@ -64,7 +64,7 @@ class BuildContext {
         ? this.prod ? 'ngc/browser/main.aot.prod.js' : 'ngc/browser/main.aot.js'
         : this.prod ? 'src/browser/main.prod.ts' : 'src/browser/main.ts',
       webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
-      cache: { enabled: true, root: '.fusebox/browser' },
+      cache: { enabled: true, FTL: true, root: '.fusebox/browser' },
       dependencies: { ignorePackages: packageJson.fuse.browser },
       hmr: this.watch,
       devServer: !this.serve ? false : {
@@ -92,7 +92,7 @@ class BuildContext {
           ? this.prod ? 'ngc/electron/angular/main.aot.prod.js' : 'ngc/electron/angular/main.aot.js'
           : this.prod ? 'src/electron/angular/main.prod.ts' : 'src/electron/angular/main.ts',
         webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
-        cache: { enabled: true, root: '.fusebox/electron/renderer' },
+        cache: { enabled: true, FTL: true, root: '.fusebox/electron/renderer' },
         dependencies: { ignorePackages: packageJson.fuse.browser },
         devServer: false,
         ...this.shared,
@@ -108,7 +108,7 @@ class BuildContext {
           ignoreAllExternal: false,
           ignorePackages: packageJson.fuse.electron
         },
-        cache: { enabled: true, root: '.fusebox/electron/main' },
+        cache: { enabled: true, FTL: true, root: '.fusebox/electron/main' },
         ...this.shared
       })
     },
