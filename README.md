@@ -12,15 +12,16 @@ Designed to get a team up and running with a fast development toolkit for Angula
 
 ### Development Features
 - [x] A blazing fast bundler [FuseBox](http://fuse-box.org).
-- [ ] Hot Module Reloading (HMR) for faster browser reloads during client development.
 - [x] Production ready builds.
 - [x] Angular specific TSLint rules.
+- [ ] Hot Module Reloading (HMR) for faster browser reloads during client development.
 - [ ] [Heroku](https://www.heroku.com), Docker, and Serverless (GC, AWS) Deployment Examples.
 
 ### Testing Features
 - [x] A blazing fast test runner [Jest](https://facebook.github.io/jest).
 - [x] Angular testing via `jest`
-- [ ] Server (api/rendering) testing via `supertest` and `jest`
+- [x] Server (api/rendering) testing via `supertest` and `jest`
+- [ ] E2E testing via `cypress`
 - [ ] Electron testing via `spectron`
 
 ### Performance Features
@@ -32,7 +33,7 @@ Designed to get a team up and running with a fast development toolkit for Angula
 - [x] Flicker-free Angular Universal server built on Express.
 - [x] Server prepped to support clustered mode for horizontal scaling via [throng](https://github.com/hunterloftis/throng).
 - [x] [HTTP Cache-Tag](https://github.com/flocasts/flo-angular/tree/master/projects/flosportsinc/ng-http-cache-tags) support.
-- [ ] Seamless server/client integration for of cookies, logging, and authentication.
+- [x] Unified logging.
 
 ### Electron Features
 - [x] main process compiled to bytecode via [bytenode](https://github.com/OsamaAbbas/bytenode) to protect your source code.
