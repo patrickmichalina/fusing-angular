@@ -1,7 +1,7 @@
 <h3>Home</h3>
 <h3>Internal API Request</h3>
-<ul>
-  <!-- <li *ngFor="let item of notesInternal$ | async">{{ item }}</li> -->
+<ul *ngIf="notesInternal$ | async as notes">
+  <li *ngFor="let note of notes">{{ note }}</li>
 </ul>
 
 <h3>External API Request</h3>

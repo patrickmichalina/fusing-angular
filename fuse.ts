@@ -39,14 +39,14 @@ class BuildContext {
     logging: { level: 'disabled' } as ILoggerProps,
     cache: { enabled: true, FTL: true, root: '.fusebox' },
     plugins: [
-      pluginReplace('fusing.module.ts', {
-        "__APPVERSION__": packageJson.version,
-        "__NODE_DEBUG__": `${process.env.NODE_DEBUG}`
-      }),
       ...this.aot ? [] : [
         pluginAngular('*.component.ts'),
         pluginCSS('*.component.css', { asText: true })
-      ]
+      ],
+      pluginReplace(/fusing.module.(ts|js)/, {
+        "__APPVERSION__": packageJson.version,
+        "__NODE_DEBUG__": `${process.env.NODE_DEBUG}`
+      })
     ]
   }
   fusebox = {
