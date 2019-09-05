@@ -111,6 +111,7 @@ class BuildContext {
         output: 'dist/desktop',
         useSingleBundle: true,
         devServer: false,
+        sourceMap: false,
         dependencies: {
           ignoreAllExternal: false,
           ignorePackages: packageJson.fuse.electron
@@ -139,7 +140,12 @@ const { task, exec, rm, src } = sparky(BuildContext)
 
 task('assets.copy', ctx => Promise.all([
   src('./src/assets/**/*.*').dest('./dist/wwwroot/assets', 'assets').exec(),
-  ctx.electron ? src('./src/assets/**/*.*').dest('./dist/desktop/wwwroot/assets', 'assets').exec() : Promise.resolve<string[]>([])
+  ctx.electron 
+    ? Promise.all([
+      src('./src/assets/**/*.*').dest('./dist/desktop/wwwroot/assets', 'assets').exec(),
+      src('./tools/scripts/bytecode.js').dest('./dist/desktop', 'scripts').exec(),
+    ])
+    : Promise.all([Promise.resolve<string[]>([])])
 ]))
 
 task('assets.compress', async ctx => {

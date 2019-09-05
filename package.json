@@ -4,7 +4,7 @@
   "author": "Patrick Michalina",
   "license": "MIT",
   "version": "0.0.1",
-  "main": "dist/desktop/app.js",
+  "main": "dist/desktop/bytecode.js",
   "repository": {
     "url": "https://github.com/patrickmichalina/fusing-angular"
   },
@@ -26,7 +26,8 @@
     "lint.app": "node_modules/.bin/ngc -p src/tsconfig.json & tslint -p src/tsconfig.json",
     "lint.tools": "tsc && tslint -p tsconfig.json",
     "heroku-postbuild": "npm run lint && npm run test.cov && npm run build.prod",
-    "release.mac": "npm run build.prod.desktop && BUILD_BYTECODE=true electron . && ts-node -r dotenv/config tools/scripts/electron-deps.ts && electron-builder --mac && ts-node -r dotenv/config tools/scripts/electron-deps-revert.ts "
+    "release.prep": "npm run build.desktop.prod && BUILD_BYTECODE=true electron dist/desktop/bytecode.js",
+    "release.mac": "npm run release.prep && ts-node tools/scripts/electron-deps.ts && electron-builder --mac && ts-node -r dotenv/config tools/scripts/electron-deps-revert.ts "
   },
   "engines": {
     "node": "= 12.10.0"
