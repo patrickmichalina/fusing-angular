@@ -1,5 +1,5 @@
 import { argv } from 'yargs'
-import { fusebox, sparky, pluginReplace, pluginAngular, pluginCSS, pluginLess } from 'fuse-box'
+import { fusebox, sparky, pluginReplace, pluginAngular, pluginCSS } from 'fuse-box'
 import { ngc, ngcWatch } from './tools/scripts/ngc.spawn'
 import { IMaybe, maybe } from 'typescript-monads'
 import { ServerLauncher } from 'fuse-box/user-handler/ServerLauncher'
@@ -11,11 +11,6 @@ import { UserHandler } from 'fuse-box/user-handler/UserHandler'
 import * as packageJson from './package.json'
 
 const argToBool = (arg: string) => argv[arg] ? true : false
-
-const angularPlugins = [
-  pluginAngular('*.component.ts'),
-  pluginCSS('*.component.css', { asText: true })
-]
 
 class BuildContext {
   minify = argToBool('minify')
@@ -36,14 +31,23 @@ class BuildContext {
     ref.kill()
     this.setServerRef()
   })
+  devServerPort = 4200
+  ngServerPort = 4201
   shared = {
     watch: this.watch,
     turboMode: true,
     logging: { level: 'disabled' } as ILoggerProps,
-    plugins: [pluginReplace('fusing.module.ts', {
-      "__APPVERSION__": packageJson.version,
-      "__NODE_DEBUG__": `${process.env.NODE_DEBUG}`
-    })]
+    cache: { enabled: true, FTL: true, root: '.fusebox' },
+    plugins: [
+      pluginReplace('fusing.module.ts', {
+        "__APPVERSION__": packageJson.version,
+        "__NODE_DEBUG__": `${process.env.NODE_DEBUG}`
+      }),
+      ...this.aot ? [] : [
+        pluginAngular('*.component.ts'),
+        pluginCSS('*.component.css', { asText: true })
+      ]
+    ]
   }
   fusebox = {
     server: fusebox({
@@ -53,9 +57,8 @@ class BuildContext {
       dependencies: this.prod
         ? { ignorePackages: packageJson.fuse.server, ignoreAllExternal: false }
         : {},
-      cache: { enabled: true, FTL: true, root: '.fusebox/server' },
       ...this.shared,
-      plugins: [...this.aot ? [] : angularPlugins, ...this.shared.plugins]
+      plugins: this.shared.plugins
     }),
     browser: fusebox({
       target: 'browser',
@@ -64,17 +67,16 @@ class BuildContext {
         ? this.prod ? 'ngc/browser/main.aot.prod.js' : 'ngc/browser/main.aot.js'
         : this.prod ? 'src/browser/main.prod.ts' : 'src/browser/main.ts',
       webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
-      cache: { enabled: true, FTL: true, root: '.fusebox/browser' },
       dependencies: { ignorePackages: packageJson.fuse.browser },
       hmr: this.watch,
       devServer: !this.serve ? false : {
-        hmrServer: this.watch ? { port: 4200 } : false,
-        httpServer: this.watch ? { port: 4200 } : false,
+        hmrServer: this.watch ? { port: this.devServerPort } : false,
+        httpServer: this.watch ? { port: this.devServerPort } : false,
         proxy: !this.watch ? [] : [
           {
             path: "/",
             options: {
-              target: "http://localhost:4201",
+              target: `http://localhost:${this.ngServerPort}`,
               changeOrigin: true,
               followRedirects: true
             }
@@ -82,7 +84,7 @@ class BuildContext {
         ]
       },
       ...this.shared,
-      plugins: [...this.aot ? [] : angularPlugins, ...this.shared.plugins]
+      plugins: this.shared.plugins
     }),
     electron: {
       renderer: fusebox({
@@ -92,11 +94,10 @@ class BuildContext {
           ? this.prod ? 'ngc/electron/angular/main.aot.prod.js' : 'ngc/electron/angular/main.aot.js'
           : this.prod ? 'src/electron/angular/main.prod.ts' : 'src/electron/angular/main.ts',
         webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
-        cache: { enabled: true, FTL: true, root: '.fusebox/electron/renderer' },
         dependencies: { ignorePackages: packageJson.fuse.browser },
         devServer: false,
         ...this.shared,
-        plugins: [...this.aot ? [] : angularPlugins, ...this.shared.plugins]
+        plugins: this.shared.plugins
       }),
       main: fusebox({
         target: 'electron',
@@ -108,7 +109,6 @@ class BuildContext {
           ignoreAllExternal: false,
           ignorePackages: packageJson.fuse.electron
         },
-        cache: { enabled: true, FTL: true, root: '.fusebox/electron/main' },
         ...this.shared
       })
     },
@@ -118,7 +118,7 @@ class BuildContext {
         handler.onComplete(complete => {
           this.setServerRef(complete.server)
           if (!this.prod) {
-            const scriptArgs = this.watch ? ['--port=4201'] : []
+            const scriptArgs = this.watch ? [`--port=${this.ngServerPort}`] : []
             exec('assets.pwa.ngsw.config').then(() => {
               complete.server.handleEntry({ nodeArgs: [], scriptArgs })
             })
