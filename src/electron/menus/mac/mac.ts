@@ -1,9 +1,9 @@
 import { app } from 'electron'
 
 export const macMainMenuTemplate = {
-  label: app.getName(),
+  label: app.name,
   submenu: [
-    { label: `About ${app.getName()}`, role: 'about' },
+    { label: `About ${app.name}`, role: 'about' },
     { type: 'separator' },
     { label: 'Quit', role: 'quit' }
   ]

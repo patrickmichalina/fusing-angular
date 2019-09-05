@@ -96,6 +96,12 @@ class BuildContext {
         webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
         dependencies: { ignorePackages: packageJson.fuse.browser },
         devServer: false,
+        env: Object
+          .keys(process.env)
+          .filter(k => k.includes('NG_'))
+          .reduce((acc, curr) => ({ ...acc, [curr.replace('NG_', '')]: process.env[curr] }), {
+            NG_SERVER_HOST: maybe(process.env.HOSTNAME).valueOr(`http://localhost:${this.ngServerPort}`)
+          }),
         ...this.shared,
         plugins: this.shared.plugins
       }),
