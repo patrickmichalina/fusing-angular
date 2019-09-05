@@ -44,7 +44,7 @@
       "pino"
     ]
   },
-  "electron-dependencies": ["bytenode"],
+  "electron-dependencies": ["bytenode", "pino"],
   "dependencies": {
     "@angular/platform-server": "^9.0.0-next.5",
     "pino": "^5.13.2",
@@ -163,13 +163,25 @@
   "build": {
     "productName": "fusing-angular",
     "appId": "com.electron.fusing-angular",
+    "icon": "dist/desktop/icons",
     "directories": {
       "output": "release"
     },
-    "files": [
-      "dist/desktop"
-    ],
     "mac": {
+      "files": [
+        "dist/desktop",
+        "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+        "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+        "!**/node_modules/*.d.ts",
+        "!**/node_modules/.bin",
+        "!**/*.{br,map,gz,md,iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj,test.js}",
+        "!.editorconfig",
+        "!**/._*",
+        "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+        "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+        "!**/{appveyor.yml,.travis.yml,circle.yml}",
+        "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+      ],
       "artifactName": "fusing-angular-${version}.${os}.${ext}",
       "electronLanguages": [
         "en",
@@ -177,12 +189,40 @@
       ]
     },
     "win": {
+      "files": [
+        "dist/desktop",
+        "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+        "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+        "!**/node_modules/*.d.ts",
+        "!**/node_modules/.bin",
+        "!**/*.{br,map,gz,md,iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj,test.js}",
+        "!.editorconfig",
+        "!**/._*",
+        "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+        "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+        "!**/{appveyor.yml,.travis.yml,circle.yml}",
+        "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+      ],
       "target": [
         "nsis"
       ],
       "artifactName": "fusing-angular-${version}.${os}.${ext}"
     },
     "linux": {
+      "files": [
+        "dist/desktop",
+        "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+        "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+        "!**/node_modules/*.d.ts",
+        "!**/node_modules/.bin",
+        "!**/*.{br,map,gz,md,iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj,test.js}",
+        "!.editorconfig",
+        "!**/._*",
+        "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+        "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+        "!**/{appveyor.yml,.travis.yml,circle.yml}",
+        "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+      ],
       "artifactName": "fusing-angular-${version}.${os}.${ext}"
     }
   }

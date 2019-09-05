@@ -3,7 +3,9 @@ const fs = require('fs')
 const v8 = require('v8')
 const bytecode = require('bytenode')
 const app = require('electron').app
-const appPath = app.getAppPath()
+const appPath = process.env.BUILD_BYTECODE
+  ? app.getAppPath()
+  : join(app.getAppPath(), 'dist/desktop')
 
 v8.setFlagsFromString('--no-lazy')
 

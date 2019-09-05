@@ -3,7 +3,7 @@ import { fusebox, sparky, pluginReplace, pluginAngular, pluginCSS } from 'fuse-b
 import { ngc, ngcWatch } from './tools/scripts/ngc.spawn'
 import { IMaybe, maybe } from 'typescript-monads'
 import { ServerLauncher } from 'fuse-box/user-handler/ServerLauncher'
-import { ChildProcess, spawnSync } from 'child_process'
+import { ChildProcess, spawnSync, spawn } from 'child_process'
 import { compressStatic } from './tools/scripts/compress'
 import { minify } from 'terser'
 import { ILoggerProps } from 'fuse-box/logging/logging'
@@ -142,10 +142,11 @@ task('assets.copy', ctx => Promise.all([
   src('./src/assets/**/*.*').dest('./dist/wwwroot/assets', 'assets').exec(),
   ctx.electron 
     ? Promise.all([
+      exec('icns'),
       src('./src/assets/**/*.*').dest('./dist/desktop/wwwroot/assets', 'assets').exec(),
       src('./tools/scripts/bytecode.js').dest('./dist/desktop', 'scripts').exec(),
-    ])
-    : Promise.all([Promise.resolve<string[]>([])])
+    ]) as any
+    : Promise.resolve<string[]>([])
 ]))
 
 task('assets.compress', async ctx => {
@@ -222,6 +223,8 @@ task('assets.pwa.ngsw.config', _ctx => {
   // TODO: convert to promise
   spawnSync('node_modules/.bin/ngsw-config', ['dist/wwwroot', 'src/browser/ngsw.json'])
 })
+
+task('icns', _ctx => spawn('./tools/scripts/icns.sh', ['dist/desktop/icon', 'src/assets/icons/favicon-1024x1024.png']))
 
 task('default', ctx => {
   rm('dist')
