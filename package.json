@@ -44,7 +44,7 @@
       "pino"
     ]
   },
-  "electron-dependencies": [],
+  "electron-dependencies": ["bytenode"],
   "dependencies": {
     "@angular/platform-server": "^9.0.0-next.5",
     "pino": "^5.13.2",
@@ -164,13 +164,17 @@
     "productName": "fusing-angular",
     "appId": "com.electron.fusing-angular",
     "directories": {
-      "output": "dist/release/"
+      "output": "release"
     },
     "files": [
-      "dist/electron"
+      "dist/desktop"
     ],
     "mac": {
-      "artifactName": "fusing-angular-${version}.${os}.${ext}"
+      "artifactName": "fusing-angular-${version}.${os}.${ext}",
+      "electronLanguages": [
+        "en",
+        "ja"
+      ]
     },
     "win": {
       "target": [
