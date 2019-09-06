@@ -215,7 +215,7 @@ task('build.prod.electron', ctx => ctx.fusebox.electron.renderer.runProd({ uglif
 })))
 
 task('assets.pwa.ngsw', _ctx => src('./node_modules/@angular/service-worker/ngsw-worker.js')
-  .contentsOf(/ngsw-worker.js/, content => minify(content).code || content) // MINIFY?
+  .contentsOf(/ngsw-worker.js/, content => minify(content).code || content)
   .dest('./dist/wwwroot', 'node_modules/@angular/service-worker')
   .exec())
 
