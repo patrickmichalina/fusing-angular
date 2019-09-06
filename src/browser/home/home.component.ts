@@ -13,6 +13,6 @@ import { of, Observable } from 'rxjs';
 export class HomeComponent {
   constructor(public env: NodeEnvTransferService, private http: HttpClient) { }
 
-  public notesInternal$ = this.http.get<any[]>('api/notes').pipe(catchError(_ => of<any[]>([])))
-  public notesExternal$ = this.http.get<any[]>('https://jsonplaceholder.typicode.com/posts')
+  public notesInternal$ = this.http.get('api/notes').pipe(catchError(_ => of<any[]>([])))
+  public notesExternal$ = this.http.get('https://jsonplaceholder.typicode.com/posts')
 }

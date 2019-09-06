@@ -6,8 +6,8 @@ import { ServerLauncher } from 'fuse-box/user-handler/ServerLauncher'
 import { ChildProcess, spawnSync, spawn } from 'child_process'
 import { compressStatic } from './tools/scripts/compress'
 import { minify } from 'terser'
-import { ILoggerProps } from 'fuse-box/logging/logging'
 import { UserHandler } from 'fuse-box/user-handler/UserHandler'
+import { IFuseLoggerProps } from 'fuse-box/config/IFuseLoggerProps'
 import * as packageJson from './package.json'
 
 const argToBool = (arg: string) => argv[arg] ? true : false
@@ -36,7 +36,7 @@ class BuildContext {
   shared = {
     watch: this.watch,
     turboMode: true,
-    logging: { level: 'disabled' } as ILoggerProps,
+    logging: { level: 'disabled' } as IFuseLoggerProps,
     cache: { enabled: true, FTL: true, root: '.fusebox' },
     plugins: [
       ...this.aot ? [] : [
