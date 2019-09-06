@@ -2,7 +2,7 @@
 <h3 align="center">Provides an extremely fast seed project for the development of Angular Universal (SSR) and Electron projects.</h3>
 
 ## Goals
-Designed to get a team up and running with a fast development toolkit for Angular Univerasl, Electron, and NativeScript applications.
+Designed to get a team up and running with a fast development toolkit for Angular Universal, Electron, and NativeScript applications.
 
 ### Angular Features
 - [x] Angular 9 w/ Ivy Renderer
