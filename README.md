@@ -36,8 +36,8 @@ Designed to get a team up and running with a fast development toolkit for Angula
 - [x] Unified logging.
 
 ### Electron Features
-- [x] main process compiled to bytecode via [bytenode](https://github.com/OsamaAbbas/bytenode) to protect your source code.
-- [ ] Configured to ouput windows, mac, and linux builds.
+- [x] Main process compiled to bytecode via [bytenode](https://github.com/OsamaAbbas/bytenode) to help protect your source code.
+- [x] Configured to ouput windows, mac, and linux builds.
 
 ### Caveats
 - No CSS preprocessor. Just use plain CSS w/ css-variables.
