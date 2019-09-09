@@ -1,5 +1,5 @@
 import { argv } from 'yargs'
-import { fusebox, sparky, pluginReplace, pluginAngular, pluginCSS } from 'fuse-box'
+import { fusebox, sparky, pluginReplace, pluginAngular, pluginCSS, pluginConsolidate } from 'fuse-box'
 import { ngc, ngcWatch } from './tools/scripts/ngc.spawn'
 import { IMaybe, maybe } from 'typescript-monads'
 import { ServerLauncher } from 'fuse-box/user-handler/ServerLauncher'
@@ -39,6 +39,9 @@ class BuildContext {
     logging: { level: 'disabled' } as IFuseLoggerProps,
     cache: { enabled: true, FTL: true, root: '.fusebox' },
     plugins: [
+      pluginConsolidate('pug', {
+
+      }),
       ...this.aot ? [] : [
         pluginAngular('*.component.ts'),
         pluginCSS('*.component.css', { asText: true })
@@ -46,7 +49,7 @@ class BuildContext {
       pluginReplace(/fusing.module.(ts|js)/, {
         "__APPVERSION__": packageJson.version,
         "__NODE_DEBUG__": `${process.env.NODE_DEBUG}`
-      })
+      }),
     ]
   }
   fusebox = {
@@ -66,7 +69,7 @@ class BuildContext {
       entry: this.aot
         ? this.prod ? 'ngc/browser/main.aot.prod.js' : 'ngc/browser/main.aot.js'
         : this.prod ? 'src/browser/main.prod.ts' : 'src/browser/main.ts',
-      webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
+      webIndex: { template: 'src/browser/index.pug', distFileName: '../../index.html', publicPath: 'assets/js' },
       dependencies: { ignorePackages: packageJson.fuse.browser },
       hmr: this.watch,
       devServer: !this.serve ? false : {
@@ -93,7 +96,7 @@ class BuildContext {
         entry: this.aot
           ? this.prod ? 'ngc/electron/angular/main.aot.prod.js' : 'ngc/electron/angular/main.aot.js'
           : this.prod ? 'src/electron/angular/main.prod.ts' : 'src/electron/angular/main.ts',
-        webIndex: { template: 'src/browser/index.html', distFileName: '../../index.html', publicPath: 'assets/js' },
+        webIndex: { template: 'src/browser/index.pug', distFileName: '../../index.html', publicPath: 'assets/js' },
         dependencies: { ignorePackages: packageJson.fuse.browser },
         devServer: false,
         env: Object
