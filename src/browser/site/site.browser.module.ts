@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core'
 import { ServiceWorkerModule } from '@angular/service-worker'
-import { AppModule } from './app.module'
-import { AppComponent } from './app.component'
+import { SiteModule } from './site.module'
+import { SiteComponent } from './site.component'
 import { FloNodeEnvTransferBrowserModule } from '@flosportsinc/ng-env-transfer-state/browser'
 
 @NgModule({
   imports: [
-    AppModule,
+    SiteModule,
     FloNodeEnvTransferBrowserModule,
     ServiceWorkerModule.register('./ngsw-worker.js', { enabled: true })
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [SiteComponent]
 })
-export class AppBrowserModule { }
+export class SiteBrowserModule { }

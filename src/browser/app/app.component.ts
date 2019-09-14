@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Renderer2 } from '@angular/core'
-import { AppInitService } from './shared/fusing/app-init.service'
+// import { AppInitService } from '../shared/fusing/app-init.service'
 
 @Component({
   selector: 'pm-app',
@@ -8,11 +8,11 @@ import { AppInitService } from './shared/fusing/app-init.service'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  constructor(rdr: Renderer2, ais: AppInitService) {
-    ais.init(rdr)
-  }
+  // constructor(rdr: Renderer2, ais: AppInitService) {
+  //   ais.init(rdr)
+  // }
 
-  public param = { value: 'John' }
-  public en = { lang: 'en' }
-  public jp = { lang: 'jp' }
+  // public param = { value: 'John' }
+  // public en = { lang: 'en' }
+  // public jp = { lang: 'jp' }
 }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router'
-import { lazyRoutes } from './app-routing.lazy'
+import { lazyRoutes } from './site-routing.lazy'
 import { APP_BASE_HREF } from '@angular/common'
 
 @NgModule({
@@ -12,4 +12,4 @@ import { APP_BASE_HREF } from '@angular/common'
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class SiteRoutingModule { }
