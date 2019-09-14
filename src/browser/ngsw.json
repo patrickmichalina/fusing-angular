@@ -5,9 +5,25 @@
       "name": "appshell",
       "resources": {
         "files": [
-          "/**/assets/*.js",
-          "/**/assets/*.css",
+          "/**/*.woff",
+          "/**/*.woff2",
+          "/**/*.ico",
+          "/**/*.png",
+          "/**/*.jpg",
+          "/assets/js/app.js",
+          "/assets/js/vendor.js",
           "/ngsw-worker.js"
+        ]
+      }
+    },
+    {
+      "name": "appcache",
+      "installMode": "lazy",
+      "updateMode": "lazy",
+      "resources": {
+        "files": [
+          "/**/i18n/**/*.json",
+          "/**/*.js"
         ]
       }
     }

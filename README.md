@@ -27,7 +27,7 @@ Designed to get a team up and running with a fast development toolkit for Angula
 ### Performance Features
 - [x] [Brotli compression](https://github.com/google/brotli) with [gzip](http://www.gzip.org) fallback.
 - [x] [Ahead-of-Time](https://angular.io/guide/aot-compiler) (AOT) compilation support.
-- [ ] [Lazy Loaded](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules.
+- [x] [Lazy Loaded + AOT](https://angular-2-training-book.rangle.io/handout/modules/lazy-loading-module.html) modules.
 
 ### Universal (SSR) Features
 - [x] Flicker-free Angular Universal server built on Express.
