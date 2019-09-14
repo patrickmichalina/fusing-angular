@@ -9,6 +9,7 @@ import { minify } from 'terser'
 import { UserHandler } from 'fuse-box/user-handler/UserHandler'
 import { IFuseLoggerProps } from 'fuse-box/config/IFuseLoggerProps'
 import * as packageJson from './package.json'
+import { pluginAngularAot } from './tools/plugins/lazy-aot'
 
 const argToBool = (arg: string) => argv[arg] ? true : false
 
@@ -87,7 +88,7 @@ class BuildContext {
         ]
       },
       ...this.shared,
-      plugins: this.shared.plugins
+      plugins: [...this.shared.plugins, pluginAngularAot()]
     }),
     electron: {
       renderer: fusebox({
