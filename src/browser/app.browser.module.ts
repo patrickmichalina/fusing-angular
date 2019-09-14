@@ -8,7 +8,7 @@ import { FloNodeEnvTransferBrowserModule } from '@flosportsinc/ng-env-transfer-s
   imports: [
     AppModule,
     FloNodeEnvTransferBrowserModule,
-    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: false })
+    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: true })
   ],
   bootstrap: [AppComponent]
 })
