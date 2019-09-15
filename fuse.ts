@@ -40,15 +40,12 @@ class BuildContext {
     logging: { level: 'disabled' } as IFuseLoggerProps,
     cache: { enabled: true, FTL: true, root: '.fusebox' },
     plugins: [
-      pluginConsolidate('pug', {
-
-      }),
       ...this.aot ? [] : [
         pluginAngular('*.component.ts'),
         pluginCSS('*.component.css', { asText: true })
       ],
       pluginReplace(/fusing.module.(ts|js)/, {
-        "__APPVERSION__": packageJson.version,
+        "__APP_VERSION__": packageJson.version,
         "__NODE_DEBUG__": `${process.env.NODE_DEBUG}`
       }),
     ]
@@ -88,7 +85,7 @@ class BuildContext {
         ]
       },
       ...this.shared,
-      plugins: [...this.shared.plugins, pluginAngularAot()]
+      plugins: [pluginConsolidate('pug', { isElectron: false }), ...this.shared.plugins, pluginAngularAot()]
     }),
     electron: {
       renderer: fusebox({
@@ -107,7 +104,7 @@ class BuildContext {
             NG_SERVER_HOST: maybe(process.env.HOSTNAME).valueOr(`http://localhost:${this.ngServerPort}`)
           }),
         ...this.shared,
-        plugins: this.shared.plugins
+        plugins: [pluginConsolidate('pug', { isElectron: true }), ...this.shared.plugins]
       }),
       main: fusebox({
         target: 'electron',
