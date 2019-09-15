@@ -1,6 +1,5 @@
-import { join } from 'path'
 import { format } from 'url'
-import { app, BrowserWindow } from 'electron'
+import { BrowserWindow } from 'electron'
 import { reader } from 'typescript-monads'
 import { IElectronConfig } from './config'
 
@@ -10,8 +9,10 @@ export const initWindow = () => reader<IElectronConfig, BrowserWindow>(cfg => {
     width: 800,
     height: 500,
     webPreferences: {
-      nodeIntegration: true
-    },
+      nodeIntegration: true,
+      autoplayPolicy: 'no-user-gesture-required',
+      devTools: cfg.IS_DEVELOPMENT
+    }
   })
 
   // and load the index.html of the app.

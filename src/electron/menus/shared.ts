@@ -5,6 +5,8 @@ import { tap } from "rxjs/operators"
 import { getUsableLanguageMenu } from "./shared/language"
 import { reader } from "typescript-monads"
 import { IElectronConfig } from "../config"
+import { editMenu } from "./shared/edit"
+import { devMenu } from "./shared/dev"
 
 export const initMenu = (win: BrowserWindow) => reader<IElectronConfig, Observable<any>>(cfg => forkJoin(
   getUsableLanguageMenu(win).run(cfg),
@@ -12,7 +14,12 @@ export const initMenu = (win: BrowserWindow) => reader<IElectronConfig, Observab
 .pipe(
   tap(resolvedMenus => {
     const languageMenu = resolvedMenus[0]
-    const menu = Menu.buildFromTemplate([macMainMenuTemplate, languageMenu as any])
+    const menu = Menu.buildFromTemplate([
+      macMainMenuTemplate, 
+      editMenu(cfg.IS_PLATFORM_OSX), 
+      languageMenu as any, 
+      ...cfg.IS_DEVELOPMENT ? [devMenu(cfg)] : []
+    ])
     Menu.setApplicationMenu(menu)
   })
 ))
