@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core'
-import { FloNodeEnvTransferModule, NODE_ENV_USE_VALUES } from '@flosportsinc/ng-env-transfer-state'
+import { FloNodeEnvTransferModule } from '@flosportsinc/ng-env-transfer-state'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable, of } from 'rxjs'
@@ -10,6 +10,7 @@ import { EnvironmentService } from './environment.service'
 import { AppInitService } from './app-init.service'
 import { PreserveQueryParamsDirective, RouterLinkLangDirective } from './param-router-link.directive'
 import { LoggingModule } from './logging/logging.module'
+import { UpdaterModule } from './updater/updater.module'
 
 export class TranslateHttpLoader implements TranslateLoader {
   constructor(private http: HttpClient, private es: EnvironmentService) { }
@@ -23,6 +24,7 @@ export class TranslateHttpLoader implements TranslateLoader {
 
 @NgModule({
   imports: [
+    UpdaterModule,
     LoggingModule,
     FloNodeEnvTransferModule.config({
       useValues: { APP_VERSION: "__APP_VERSION__" }
@@ -40,6 +42,7 @@ export class TranslateHttpLoader implements TranslateLoader {
     RouterLinkLangDirective
   ],
   exports: [
+    UpdaterModule,
     LoggingModule,
     PreserveQueryParamsDirective,
     RouterLinkLangDirective,
