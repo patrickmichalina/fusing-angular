@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core'
 import { NodeEnvTransferService } from '@flosportsinc/ng-env-transfer-state'
 import { HttpClient } from '@angular/common/http'
-import { catchError } from 'rxjs/operators';
-import { of, Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators'
+import { of } from 'rxjs'
 
 @Component({
   selector: 'app-home',

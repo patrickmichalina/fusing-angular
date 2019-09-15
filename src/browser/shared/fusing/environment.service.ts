@@ -5,6 +5,7 @@ import { maybe, IMaybe } from 'typescript-monads'
 // change me to fit your application
 export interface IEnvironment {
   readonly APP_VERSION: string
+  readonly NODE_DEBUG: string
 }
 
 export interface IEnvironmentService {

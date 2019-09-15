@@ -12,6 +12,7 @@ import { EnvironmentService } from '../../browser/shared/fusing/environment.serv
 import { ElectronService } from '../../browser/shared/fusing/electron.service'
 import { ElectronServerService } from './electron.service'
 import { AppBrowserModule } from '../../browser/app/app.browser.module'
+import { LoggingElectronModule } from './logging.electron.module'
 
 export function createTranslateLoader(http: HttpClient, es: EnvironmentService) {
   return new TranslateHttpLoader(http, './assets/i18n/', `.json?v=${es.config.APP_VERSION}`)
@@ -26,6 +27,7 @@ export function maybeGetElectronVars() {
 @NgModule({
   imports: [
     AppBrowserModule,
+    LoggingElectronModule,
     FloNodeEnvTransferBrowserModule,
     TranslateModule.forRoot({
       loader: {

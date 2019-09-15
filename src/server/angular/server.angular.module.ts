@@ -7,6 +7,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { HttpUniversalInterceptor } from './universal.interceptor'
 import { SiteModule } from '../../browser/site/site.module'
 import { SiteComponent } from '../../browser/site/site.component'
+import { LoggingServerModule } from './logging.server.module'
 
 enableProdMode()
 
@@ -14,6 +15,7 @@ enableProdMode()
   imports: [
     SiteModule,
     ServerModule,
+    LoggingServerModule,
     ServerTransferStateModule,
     FloHttpCacheTagExpressServerModule,
     FloNodeEnvTransferServerModule.config({

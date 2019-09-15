@@ -9,6 +9,7 @@ import { ElectronService } from './electron.service'
 import { EnvironmentService } from './environment.service'
 import { AppInitService } from './app-init.service'
 import { PreserveQueryParamsDirective, RouterLinkLangDirective } from './param-router-link.directive'
+import { LoggingModule } from './logging/logging.module'
 
 export class TranslateHttpLoader implements TranslateLoader {
   constructor(private http: HttpClient, private es: EnvironmentService) { }
@@ -22,6 +23,7 @@ export class TranslateHttpLoader implements TranslateLoader {
 
 @NgModule({
   imports: [
+    LoggingModule,
     FloNodeEnvTransferModule.config({
       useValues: { APP_VERSION: "__APP_VERSION__" }
     }),
@@ -38,6 +40,7 @@ export class TranslateHttpLoader implements TranslateLoader {
     RouterLinkLangDirective
   ],
   exports: [
+    LoggingModule,
     PreserveQueryParamsDirective,
     RouterLinkLangDirective,
     FloNodeEnvTransferModule,
