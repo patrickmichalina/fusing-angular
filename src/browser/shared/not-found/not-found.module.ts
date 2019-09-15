@@ -5,10 +5,7 @@ import { NotFoundComponent } from './not-found.component'
 @NgModule({
   imports: [
     RouterModule.forChild([
-      {
-        path: '**',
-        component: NotFoundComponent
-      }
+      { path: '**', component: NotFoundComponent }
     ])
   ],
   exports: [NotFoundComponent],

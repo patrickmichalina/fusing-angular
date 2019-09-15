@@ -3,19 +3,22 @@ import { HttpClientModule } from '@angular/common/http'
 import { CommonModule } from '@angular/common'
 import { TransferHttpCacheModule } from '@nguniversal/common'
 import { FusingModule } from './fusing/fusing.module'
+import { NotFoundModule } from './not-found/not-found.module'
 
 @NgModule({
   imports: [
     CommonModule,
     HttpClientModule,
     TransferHttpCacheModule,
-    FusingModule
+    FusingModule,
+    NotFoundModule
   ],
   exports: [
     CommonModule,
     HttpClientModule,
     TransferHttpCacheModule,
-    FusingModule
+    FusingModule,
+    NotFoundModule
   ]
 })
 export class SharedModule { }

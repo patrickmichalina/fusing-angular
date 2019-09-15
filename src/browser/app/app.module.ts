@@ -6,8 +6,8 @@ import { AppComponent } from './app.component'
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    SharedModule,
-    AppRoutingModule
+    AppRoutingModule,
+    SharedModule
   ]
 })
 export class AppModule { }

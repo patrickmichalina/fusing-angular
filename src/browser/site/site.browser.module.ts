@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core'
 import { ServiceWorkerModule } from '@angular/service-worker'
 import { SiteModule } from './site.module'
 import { SiteComponent } from './site.component'
-import { FloNodeEnvTransferBrowserModule } from '@flosportsinc/ng-env-transfer-state/browser'
+import { SharedBrowserModule } from '../shared/shared.browser.module'
 
 @NgModule({
   imports: [
     SiteModule,
-    FloNodeEnvTransferBrowserModule,
+    SharedBrowserModule,
     ServiceWorkerModule.register('./ngsw-worker.js', { enabled: true })
   ],
   bootstrap: [SiteComponent]
