@@ -10,6 +10,7 @@
           "/**/*.ico",
           "/**/*.png",
           "/**/*.jpg",
+          "/**/*.svg",
           "/assets/js/app.js",
           "/assets/js/vendor.js",
           "/ngsw-worker.js"
@@ -37,7 +38,7 @@
       "cacheConfig": {
         "maxSize": 100,
         "maxAge": "2m",
-        "timeout": "30s",
+        "timeout": "10s",
         "strategy": "freshness"
       }
     }
