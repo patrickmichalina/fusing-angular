@@ -9,7 +9,7 @@ export const HTTP_TEST_APP =
       PORT: 4202,
       DIST_FOLDER: 'dist',
       WWW_ROOT: 'dist/wwwroot',
-      HTTP_LOGS_ENALED: false
+      HTTP_LOGS_ENABLED: false
     })
 
 export const serverTestAgent = agent(HTTP_TEST_APP)

@@ -12,12 +12,12 @@ export interface IConfig {
   readonly CLUSTERED_WORKERS: number
   readonly DIST_FOLDER: string
   readonly WWW_ROOT: string
-  readonly HTTP_LOGS_ENALED: boolean
+  readonly HTTP_LOGS_ENABLED: boolean
 }
 
 export const STANDARD_CONFIG: IConfig = {
   NODE_DEBUG: maybe(process.env.NODE_ENV).filter(a => a === 'production').isNone(),
-  HTTP_LOGS_ENALED: maybe(process.env.HTTP_LOGS_DISABLED).filter(Boolean).isNone(),
+  HTTP_LOGS_ENABLED: maybe(process.env.HTTP_LOGS_DISABLED).filter(Boolean).isNone(),
   PORT: maybe(argv['port'] as string | undefined)
     .match({ some: maybe, none: () => maybe(process.env.PORT) })
     .map(p => +p).valueOr(4200),

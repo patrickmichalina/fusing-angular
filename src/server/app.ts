@@ -3,12 +3,14 @@ import 'core-js/proposals/reflect-metadata'
 import * as express from 'express'
 import * as cookies from 'cookie-parser'
 import * as compression from 'compression'
+import { json, urlencoded } from 'body-parser'
 import { ngExpressEngine } from '@nguniversal/express-engine'
 import { registerApi } from './api'
 import { reader } from 'typescript-monads'
 import { IConfig } from './config'
 import { resolve } from 'path'
 import { AppServerModule } from './angular/server.angular.module'
+import { sslRedirect } from './ssl'
 
 export const createExpressApplication = reader<IConfig, express.Application>(config => {
   const app = express()
@@ -16,8 +18,11 @@ export const createExpressApplication = reader<IConfig, express.Application>(con
   const expressStaticGzip = require('express-static-gzip')
   const pino = require('express-pino-logger')
 
-  if (config.HTTP_LOGS_ENALED) app.use(pino())
+  if (config.HTTP_LOGS_ENABLED) app.use(pino())
 
+  app.use(sslRedirect)
+  app.use(urlencoded({ extended: true }))
+  app.use(json())
   app.use(cookies())
   app.disable('x-powered-by')
   app.set('view engine', 'html')
