@@ -3,12 +3,6 @@ import { HomeComponent } from './home.component'
 import { HomeTestingModule } from './home.module.testing'
 
 describe(HomeComponent.name, () => {
-  // beforeEach(() => {
-  //   TestBed.configureTestingModule({
-  //     imports: [HomeTestingModule]
-  //   }).compileComponents()
-  // })
-
   it('should compile', () => {
     TestBed.configureTestingModule({
       imports: [HomeTestingModule]

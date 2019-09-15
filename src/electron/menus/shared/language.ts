@@ -5,8 +5,6 @@ import { maybe, reader } from 'typescript-monads'
 import { IElectronConfig } from '../../config'
 import { StringDict } from '../../interfaces'
 import { sendAngularMessage } from '../../util'
-// import { take, filter } from 'rxjs/operators'
-// import { window$ } from '../../app'
 
 type Interem = { key: string, language: string }
 

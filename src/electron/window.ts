@@ -11,7 +11,7 @@ export const initWindow = () => reader<IElectronConfig, BrowserWindow>(cfg => {
     height: 500,
     webPreferences: {
       nodeIntegration: true
-    }
+    },
   })
 
   // and load the index.html of the app.
