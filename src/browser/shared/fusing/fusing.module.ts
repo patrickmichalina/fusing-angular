@@ -23,7 +23,7 @@ export class TranslateHttpLoader implements TranslateLoader {
 @NgModule({
   imports: [
     FloNodeEnvTransferModule.config({
-      useValues: { APP_VERSION: "__APPVERSION__" }
+      useValues: { APP_VERSION: "__APP_VERSION__" }
     }),
     TranslateModule.forRoot({
       loader: {

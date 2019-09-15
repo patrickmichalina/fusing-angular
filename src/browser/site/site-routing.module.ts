@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router'
-import { lazyRoutes } from './app-routing.lazy'
+import { routes } from '../main-routing'
 import { APP_BASE_HREF } from '@angular/common'
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(lazyRoutes, { initialNavigation: 'enabled' })
+    RouterModule.forRoot(routes, { initialNavigation: 'enabled' })
   ],
   providers: [
     { provide: APP_BASE_HREF, useValue: '/' }
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class SiteRoutingModule { }

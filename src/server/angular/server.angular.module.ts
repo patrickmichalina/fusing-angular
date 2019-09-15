@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core'
 import { ServerModule, ServerTransferStateModule } from '@angular/platform-server'
 import { enableProdMode } from '@angular/core'
-import { AppComponent } from '../../browser/app.component'
-import { AppModule } from '../../browser/app.module'
 import { FloNodeEnvTransferServerModule, } from '@flosportsinc/ng-env-transfer-state/server'
 import { FloHttpCacheTagExpressServerModule } from '@flosportsinc/ng-http-cache-tags'
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { HttpUniversalInterceptor } from './universal.interceptor'
+import { SiteModule } from '../../browser/site/site.module'
+import { SiteComponent } from '../../browser/site/site.component'
 
 enableProdMode()
 
 @NgModule({
   imports: [
-    AppModule,
+    SiteModule,
     ServerModule,
     ServerTransferStateModule,
     FloHttpCacheTagExpressServerModule,
@@ -27,7 +27,7 @@ enableProdMode()
       multi: true
     }
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [SiteComponent],
 })
 export class AppServerModule {
 }

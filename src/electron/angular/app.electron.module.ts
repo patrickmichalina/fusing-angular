@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core'
 import { FloNodeEnvTransferBrowserModule } from '@flosportsinc/ng-env-transfer-state/browser'
-import { AppModule } from '../../browser/app.module'
-import { AppComponent } from '../../browser/app.component'
+import { AppComponent } from '../../browser/app/app.component'
 import { ENV_CONFIG_DEFAULT } from '@flosportsinc/ng-env-transfer-state'
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { HttpElectronInterceptor } from './electron.interceptor'
@@ -12,6 +11,7 @@ import { ElectronRoutingModule } from './app-routing.module'
 import { EnvironmentService } from '../../browser/shared/fusing/environment.service'
 import { ElectronService } from '../../browser/shared/fusing/electron.service'
 import { ElectronServerService } from './electron.service'
+import { AppBrowserModule } from '../../browser/app/app.browser.module'
 
 export function createTranslateLoader(http: HttpClient, es: EnvironmentService) {
   return new TranslateHttpLoader(http, './assets/i18n/', `.json?v=${es.config.APP_VERSION}`)
@@ -25,6 +25,7 @@ export function maybeGetElectronVars() {
 
 @NgModule({
   imports: [
+    AppBrowserModule,
     FloNodeEnvTransferBrowserModule,
     TranslateModule.forRoot({
       loader: {
@@ -33,7 +34,6 @@ export function maybeGetElectronVars() {
         deps: [HttpClient, EnvironmentService]
       }
     }),
-    AppModule,
     ElectronRoutingModule
   ],
   providers: [
