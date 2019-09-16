@@ -8,8 +8,9 @@ import { compressStatic } from './tools/scripts/compress'
 import { minify } from 'terser'
 import { UserHandler } from 'fuse-box/user-handler/UserHandler'
 import { IFuseLoggerProps } from 'fuse-box/config/IFuseLoggerProps'
-import * as packageJson from './package.json'
 import { pluginAngularAot } from './tools/plugins/lazy-aot'
+import { run } from 'cypress'
+import * as packageJson from './package.json'
 
 const argToBool = (arg: string) => argv[arg] ? true : false
 
@@ -21,6 +22,7 @@ class BuildContext {
   serve = argToBool('serve')
   watch = argToBool('watch')
   pwa = argToBool('pwa')
+  e2e = argToBool('e2e')
   electron = argToBool('electron')
   ngcProcess: IMaybe<ChildProcess> = maybe()
   serverRef: IMaybe<ServerLauncher> = maybe()
@@ -35,10 +37,10 @@ class BuildContext {
   devServerPort = 4200
   ngServerPort = 4201
   shared = {
-    watch: this.watch ? { ignored: ['cypress'] } : false,
+    watch: this.watch ? { ignored: ['cypress/integration'] } : false,
     turboMode: true,
     logging: { level: 'disabled' } as IFuseLoggerProps,
-    cache: { enabled: true, FTL: true, root: '.fusebox' },
+    cache: { enabled: true, FTL: !this.e2e && this.watch, root: '.fusebox' },
     plugins: [
       ...this.aot ? [] : [
         pluginAngular('*.component.ts'),
@@ -69,9 +71,9 @@ class BuildContext {
         : this.prod ? 'src/browser/main.prod.ts' : 'src/browser/main.ts',
       webIndex: { template: 'src/browser/index.pug', distFileName: '../../index.html', publicPath: 'assets/js' },
       dependencies: { ignorePackages: packageJson.fuse.browser },
-      hmr: this.watch,
+      hmr: !this.e2e && this.watch,
       devServer: !this.serve ? false : {
-        hmrServer: this.watch ? { port: this.devServerPort } : false,
+        hmrServer: !this.e2e && this.watch ? { port: this.devServerPort } : false,
         httpServer: this.watch ? { port: this.devServerPort } : false,
         proxy: !this.watch ? [] : [
           {
@@ -141,7 +143,7 @@ const { task, exec, rm, src } = sparky(BuildContext)
 
 task('assets.copy', ctx => Promise.all([
   src('./src/assets/**/*.*').dest('./dist/wwwroot/assets', 'assets').exec(),
-  ctx.electron 
+  ctx.electron
     ? Promise.all([
       exec('icns'),
       src('./src/assets/**/*.*').dest('./dist/desktop/wwwroot/assets', 'assets').exec(),
@@ -236,5 +238,27 @@ task('default', ctx => {
     ctx.killNgc()
   })
 
-  return exec('build')
+  return exec('build').then(() => {
+    if(!ctx.e2e) return Promise.resolve()
+    
+    return run({
+      browser: 'chrome',
+      config: {
+        baseUrl: 'http://localhost:4200',
+        chromeWebSecurity: false,
+        video: false,
+        integrationFolder: 'cypress/build',
+      }
+    }).then(res => {
+      ctx.killServer()
+      if (res.totalFailed > 0) {
+        return Promise.reject('E2E failures')
+      } else {
+        return Promise.resolve()
+      }
+    }).catch(err => {
+      ctx.killServer()
+      throw new Error(err)
+    })
+  })
 })

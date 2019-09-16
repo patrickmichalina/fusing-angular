@@ -3,9 +3,9 @@ describe('Site homepage', () => {
 
   describe('Events Widget', () => {
     it('has a link to /events', () => {
-      cy.viewport('macbook-15')
-      cy.get('.hidden-md-down')
-        .contains('View All Events')
+      cy.visit('/')
+      cy.get('h1')
+        .contains('Fusing Angular')
         .click()
       cy.url().should('include', '/events')
     })

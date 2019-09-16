@@ -1,5 +1,9 @@
 {
   "name": "fusing-angular",
+  "buildpacks": [
+    { "url": "heroku/nodejs" },
+    { "url": "https://github.com/heroku/heroku-buildpack-xvfb-google-chrome" }
+  ],
   "env": {
     "HEROKU_APP_NAME": {
       "required": true
