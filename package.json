@@ -127,14 +127,16 @@
     ],
     "testPathIgnorePatterns": [
       "node_modules",
-      ".ngc"
+      "dist",
+      ".fusebox",
+      "ngc"
     ],
     "setupFilesAfterEnv": [
       "../tools/scripts/jest-setup.ts"
     ],
     "globals": {
       "ts-jest": {
-        "tsConfig": "./tsconfig.json",
+        "tsConfig": "src/tsconfig.json",
         "stringifyContentPathRegex": "\\.html$",
         "astTransformers": [
           "jest-preset-angular/InlineHtmlStripStylesTransformer"
@@ -146,7 +148,9 @@
     },
     "coveragePathIgnorePatterns": [
       "<rootDir>/node_modules/",
-      "<rootDir>/.ngc"
+      "<rootDir>/ngc",
+      "<rootDir>/.fusebox",
+      "<rootDir>/dist"
     ],
     "reporters": [
       "jest-tap-reporter"
