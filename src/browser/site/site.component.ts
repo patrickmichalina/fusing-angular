@@ -1,6 +1,5 @@
 import { Component, ChangeDetectionStrategy, Renderer2 } from '@angular/core'
 import { AppInitService } from '../shared/fusing/app-init.service'
-import { LoggingService } from '../shared/fusing/logging/logging.service';
 
 @Component({
   selector: 'pm-site',

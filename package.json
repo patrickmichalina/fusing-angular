@@ -111,7 +111,7 @@
     "rxjs": "^6.5.3",
     "supertest": "^4.0.2",
     "terser": "^4.3.1",
-    "ts-node": "^8.3.0",
+    "ts-node": "^8.4.1",
     "tslint": "^5.20.0",
     "tslint-immutable": "^6.0.1",
     "typescript": "3.5.2",
@@ -127,14 +127,16 @@
     ],
     "testPathIgnorePatterns": [
       "node_modules",
-      ".ngc"
+      "dist",
+      ".fusebox",
+      "ngc"
     ],
     "setupFilesAfterEnv": [
       "../tools/scripts/jest-setup.ts"
     ],
     "globals": {
       "ts-jest": {
-        "tsConfig": "./tsconfig.json",
+        "tsConfig": "src/tsconfig.json",
         "stringifyContentPathRegex": "\\.html$",
         "astTransformers": [
           "jest-preset-angular/InlineHtmlStripStylesTransformer"
@@ -146,7 +148,9 @@
     },
     "coveragePathIgnorePatterns": [
       "<rootDir>/node_modules/",
-      "<rootDir>/.ngc"
+      "<rootDir>/ngc",
+      "<rootDir>/.fusebox",
+      "<rootDir>/dist"
     ],
     "reporters": [
       "jest-tap-reporter"
