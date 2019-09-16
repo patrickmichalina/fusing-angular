@@ -1,8 +1,8 @@
 {
   "name": "fusing-angular",
   "buildpacks": [
-    { "url": "heroku/nodejs" },
-    { "url": "heroku/google-chrome" }
+    { "url": "heroku/google-chrome" },
+    { "url": "heroku/nodejs" }
   ],
   "env": {
     "HEROKU_APP_NAME": {
