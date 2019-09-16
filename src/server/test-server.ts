@@ -8,7 +8,7 @@ export const HTTP_TEST_APP =
       NODE_DEBUG: true,
       PORT: 4202,
       DIST_FOLDER: 'dist',
-      WWW_ROOT: 'dist/wwwroot',
+      WWW_ROOT: 'wwwroot',
       HTTP_LOGS_ENABLED: false
     })
 
