@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "isolatedModules": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declaration": false,
+    "noImplicitAny": true,
+    "noImplicitUseStrict": false,
+    "strictNullChecks": true,
+    "noEmitHelpers": false,
+    "noLib": false,
+    "noUnusedLocals": true,
+    "outDir": "build",
+    "importHelpers": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": false,
+    "lib": ["es2016", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "typeRoots": ["../node_modules/@types"],
+    "types": ["cypress"]
+  },
+  "include": ["integration"]
+}

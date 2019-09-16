@@ -35,7 +35,7 @@ class BuildContext {
   devServerPort = 4200
   ngServerPort = 4201
   shared = {
-    watch: this.watch,
+    watch: this.watch ? { ignored: ['cypress'] } : false,
     turboMode: true,
     logging: { level: 'disabled' } as IFuseLoggerProps,
     cache: { enabled: true, FTL: true, root: '.fusebox' },

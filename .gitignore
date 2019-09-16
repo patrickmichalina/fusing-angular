@@ -78,3 +78,6 @@ ngc
 .fusebox
 package.json.clone
 release
+cypress/videos/
+cypress/build/
+cypress/screenshots/

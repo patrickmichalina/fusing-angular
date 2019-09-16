@@ -1,0 +1,8 @@
+{
+  "projectId": "fusing-angular",
+  "integrationFolder": "cypress/build",
+  "baseUrl": "http://localhost:4200",
+  "chromeWebSecurity": false,
+  "viewportWidth": 1440,
+  "viewportHeight": 900
+}
