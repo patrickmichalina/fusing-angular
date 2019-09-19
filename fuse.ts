@@ -254,7 +254,7 @@ task('assets.pwa.ngsw.config', _ctx => {
   spawnSync('node_modules/.bin/ngsw-config', ['dist/wwwroot', 'src/browser/ngsw.json'])
 })
 
-task('icns', _ctx => spawn('./tools/scripts/icns.sh', ['dist/desktop/icon', 'src/assets/icons/icon-1024x1024.png']))
+task('icns', _ctx => spawn('./tools/scripts/icns.sh', ['dist/desktop/icon', 'src/assets/img/logo.png']))
 
 task('default', ctx => {
   rm('dist')
