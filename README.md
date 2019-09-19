@@ -8,7 +8,7 @@ Designed to get a team up and running with a fast development toolkit for Angula
 - [x] Angular 9 w/ Ivy Renderer
 - [x] Platform specific Angular modules.
 - [x] Multi Language support.
-- [ ] Angular PWA support.
+- [x] Angular PWA support.
 
 ### Development Features
 - [x] A blazing fast bundler [FuseBox](http://fuse-box.org).
@@ -59,6 +59,7 @@ Designed to get a team up and running with a fast development toolkit for Angula
 | lint | Checks app an tools for lint failures |
 | lint.app | Checks /src for lint failures |
 | lint.tools | Checks /tools for lint failures |
+| icons.gen  | Generate various favicons from a source imgage. |
 | release.mac | Production electron output for mac |
 | release.win | Production electron output for windows |
 | release.linux | Production electron output for linux |

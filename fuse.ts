@@ -10,8 +10,37 @@ import { UserHandler } from 'fuse-box/user-handler/UserHandler'
 import { IFuseLoggerProps } from 'fuse-box/config/IFuseLoggerProps'
 import { pluginAngularAot } from './tools/plugins/lazy-aot'
 import * as packageJson from './package.json'
+import { readdirSync } from 'fs'
 
 const argToBool = (arg: string) => argv[arg] ? true : false
+
+const files = readdirSync('src/assets/icons')
+const ios = files.filter(b => b.match(/apple-icon-/g))
+  .map(a => +a.split('.').reverse()[1].split('-')[2])
+  .sort((a, b) => b - a)
+  .map(a => {
+  return {
+    size: `${a}x${a}`,
+    href: `./assets/icons/apple-icon-${a}.png`
+  }
+})
+
+const favicons = files.filter(b => b.match(/icon-*.*x/g)).map(a => +a.split('x')[1].split('.')[0])
+  .sort((a, b) => b - a)
+  .map(size => {
+    return {
+      size: `${size}x${size}`,
+      href: `./assets/icons/icon-${size}x${size}.png`
+    }
+  })
+
+const pugSharedLocals = { 
+  title: 'Fusing Angular',
+  icons: {
+    ios,
+    favicons
+  }
+}
 
 class BuildContext {
   minify = argToBool('minify')
@@ -85,7 +114,7 @@ class BuildContext {
         ]
       },
       ...this.shared,
-      plugins: [pluginConsolidate('pug', { isElectron: false }), ...this.shared.plugins, pluginAngularAot()]
+      plugins: [pluginConsolidate('pug', { ...pugSharedLocals, isElectron: false }), ...this.shared.plugins, pluginAngularAot()]
     }),
     electron: {
       renderer: fusebox({
@@ -104,7 +133,7 @@ class BuildContext {
             NG_SERVER_HOST: maybe(process.env.HOSTNAME).valueOr(`http://localhost:${this.ngServerPort}`)
           }),
         ...this.shared,
-        plugins: [pluginConsolidate('pug', { isElectron: true }), ...this.shared.plugins]
+        plugins: [pluginConsolidate('pug', { ...pugSharedLocals, isElectron: true }), ...this.shared.plugins]
       }),
       main: fusebox({
         target: 'electron',
@@ -225,7 +254,7 @@ task('assets.pwa.ngsw.config', _ctx => {
   spawnSync('node_modules/.bin/ngsw-config', ['dist/wwwroot', 'src/browser/ngsw.json'])
 })
 
-task('icns', _ctx => spawn('./tools/scripts/icns.sh', ['dist/desktop/icon', 'src/assets/icons/favicon-1024x1024.png']))
+task('icns', _ctx => spawn('./tools/scripts/icns.sh', ['dist/desktop/icon', 'src/assets/icons/icon-1024x1024.png']))
 
 task('default', ctx => {
   rm('dist')
