@@ -27,6 +27,7 @@
     "lint.tools": "tsc && tslint -p tsconfig.json",
     "gen.apple-icons": "pwa-asset-generator src/assets/img/logo.png src/assets/icons",
     "gen.favicons": "ts-node tools/scripts/favicons.ts",
+    "gen.icons": "npm run gen.favicons & npm run gen.apple-icons",
     "heroku-postbuild": "npm run lint && npm run test.cov && npm run build.prod",
     "release.prep": "npm run build.desktop.prod && BUILD_BYTECODE=true electron dist/desktop/bytecode.js",
     "release.mac": "npm run release.prep && ts-node tools/scripts/electron-deps.ts && electron-builder --mac && ts-node -r dotenv/config tools/scripts/electron-deps-revert.ts "

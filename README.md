@@ -59,7 +59,7 @@ Designed to get a team up and running with a fast development toolkit for Angula
 | lint | Checks app an tools for lint failures |
 | lint.app | Checks /src for lint failures |
 | lint.tools | Checks /tools for lint failures |
-| icons.gen  | Generate various favicons from a source imgage. |
+| gen.icons  | Generate various favicons from a source imgage. |
 | release.mac | Production electron output for mac |
 | release.win | Production electron output for windows |
 | release.linux | Production electron output for linux |
