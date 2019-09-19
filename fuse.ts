@@ -8,8 +8,8 @@ import { compressStatic } from './tools/scripts/compress'
 import { minify } from 'terser'
 import { UserHandler } from 'fuse-box/user-handler/UserHandler'
 import { IFuseLoggerProps } from 'fuse-box/config/IFuseLoggerProps'
-import * as packageJson from './package.json'
 import { pluginAngularAot } from './tools/plugins/lazy-aot'
+import * as packageJson from './package.json'
 
 const argToBool = (arg: string) => argv[arg] ? true : false
 
@@ -56,7 +56,7 @@ class BuildContext {
       entry: this.aot ? 'ngc/server/server.js' : 'src/server/server.ts',
       devServer: false,
       dependencies: this.prod
-        ? { ignorePackages: packageJson.fuse.server, ignoreAllExternal: false }
+        ? { ignorePackages: packageJson.fusebox.ignore.server, ignoreAllExternal: false }
         : {},
       ...this.shared,
       plugins: this.shared.plugins
@@ -68,7 +68,7 @@ class BuildContext {
         ? this.prod ? 'ngc/browser/main.aot.prod.js' : 'ngc/browser/main.aot.js'
         : this.prod ? 'src/browser/main.prod.ts' : 'src/browser/main.ts',
       webIndex: { template: 'src/browser/index.pug', distFileName: '../../index.html', publicPath: 'assets/js' },
-      dependencies: { ignorePackages: packageJson.fuse.browser },
+      dependencies: { ignorePackages: packageJson.fusebox.ignore.browser },
       hmr: this.watch,
       devServer: !this.serve ? false : {
         hmrServer: this.watch ? { port: this.devServerPort } : false,
@@ -95,7 +95,7 @@ class BuildContext {
           ? this.prod ? 'ngc/electron/angular/main.aot.prod.js' : 'ngc/electron/angular/main.aot.js'
           : this.prod ? 'src/electron/angular/main.prod.ts' : 'src/electron/angular/main.ts',
         webIndex: { template: 'src/browser/index.pug', distFileName: '../../index.html', publicPath: 'assets/js' },
-        dependencies: { ignorePackages: packageJson.fuse.browser },
+        dependencies: { ignorePackages: packageJson.fusebox.ignore.browser },
         devServer: false,
         env: Object
           .keys(process.env)
@@ -115,7 +115,7 @@ class BuildContext {
         sourceMap: false,
         dependencies: {
           ignoreAllExternal: false,
-          ignorePackages: packageJson.fuse.electron
+          ignorePackages: packageJson.fusebox.ignore.electron
         },
         ...this.shared
       })

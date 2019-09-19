@@ -32,17 +32,19 @@
   "engines": {
     "node": "= 12.10.0"
   },
-  "fuse": {
-    "browser": [],
-    "server": [
-      "domino",
-      "throng",
-      "pino"
-    ],
-    "electron": [
-      "electron",
-      "pino"
-    ]
+  "fusebox": {
+    "ignore": {
+      "browser": [],
+      "server": [
+        "domino",
+        "throng",
+        "pino"
+      ],
+      "electron": [
+        "electron",
+        "pino"
+      ]
+    }
   },
   "electron-dependencies": [
     "bytenode",
