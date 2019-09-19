@@ -4,6 +4,7 @@ import { SiteRoutingModule } from './site-routing.module'
 import { BrowserModule } from '@angular/platform-browser'
 import { SharedModule } from '../shared/shared.module'
 import { SharedSiteModule } from './shared/shared.module'
+import { ServiceWorkerModule } from '@angular/service-worker'
 
 @NgModule({
   declarations: [SiteComponent],
@@ -11,6 +12,7 @@ import { SharedSiteModule } from './shared/shared.module'
     SiteRoutingModule,
     SharedModule,
     SharedSiteModule,
+    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: true }),
     BrowserModule.withServerTransition({ appId: 'pm-app' })
   ]
 })
