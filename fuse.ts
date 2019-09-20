@@ -96,7 +96,7 @@ class BuildContext {
       entry: this.aot
         ? this.prod ? 'ngc/browser/main.aot.prod.js' : 'ngc/browser/main.aot.js'
         : this.prod ? 'src/browser/main.prod.ts' : 'src/browser/main.ts',
-      webIndex: { template: 'src/browser/index.pug', distFileName: '../../index.html', publicPath: 'assets/js' },
+      webIndex: { template: 'src/browser/index.pug', distFileName: '../../index.html', publicPath: '/assets/js' },
       dependencies: { ignorePackages: packageJson.fusebox.ignore.browser },
       hmr: this.watch,
       devServer: !this.serve ? false : {
@@ -124,7 +124,7 @@ class BuildContext {
         entry: this.aot
           ? this.prod ? 'ngc/electron/angular/main.aot.prod.js' : 'ngc/electron/angular/main.aot.js'
           : this.prod ? 'src/electron/angular/main.prod.ts' : 'src/electron/angular/main.ts',
-        webIndex: { template: 'src/browser/index.pug', distFileName: '../../index.html', publicPath: 'assets/js' },
+        webIndex: { template: 'src/browser/index.pug', distFileName: '../../index.html', publicPath: '/assets/js' },
         dependencies: { ignorePackages: packageJson.fusebox.ignore.browser },
         devServer: false,
         env: Object
