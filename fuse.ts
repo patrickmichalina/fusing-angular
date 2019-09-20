@@ -9,8 +9,8 @@ import { minify } from 'terser'
 import { UserHandler } from 'fuse-box/user-handler/UserHandler'
 import { IFuseLoggerProps } from 'fuse-box/config/IFuseLoggerProps'
 import { pluginAngularAot } from './tools/plugins/lazy-aot'
-import * as packageJson from './package.json'
 import { readdirSync } from 'fs'
+import * as packageJson from './package.json'
 
 const argToBool = (arg: string) => argv[arg] ? true : false
 
@@ -113,6 +113,7 @@ class BuildContext {
           }
         ]
       },
+      env: { pwa: this.pwa ? "true": "false" },
       ...this.shared,
       plugins: [pluginConsolidate('pug', { ...pugSharedLocals, isElectron: false }), ...this.shared.plugins, pluginAngularAot()]
     }),
@@ -156,9 +157,13 @@ class BuildContext {
           this.setServerRef(complete.server)
           if (!this.prod) {
             const scriptArgs = this.watch ? [`--port=${this.ngServerPort}`] : []
-            exec('assets.pwa.ngsw.config').then(() => {
+            if (this.pwa) {
+              exec('assets.pwa.ngsw.config').then(() => {
+                complete.server.handleEntry({ nodeArgs: [], scriptArgs })
+              })
+            } else {
               complete.server.handleEntry({ nodeArgs: [], scriptArgs })
-            })
+            }
           }
         })
       }
@@ -206,7 +211,7 @@ task('build', ctx => (ctx.aot ? exec('ngc') : Promise.resolve())
 task('build.dev', ctx => exec('build.dev.server').then(() => Promise.all([
   exec('build.dev.browser'),
   ctx.electron ? exec('build.dev.electron') : Promise.resolve()])
-  .then(() => exec('assets.pwa.ngsw.config'))
+  .then(() => ctx.pwa ? exec('assets.pwa.ngsw.config') : Promise.resolve())
 
 ))
 task('build.dev.electron', ctx => ctx.fusebox.electron.renderer.runDev().then(() => ctx.fusebox.electron.main.runDev(h => {

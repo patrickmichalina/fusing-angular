@@ -12,7 +12,7 @@ import { ServiceWorkerModule } from '@angular/service-worker'
     SiteRoutingModule,
     SharedModule,
     SharedSiteModule,
-    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: true }),
+    ServiceWorkerModule.register('./ngsw-worker.js', { enabled: process.env.pwa === "true" }),
     BrowserModule.withServerTransition({ appId: 'pm-app' })
   ]
 })
