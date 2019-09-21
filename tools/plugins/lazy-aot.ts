@@ -12,7 +12,7 @@ export function pluginAngularAot() {
         if (/-routing\./g.test(props.module.props.absPath)) {
 
           props.module.read()
-          const ptrnLazy = /loadChildren.+?(?=}.})+}/gm
+          const ptrnLazy = /loadChildren.+?(?=}.})+}/g
 
           const d = maybe(props.module.contents.match(ptrnLazy))
             .map((importStatments: string[]) => importStatments
@@ -24,10 +24,10 @@ export function pluginAngularAot() {
               }))
             .map(paths => {
               return paths.map(path => {
-                const split = (path.path.split('/').pop() || '').split('.')
+                const modName = require('change-case').pascalCase(path.path.split('/').pop())
                 return {
                   original: path.statement,
-                  updated: importStr(path.path, capitalize(split[0]) + capitalize(split[1]))
+                  updated: importStr(path.path, modName)
                 }
               })
             })
