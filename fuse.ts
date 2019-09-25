@@ -98,6 +98,7 @@ class BuildContext {
         : this.prod ? 'src/browser/main.prod.ts' : 'src/browser/main.ts',
       webIndex: { template: 'src/browser/index.pug', distFileName: '../../index.html', publicPath: '/assets/js' },
       dependencies: { ignorePackages: packageJson.fusebox.ignore.browser },
+      codeSplitting: { useHash: false, maxPathLength: 0 },
       hmr: this.watch,
       devServer: !this.serve ? false : {
         hmrServer: this.watch ? { port: this.devServerPort } : false,
@@ -126,6 +127,7 @@ class BuildContext {
           : this.prod ? 'src/electron/angular/main.prod.ts' : 'src/electron/angular/main.ts',
         webIndex: { template: 'src/browser/index.pug', distFileName: '../../index.html', publicPath: '/assets/js' },
         dependencies: { ignorePackages: packageJson.fusebox.ignore.browser },
+        codeSplitting: { useHash: false, maxPathLength: 0 },
         devServer: false,
         env: Object
           .keys(process.env)
