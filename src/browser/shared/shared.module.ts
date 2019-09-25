@@ -11,14 +11,14 @@ import { NotFoundModule } from './not-found/not-found.module'
     HttpClientModule,
     TransferHttpCacheModule,
     FusingModule,
-    NotFoundModule
+    // NotFoundModule
   ],
   exports: [
     CommonModule,
     HttpClientModule,
     TransferHttpCacheModule,
     FusingModule,
-    NotFoundModule
+    // NotFoundModule
   ]
 })
 export class SharedModule { }

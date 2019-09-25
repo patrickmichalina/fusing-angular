@@ -15,7 +15,7 @@ import { AppBrowserModule } from '../../browser/app/app.browser.module'
 import { LoggingElectronModule } from './logging.electron.module'
 
 export function createTranslateLoader(http: HttpClient, es: EnvironmentService) {
-  return new TranslateHttpLoader(http, './assets/i18n/', `.json?v=${es.config.APP_VERSION}`)
+  return new TranslateHttpLoader(http, 'assets/i18n/', `.json?v=${es.config.APP_VERSION}`)
 }
 
 export function maybeGetElectronVars() {

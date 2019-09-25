@@ -21,7 +21,7 @@ const ios = files.filter(b => b.match(/apple-icon-/g))
   .map(a => {
   return {
     size: `${a}x${a}`,
-    href: `./assets/icons/apple-icon-${a}.png`
+    href: `/assets/icons/apple-icon-${a}.png`
   }
 })
 
@@ -30,7 +30,7 @@ const favicons = files.filter(b => b.match(/icon-*.*x/g)).map(a => +a.split('x')
   .map(size => {
     return {
       size: `${size}x${size}`,
-      href: `./assets/icons/icon-${size}x${size}.png`
+      href: `/assets/icons/icon-${size}x${size}.png`
     }
   })
 

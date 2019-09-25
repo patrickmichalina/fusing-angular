@@ -13,6 +13,7 @@ import { app, BrowserWindow, ipcMain, dialog, clipboard } from 'electron'
 import { initAutoUpdater } from './updater'
 import { ElectronEvent } from './interfaces'
 import * as cleanStack from 'clean-stack'
+import { initInterceptFileProtocol } from './protocol'
 
 const initApp = () => reader<IElectronConfig, void>(cfg => {
   const log = cfg.LOGGER.child({ ns: 'app()' })
@@ -35,7 +36,7 @@ const initApp = () => reader<IElectronConfig, void>(cfg => {
   const takeUntilAppQuit = <T>(source: Observable<T>) => source.pipe(takeUntil(appQuit$))
   const filterBoolean = <T>(source: Observable<T>) => source.pipe(filter<NonNullable<T>>(Boolean))
   const filterPlatformOSX = <T>(source: Observable<T>) => source.pipe(filter<T>(() => cfg.IS_PLATFORM_OSX))
-  const createWindow = () => windowSource.next(initWindow().run(cfg))
+  const createWindow = () => windowSource.next(initWindow.run(cfg))
 
   appAngularEvents$.pipe(filterIPCMessages('log')).subscribe(a => {
     switch (a.type) {
@@ -65,6 +66,7 @@ const initApp = () => reader<IElectronConfig, void>(cfg => {
   })
 
   window$.pipe(takeUntilAppQuit).subscribe(w => {
+    // initInterceptFileProtocol().run(cfg)
     initAutoUpdater(w).run(cfg)
       .checkForUpdatesAndNotify()
       .then()

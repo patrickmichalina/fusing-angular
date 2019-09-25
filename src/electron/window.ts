@@ -2,8 +2,10 @@ import { format } from 'url'
 import { BrowserWindow } from 'electron'
 import { reader } from 'typescript-monads'
 import { IElectronConfig } from './config'
+import { initInterceptFileProtocol } from './protocol'
 
-export const initWindow = () => reader<IElectronConfig, BrowserWindow>(cfg => {
+export const initWindow = initInterceptFileProtocol
+  .flatMap(() => reader<IElectronConfig, BrowserWindow>(cfg => {
   const win = new BrowserWindow({
     center: true,
     width: 800,
@@ -18,9 +20,9 @@ export const initWindow = () => reader<IElectronConfig, BrowserWindow>(cfg => {
   // and load the index.html of the app.
   win.loadURL(
     format({
-      pathname: cfg.PATH_TO_WEBPAGE_INDEX,
+      pathname: 'index.html',
       protocol: 'file:',
-      slashes: true,
+      slashes: true
     })
   )
 
@@ -31,7 +33,7 @@ export const initWindow = () => reader<IElectronConfig, BrowserWindow>(cfg => {
   }
 
   return win
-})
+}))
 
 
 
