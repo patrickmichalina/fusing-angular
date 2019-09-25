@@ -7,7 +7,7 @@ import { HttpParams } from "@angular/common/http"
 // use until https://github.com/angular/angular/issues/12664#issue-186844950 is solved!
 @Directive({
   // tslint:disable-next-line: directive-selector
-  selector: 'a[routerLink]'
+  selector: '[routerLink]'
 })
 export class PreserveQueryParamsDirective {
   constructor(private link: RouterLinkWithHref, private route: ActivatedRoute, loc: Location) {
