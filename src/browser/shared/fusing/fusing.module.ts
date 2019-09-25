@@ -28,13 +28,6 @@ export class TranslateHttpLoader implements TranslateLoader {
     LoggingModule,
     FloNodeEnvTransferModule.config({
       useValues: { APP_VERSION: "__APP_VERSION__" }
-    }),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useClass: TranslateHttpLoader,
-        deps: [HttpClient, EnvironmentService]
-      }
     })
   ],
   declarations: [

@@ -8,6 +8,7 @@ import { HttpUniversalInterceptor } from './universal.interceptor'
 import { LoggingServerModule } from './logging.server.module'
 import { RootModule } from '../../browser/root.module'
 import { RootComponent } from '../../browser/root.component'
+import { TranslateModule } from '@ngx-translate/core'
 
 enableProdMode()
 

@@ -9,7 +9,7 @@ import { AppInitService } from '../shared/fusing/app-init.service'
 })
 export class SiteComponent {
   constructor(rdr: Renderer2, ais: AppInitService) {
-    ais.init(rdr)
+    // ais.init(rdr)
   }
 
   public param = { value: 'John' }
