@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core'
-import { AppHomeComponent } from './settings.component'
-import { AppHomeRoutingModule } from './settings-routing.module'
+import { AppSettingsComponent } from './settings.component'
+import { AppSettingsRoutingModule } from './settings-routing.module'
 
 @NgModule({
-  imports: [AppHomeRoutingModule],
-  exports: [AppHomeComponent],
-  declarations: [AppHomeComponent]
+  imports: [AppSettingsRoutingModule],
+  exports: [AppSettingsComponent],
+  declarations: [AppSettingsComponent]
 })
 export class SettingsModule { }

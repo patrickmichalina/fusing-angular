@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing'
-import { AppHomeComponent } from './home.component'
-import { HomeModule } from './home.module'
+import { AppSettingsComponent } from './settings.component'
+import { SettingsModule } from './settings.module'
 
-describe(AppHomeComponent.name, () => {
+describe(AppSettingsComponent.name, () => {
   it('should compile', () => {
     TestBed.configureTestingModule({
-      imports: [HomeModule]
+      imports: [SettingsModule]
     })
 
-    expect(TestBed.createComponent(AppHomeComponent)).toBeTruthy()
+    expect(TestBed.createComponent(AppSettingsComponent)).toBeTruthy()
   })
 })

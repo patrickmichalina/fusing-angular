@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core'
-import { AppHomeComponent } from './settings.component'
+import { AppSettingsComponent } from './settings.component'
 import { RouterModule } from '@angular/router'
 
 const children = [
-  { path: '', component: AppHomeComponent }
+  { path: '', component: AppSettingsComponent }
 ]
 
 @NgModule({
@@ -12,4 +12,4 @@ const children = [
   ],
   exports: [RouterModule]
 })
-export class AppHomeRoutingModule { }
+export class AppSettingsRoutingModule { }

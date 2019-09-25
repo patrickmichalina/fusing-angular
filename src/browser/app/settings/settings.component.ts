@@ -6,5 +6,5 @@ import { Component, ChangeDetectionStrategy } from '@angular/core'
   styleUrls: ['./settings.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppHomeComponent { 
+export class AppSettingsComponent { 
 }
