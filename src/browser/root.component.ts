@@ -8,7 +8,7 @@ import { AppInitService } from './shared/fusing/app-init.service'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RootComponent {
-  constructor(rdr: Renderer2, ais: AppInitService) {
-    ais.init(rdr)
-  }
+  // constructor(rdr: Renderer2, ais: AppInitService) {
+  //   ais.init(rdr)
+  // }
 }

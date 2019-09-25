@@ -13,15 +13,13 @@ import { EnvironmentService } from './shared/fusing/environment.service';
   declarations: [RootComponent],
   imports: [
     RootRoutingModule,
-    
-    // TranslateModule.forRoot(),
-    // TranslateModule.forRoot({
-    //   loader: {
-    //     provide: TranslateLoader,
-    //     useClass: TranslateHttpLoader,
-    //     deps: [HttpClient, EnvironmentService]
-    //   }
-    // }),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useClass: TranslateHttpLoader,
+        deps: [HttpClient, EnvironmentService]
+      }
+    }),
     SharedSiteModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: process.env.pwa === "true" }),
     BrowserModule.withServerTransition({ appId: 'pm-root' })

@@ -7,13 +7,13 @@ import { ServiceWorkerModule } from '@angular/service-worker'
 
 @NgModule({
   imports: [
-    BrowserModule,
+    // BrowserModule,
     BrowserAnimationsModule,
     FloNodeEnvTransferBrowserModule,
     LoggingBrowserModule
   ],
   exports: [
-    BrowserModule,
+    // BrowserModule,
     BrowserAnimationsModule,
     FloNodeEnvTransferBrowserModule,
     LoggingBrowserModule

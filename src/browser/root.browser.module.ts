@@ -5,8 +5,8 @@ import { SharedBrowserModule } from './shared/shared.browser.module'
 
 @NgModule({
   imports: [
-    RootModule,
-    SharedBrowserModule
+    SharedBrowserModule,
+    RootModule
   ],
   bootstrap: [RootComponent]
 })

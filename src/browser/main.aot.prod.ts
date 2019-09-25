@@ -1,12 +1,12 @@
 import 'zone.js/dist/zone'
 import { platformBrowser } from '@angular/platform-browser'
-import { SiteBrowserModule } from './site/site.browser.module'
 import { enableProdMode } from '@angular/core'
+import { RootBrowserModule } from './root.browser.module'
 
 enableProdMode()
 
 document.addEventListener('DOMContentLoaded', () => {
   platformBrowser()
-    .bootstrapModule(SiteBrowserModule)
+    .bootstrapModule(RootBrowserModule)
     .catch(console.error)
 })

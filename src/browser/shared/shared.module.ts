@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common'
 import { TransferHttpCacheModule } from '@nguniversal/common'
 import { FusingModule } from './fusing/fusing.module'
 import { RouterModule } from '@angular/router'
+import { BrowserModule } from '@angular/platform-browser'
 
 @NgModule({
   imports: [
