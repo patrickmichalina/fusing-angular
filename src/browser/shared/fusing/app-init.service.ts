@@ -1,4 +1,4 @@
-import { Injectable, Inject, Renderer2 } from "@angular/core"
+import { Injectable, Inject, Renderer2, NgZone } from "@angular/core"
 import { ElectronService } from "./electron.service"
 import { TranslateService } from "@ngx-translate/core"
 import { map, skip, pluck } from "rxjs/operators"
@@ -11,7 +11,7 @@ import { EnvironmentService } from "./environment.service"
 })
 export class AppInitService {
   constructor(private es: ElectronService, private ts: TranslateService, private ar: ActivatedRoute,
-    private env: EnvironmentService, @Inject(DOCUMENT) private doc: HTMLDocument) {}
+    private env: EnvironmentService, private zone: NgZone, @Inject(DOCUMENT) private doc: HTMLDocument) {}
 
   init(rdr: Renderer2) {
     this.initDocMeta(rdr)
@@ -28,7 +28,7 @@ export class AppInitService {
   initLanguages(rdr: Renderer2) {
     this.ts.onLangChange.pipe(map(a => a.lang)).subscribe(lang => rdr.setAttribute(this.doc.documentElement, 'lang', lang))
     
-    this.es.electronMessage$('change-language').subscribe(a => this.ts.use(a))
+    this.es.electronMessage$('change-language').subscribe(lang => this.zone.run(() => this.ts.use(lang)))
 
     this.ts.setDefaultLang('en')
     this.ar.queryParams.pipe(skip(1), pluck('lang')).subscribe(lang => {

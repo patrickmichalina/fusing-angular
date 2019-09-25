@@ -13,6 +13,7 @@ import { EnvironmentService } from './shared/fusing/environment.service';
   declarations: [RootComponent],
   imports: [
     RootRoutingModule,
+    
     // TranslateModule.forRoot(),
     // TranslateModule.forRoot({
     //   loader: {

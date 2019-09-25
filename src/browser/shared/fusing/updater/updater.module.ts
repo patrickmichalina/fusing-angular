@@ -1,7 +1,7 @@
 import { NgModule, Optional, Inject } from '@angular/core'
 import { UpdaterService } from './updater.module.service'
 import { UPDATER_INTERVAL, TPromptFn, UPDATER_UPDATER_FN, UPDATER_PROMPT_FN, TUpdaterFn } from './updater.tokens'
-import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker'
+import { SwUpdate, UpdateAvailableEvent, ServiceWorkerModule } from '@angular/service-worker'
 import { LoggingService } from '../logging/logging.service'
 import { of } from 'rxjs'
 import { switchMap, filter, first } from 'rxjs/operators'

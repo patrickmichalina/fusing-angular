@@ -3,7 +3,6 @@ import { HttpClientModule } from '@angular/common/http'
 import { CommonModule } from '@angular/common'
 import { TransferHttpCacheModule } from '@nguniversal/common'
 import { FusingModule } from './fusing/fusing.module'
-import { NotFoundModule } from './not-found/not-found.module'
 import { RouterModule } from '@angular/router'
 
 @NgModule({
@@ -13,7 +12,6 @@ import { RouterModule } from '@angular/router'
     TransferHttpCacheModule,
     FusingModule,
     RouterModule
-    // NotFoundModule
   ],
   exports: [
     CommonModule,
@@ -21,7 +19,6 @@ import { RouterModule } from '@angular/router'
     TransferHttpCacheModule,
     FusingModule,
     RouterModule
-    // NotFoundModule
   ]
 })
 export class SharedModule { }

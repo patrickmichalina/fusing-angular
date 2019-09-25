@@ -13,7 +13,7 @@ export class UpdaterService {
 
   listenForUpdates = () =>
     maybe(this.updates)
-      .filter(() => this.ps.isBrowser)
+      .filter(updates => updates.isEnabled && this.ps.isBrowser)
       .map(swUpdates => this.appRef.isStable.pipe(
         filter(Boolean),
         first(),

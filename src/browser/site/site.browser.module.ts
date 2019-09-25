@@ -8,6 +8,10 @@ import { SharedBrowserModule } from '../shared/shared.browser.module'
     SiteModule,
     SharedBrowserModule
   ],
+  exports: [
+    SiteModule,
+    SharedBrowserModule
+  ],
   bootstrap: [SiteComponent]
 })
 export class SiteBrowserModule { }
