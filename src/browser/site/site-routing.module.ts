@@ -1,14 +1,18 @@
 import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router'
-import { routes } from '../main-routing'
-import { APP_BASE_HREF } from '@angular/common'
+import { SiteComponent } from './site.component'
+
+const children = [
+  { path: '', pathMatch: 'full', loadChildren: () => import('./home/home.module').then(m => m.HomeModule) },
+  { path: 'about', loadChildren: () => import('./about/about.module').then(m => m.AboutModule) },
+  { path: '**', loadChildren: () => import('./not-found/not-found.module').then(m => m.NotFoundModule) }
+]
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { initialNavigation: 'enabled' })
-  ],
-  providers: [
-    { provide: APP_BASE_HREF, useValue: '/' }
+    RouterModule.forChild([
+      { path: '', component: SiteComponent, children }
+    ]),
   ],
   exports: [RouterModule]
 })

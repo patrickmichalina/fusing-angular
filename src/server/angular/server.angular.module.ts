@@ -5,15 +5,15 @@ import { FloNodeEnvTransferServerModule, } from '@flosportsinc/ng-env-transfer-s
 import { FloHttpCacheTagExpressServerModule } from '@flosportsinc/ng-http-cache-tags'
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { HttpUniversalInterceptor } from './universal.interceptor'
-import { SiteModule } from '../../browser/site/site.module'
-import { SiteComponent } from '../../browser/site/site.component'
 import { LoggingServerModule } from './logging.server.module'
+import { RootModule } from '../../browser/root.module'
+import { RootComponent } from '../../browser/root.component'
 
 enableProdMode()
 
 @NgModule({
   imports: [
-    SiteModule,
+    RootModule,
     ServerModule,
     LoggingServerModule,
     ServerTransferStateModule,
@@ -29,7 +29,7 @@ enableProdMode()
       multi: true
     }
   ],
-  bootstrap: [SiteComponent],
+  bootstrap: [RootComponent],
 })
 export class AppServerModule {
 }

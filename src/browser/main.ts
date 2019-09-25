@@ -5,6 +5,6 @@ import { SiteBrowserModule } from './site/site.browser.module'
 
 document.addEventListener('DOMContentLoaded', () => {
   platformBrowserDynamic()
-  .bootstrapModule(SiteBrowserModule)
-  .catch(console.error)
+    .bootstrapModule(SiteBrowserModule)
+    .catch(console.error)
 })

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common'
 import { TransferHttpCacheModule } from '@nguniversal/common'
 import { FusingModule } from './fusing/fusing.module'
 import { NotFoundModule } from './not-found/not-found.module'
+import { RouterModule } from '@angular/router'
 
 @NgModule({
   imports: [
@@ -11,6 +12,7 @@ import { NotFoundModule } from './not-found/not-found.module'
     HttpClientModule,
     TransferHttpCacheModule,
     FusingModule,
+    RouterModule
     // NotFoundModule
   ],
   exports: [
@@ -18,6 +20,7 @@ import { NotFoundModule } from './not-found/not-found.module'
     HttpClientModule,
     TransferHttpCacheModule,
     FusingModule,
+    RouterModule
     // NotFoundModule
   ]
 })

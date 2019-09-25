@@ -8,6 +8,10 @@ import { SharedAppModule } from './shared/shared.module'
   imports: [
     AppRoutingModule,
     SharedAppModule
+  ],
+  exports: [
+    AppRoutingModule,
+    SharedAppModule
   ]
 })
 export class AppModule { }
