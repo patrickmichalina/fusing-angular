@@ -5,9 +5,10 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { SharedSiteModule } from './site/shared/shared.module'
 import { ServiceWorkerModule } from '@angular/service-worker'
 import { BrowserModule } from '@angular/platform-browser'
-import { TranslateHttpLoader } from './shared/fusing/fusing.module';
-import { HttpClient } from '@angular/common/http';
-import { EnvironmentService } from './shared/fusing/environment.service';
+import { TranslateHttpLoader } from './shared/fusing/fusing.module'
+import { HttpClient, HttpClientModule } from '@angular/common/http'
+import { EnvironmentService } from './shared/fusing/environment.service'
+import { TransferHttpCacheModule } from '@nguniversal/common'
 
 @NgModule({
   declarations: [RootComponent],
@@ -22,7 +23,9 @@ import { EnvironmentService } from './shared/fusing/environment.service';
     }),
     SharedSiteModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: process.env.pwa === "true" }),
-    BrowserModule.withServerTransition({ appId: 'pm-root' })
+    BrowserModule.withServerTransition({ appId: 'pm-root' }),
+    HttpClientModule,
+    TransferHttpCacheModule
   ],
   exports: [
     RootRoutingModule,
