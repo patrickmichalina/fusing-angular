@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core'
 import { FloNodeEnvTransferBrowserModule } from '@flosportsinc/ng-env-transfer-state/browser'
 import { AppComponent } from '../../browser/app/app.component'
 import { ENV_CONFIG_DEFAULT } from '@flosportsinc/ng-env-transfer-state'
-import { HTTP_INTERCEPTORS } from '@angular/common/http'
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http'
 import { HttpElectronInterceptor } from './electron.interceptor'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { HttpClient } from '@angular/common/http'
@@ -26,6 +26,7 @@ export function maybeGetElectronVars() {
 
 @NgModule({
   imports: [
+    HttpClientModule,
     AppBrowserModule,
     LoggingElectronModule,
     FloNodeEnvTransferBrowserModule,
