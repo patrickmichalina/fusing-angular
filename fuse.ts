@@ -81,7 +81,7 @@ class BuildContext {
   fusebox = {
     server: fusebox({
       target: 'server',
-      entry: this.aot ? 'ngc/common/server/server.js' : 'src/common/server/server.ts',
+      entry: this.aot ? 'ngc/common/server/server.js' : 'src/server/server.ts',
       devServer: false,
       dependencies: this.prod
         ? { ignorePackages: packageJson.fusebox.ignore.server, ignoreAllExternal: false }
