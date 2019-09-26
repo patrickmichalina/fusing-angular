@@ -8,7 +8,6 @@ import { compressStatic } from './tools/scripts/compress'
 import { minify } from 'terser'
 import { UserHandler } from 'fuse-box/user-handler/UserHandler'
 import { IFuseLoggerProps } from 'fuse-box/config/IFuseLoggerProps'
-import { pluginAngularAot } from './tools/plugins/lazy-aot'
 import { readdirSync } from 'fs'
 import * as packageJson from './package.json'
 
@@ -82,7 +81,7 @@ class BuildContext {
   fusebox = {
     server: fusebox({
       target: 'server',
-      entry: this.aot ? 'ngc/server/server.js' : 'src/server/server.ts',
+      entry: this.aot ? 'ngc/common/server/server.js' : 'src/common/server/server.ts',
       devServer: false,
       dependencies: this.prod
         ? { ignorePackages: packageJson.fusebox.ignore.server, ignoreAllExternal: false }
@@ -94,7 +93,7 @@ class BuildContext {
       target: 'browser',
       output: 'dist/wwwroot/assets/js',
       entry: this.aot
-        ? this.prod ? 'ngc/browser/main.aot.prod.js' : 'ngc/browser/main.aot.js'
+        ? this.prod ? 'ngc/esnext/browser/main.aot.prod.js' : 'ngc/esnext/browser/main.aot.js'
         : this.prod ? 'src/browser/main.prod.ts' : 'src/browser/main.ts',
       webIndex: { template: 'src/browser/index.pug', distFileName: '../../index.html', publicPath: '/assets/js' },
       dependencies: { ignorePackages: packageJson.fusebox.ignore.browser },
@@ -116,14 +115,14 @@ class BuildContext {
       },
       env: { pwa: this.pwa ? "true": "false" },
       ...this.shared,
-      plugins: [pluginConsolidate('pug', { ...pugSharedLocals, isElectron: false }), ...this.shared.plugins, pluginAngularAot()]
+      plugins: [pluginConsolidate('pug', { ...pugSharedLocals, isElectron: false }), ...this.shared.plugins]
     }),
     electron: {
       renderer: fusebox({
         target: 'browser',
         output: 'dist/desktop/wwwroot/assets/js',
         entry: this.aot
-          ? this.prod ? 'ngc/electron/angular/main.aot.prod.js' : 'ngc/electron/angular/main.aot.js'
+          ? this.prod ? 'ngc/esnext/electron/angular/main.aot.prod.js' : 'ngc/esnext/electron/angular/main.aot.js'
           : this.prod ? 'src/electron/angular/main.prod.ts' : 'src/electron/angular/main.ts',
         webIndex: { template: 'src/browser/index.pug', distFileName: '../../index.html', publicPath: '/assets/js' },
         dependencies: { ignorePackages: packageJson.fusebox.ignore.browser },
@@ -198,7 +197,14 @@ task('assets', ctx => Promise.all([
   !ctx.pwa ? Promise.resolve() : exec('assets.pwa.ngsw')
 ]))
 
-task('ngc', ctx => {
+task('ngc.common', ctx => {
+  return (ctx.watch ? ngcWatch('src/tsconfig.common.json').then(proc => ctx.ngcProcess = maybe(proc)) : ngc('src/tsconfig.common.json'))
+    .catch(err => {
+      console.log(err.toString())
+      process.exit(-1)
+    })
+})
+task('ngc.esnext', ctx => {
   return (ctx.watch ? ngcWatch().then(proc => ctx.ngcProcess = maybe(proc)) : ngc())
     .catch(err => {
       console.log(err.toString())
@@ -206,7 +212,7 @@ task('ngc', ctx => {
     })
 })
 
-task('build', ctx => (ctx.aot ? exec('ngc') : Promise.resolve())
+task('build', ctx => (ctx.aot ? Promise.all([exec('ngc.common'), exec('ngc.esnext')]) : Promise.all([Promise.resolve()]))
   .then(() => exec('assets'))
   .then(() => ctx.prod ? exec('build.prod') : exec('build.dev')))
 

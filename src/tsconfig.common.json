@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
+    "target": "es5",
+    "module": "commonjs",
     "lib": [
       "es6",
       "dom"
     ],
     "rootDir": ".",
-    "outDir": "../ngc/esnext",
+    "outDir": "../ngc/common",
     "types": [
       "node",
       "jest"
