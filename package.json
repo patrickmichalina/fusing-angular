@@ -183,7 +183,7 @@
   },
   "build": {
     "productName": "Fusing Angular",
-    "appId": "com.electron.fusing-angular",
+    "appId": "com.fusing-angular.desktop",
     "icon": "dist/desktop/wwwroot/assets/icons",
     "directories": {
       "output": "release"
@@ -191,6 +191,11 @@
     "mac": {
       "icon": "dist/desktop/icon.icns",
       "darkModeSupport": true,
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "artifactName": "fusing-angular-${version}.${os}.${ext}",
+      "entitlements": "tools/entitlements/entitlements.mac.plist",
+      "type": "distribution",
       "files": [
         "dist/desktop",
         "dist/desktop/icon.icns",
@@ -206,11 +211,19 @@
         "!**/{appveyor.yml,.travis.yml,circle.yml}",
         "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
       ],
-      "artifactName": "fusing-angular-${version}.${os}.${ext}",
       "electronLanguages": [
         "en",
         "ja"
+      ],
+      "target": [
+        "dmg",
+        "mas"
       ]
+    },
+    "mas": {
+      "hardenedRuntime": true,
+      "entitlements": "tools/entitlements/entitlements.mas.plist",
+      "entitlementsInherit": "tools/entitlements/entitlements.mas.inherit.plist"
     },
     "win": {
       "files": [
