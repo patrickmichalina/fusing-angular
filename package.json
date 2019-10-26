@@ -54,6 +54,11 @@
     "bytenode",
     "pino"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm test"
+    }
+  },
   "dependencies": {
     "@angular/platform-server": "9.0.0-next.13",
     "pino": "^5.13.5",
@@ -109,6 +114,7 @@
     "express-pino-logger": "^4.0.0",
     "express-static-gzip": "^2.0.5",
     "fuse-box": "4.0.0-next.142",
+    "husky": "^3.0.9",
     "jest": "^24.9.0",
     "jest-preset-angular": "^8.0.0",
     "pino-multi-stream": "^4.2.0",

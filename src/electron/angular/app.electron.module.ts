@@ -8,14 +8,13 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { HttpClient } from '@angular/common/http'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { ElectronRoutingModule } from './app-routing.module'
-import { EnvironmentService } from '../../browser/shared/fusing/environment.service'
 import { ElectronService } from '../../browser/shared/fusing/electron.service'
 import { ElectronServerService } from './electron.service'
 import { AppBrowserModule } from '../../browser/app/app.browser.module'
 import { LoggingElectronModule } from './logging.electron.module'
 
-export function createTranslateLoader(http: HttpClient, es: EnvironmentService) {
-  return new TranslateHttpLoader(http, 'assets/i18n/', `.json?v=${es.config.APP_VERSION}`)
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', `.json`)
 }
 
 export function maybeGetElectronVars() {
@@ -34,7 +33,7 @@ export function maybeGetElectronVars() {
       loader: {
         provide: TranslateLoader,
         useFactory: createTranslateLoader,
-        deps: [HttpClient, EnvironmentService]
+        deps: [HttpClient]
       }
     }),
     ElectronRoutingModule
